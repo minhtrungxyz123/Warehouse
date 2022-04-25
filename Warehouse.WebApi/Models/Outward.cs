@@ -22,7 +22,6 @@ namespace Warehouse.WebApi.Models
         public string CreatedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
-        public bool OnDelete { get; set; }
         public string ReceiverDepartment { get; set; }
         public string ReceiverAddress { get; set; }
         public string ReceiverPhone { get; set; }

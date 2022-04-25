@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Warehouse.WebApi.Configuration;
+using Warehouse.WebApi.Models;
 
 namespace Warehouse.WebApi.Data
 {
@@ -30,5 +31,7 @@ namespace Warehouse.WebApi.Data
             modelBuilder.ApplyConfiguration(new WareHouseItemUnitConfiguration());
             modelBuilder.ApplyConfiguration(new WareHouseLimitConfiguration());
         }
+
+        public DbSet<Warehouse.WebApi.Models.Unit> Units { get; set; }
     }
 }

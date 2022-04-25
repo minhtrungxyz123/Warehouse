@@ -26,7 +26,6 @@ namespace Warehouse.WebApi.Models
         public string ProjectName { get; set; }
         public string CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public bool OnDelete { get; set; }
         public string AccountMore { get; set; }
         public string AccountYes { get; set; }
         public string Status { get; set; }
