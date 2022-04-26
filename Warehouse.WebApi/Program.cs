@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Warehouse.WebApi.Data;
-using Warehouse.WebApi.Service.Unit;
+using Warehouse.Data.EF;
+using Warehouse.Service.Unit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +10,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<WarehouseContext>(option =>
-{
-    option.UseSqlServer(builder.Configuration.GetConnectionString("WarehouseDatabase"));
-});
-builder.Services.AddTransient<IUnitService,UnitService>();
+builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseSqlServer(
+                            builder.Configuration.GetConnectionString("WarehouseDatabase")));
+
+builder.Services.AddScoped(typeof(IUnitService), typeof(UnitService));
 
 var app = builder.Build();
 
