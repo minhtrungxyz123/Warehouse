@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Warehouse.WebApi.Data;
+using Warehouse.WebApi.Models;
 using Warehouse.WebApi.Service.Unit;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Warehouse.WebApi.Controllers
 {
@@ -9,45 +11,104 @@ namespace Warehouse.WebApi.Controllers
     [ApiController]
     public class UnitsController : ControllerBase
     {
-        private readonly IUnitService _unitService;
+        #region Fields
 
-        public UnitsController(IUnitService unitService)
+        private readonly IUnitService _unitService;
+        private readonly WarehouseContext _context;
+
+        public UnitsController(IUnitService unitService, WarehouseContext context)
         {
             _unitService = unitService;
+            _context = context;
         }
 
-        // GET: api/<UnitsController>
+        #endregion
+
+        #region List
+
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<IEnumerable<Unit>>> GetUnits()
         {
-            return Ok(_unitService.Get());
+            return await _context.Units.ToListAsync();
         }
 
-        // GET api/<UnitsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<Unit>> GetUnit(string id)
         {
-            return "value";
+            var unit = await _context.Units.FindAsync(id);
+
+            if (unit == null)
+            {
+                return NotFound();
+            }
+
+            return unit;
         }
 
-        // POST api/<UnitsController>
+        #endregion
+
+        #region Method
+
         [HttpPost]
-        public IActionResult Post(Warehouse.WebApi.Models.Unit unit)
+        public async Task<ActionResult<Unit>> PostUnit(Unit unit)
         {
-            return Ok(_unitService.AddEntity(unit));
+            _context.Units.Add(unit);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetUnit", new { id = unit.Id }, unit);
         }
 
-        // PUT api/<UnitsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> PutUnit(string id, Unit unit)
         {
+            if (id != unit.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(unit).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UnitExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // DELETE api/<UnitsController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> DeleteUnit(string id)
         {
-            return Ok(_unitService.DeleteEntity(id));
+            var unit = await _context.Units.FindAsync(id);
+            if (unit == null)
+            {
+                return NotFound();
+            }
+
+            _context.Units.Remove(unit);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
+
+        #endregion
+
+        #region Utilities
+        private bool UnitExists(string id)
+        {
+            return _context.Units.Any(e => e.Id == id);
+        }
+        #endregion
     }
 }

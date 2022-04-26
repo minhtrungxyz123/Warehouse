@@ -1,4 +1,5 @@
-﻿using Warehouse.WebApi.Data;
+﻿using System.Linq;
+using Warehouse.WebApi.Data;
 
 namespace Warehouse.WebApi.Service.Unit
 {
@@ -32,7 +33,15 @@ namespace Warehouse.WebApi.Service.Unit
 
         public bool UpdateEntity(WebApi.Models.Unit entity)
         {
-            throw new NotImplementedException();
+            var unit = new WebApi.Models.Unit()
+            {
+                Id = entity.Id,
+                UnitName = entity.UnitName,
+            };
+            _context.Units.Update(entity);
+            _context.SaveChanges();
+
+            return true;
         }
     }
 }
