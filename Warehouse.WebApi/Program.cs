@@ -3,7 +3,9 @@ using Warehouse.Data.EF;
 using Warehouse.Service.Audit;
 using Warehouse.Service.AuditDetail;
 using Warehouse.Service.Unit;
+using Warehouse.Service.Vendor;
 using Warehouse.Service.WareHouse;
+using Warehouse.Service.WareHouseItem;
 using Warehouse.Service.WareHouseItemCategory;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,8 @@ builder.Services.AddScoped(typeof(IUnitService), typeof(UnitService));
 builder.Services.AddScoped(typeof(IAuditDetailService), typeof(AuditDetailService));
 builder.Services.AddScoped(typeof(IAuditService), typeof(AuditService));
 builder.Services.AddScoped<IWareHouseItemCategoryService, WareHouseItemCategoryService>();
+builder.Services.AddScoped<IWareHouseItemService, WareHouseItemService>();
+builder.Services.AddScoped<IVendorService, VendorService>();
 #endregion
 
 var app = builder.Build();
