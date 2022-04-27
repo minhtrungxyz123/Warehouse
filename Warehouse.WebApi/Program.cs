@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Warehouse.Data.EF;
+using Warehouse.Service.Audit;
+using Warehouse.Service.AuditDetail;
 using Warehouse.Service.Unit;
+using Warehouse.Service.WareHouse;
+using Warehouse.Service.WareHouseItemCategory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +17,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseSqlServer(
                             builder.Configuration.GetConnectionString("WarehouseDatabase")));
 
+#region addService
+builder.Services.AddScoped(typeof(IWareHouseService), typeof(WareHouseService));
 builder.Services.AddScoped(typeof(IUnitService), typeof(UnitService));
+builder.Services.AddScoped(typeof(IAuditDetailService), typeof(AuditDetailService));
+builder.Services.AddScoped(typeof(IAuditService), typeof(AuditService));
+builder.Services.AddScoped<IWareHouseItemCategoryService, WareHouseItemCategoryService>();
+#endregion
 
 var app = builder.Build();
 

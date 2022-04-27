@@ -9,12 +9,16 @@ namespace Warehouse.WebApi.Controllers
     [ApiController]
     public class UnitController : ControllerBase
     {
+        #region Fields
         private readonly IUnitService _unitService;
 
         public UnitController(IUnitService unitService)
         {
             _unitService = unitService;
         }
+        #endregion
+
+        #region List
 
         [HttpGet("")]
         public async Task<ActionResult> GetAll()
@@ -40,6 +44,10 @@ namespace Warehouse.WebApi.Controllers
 
             return Ok(item);
         }
+
+        #endregion
+
+        #region Method
 
         [HttpPost("create")]
         public async Task<IActionResult> Post(UnitModel model)
@@ -94,5 +102,7 @@ namespace Warehouse.WebApi.Controllers
                 return BadRequest(new ApiBadRequestResponse("Delete unit failed"));
             }
         }
+
+        #endregion
     }
 }

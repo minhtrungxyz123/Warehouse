@@ -7,12 +7,18 @@ namespace Warehouse.Service.Unit
 {
     public class UnitService : IUnitService
     {
+        #region Fields
+
         private readonly WarehouseDbContext _context;
 
         public UnitService(WarehouseDbContext context)
         {
             _context = context;
         }
+
+        #endregion
+
+        #region List
 
         public async Task<IEnumerable<Data.Entities.Unit>> GetAll()
         {
@@ -55,6 +61,10 @@ namespace Warehouse.Service.Unit
 
             return item;
         }
+
+        #endregion
+
+        #region Method
 
         public async Task<RepositoryResponse> Create(UnitModel model)
         {
@@ -100,5 +110,7 @@ namespace Warehouse.Service.Unit
 
             return result;
         }
+
+        #endregion
     }
 }
