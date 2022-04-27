@@ -1,0 +1,16 @@
+﻿@model Warehouse.Model.Unit.UnitModel
+
+	@{
+		ViewData["Title"] = "Index";
+	}
+
+	<h1>Index Create</h1>
+
+	<form asp-controller="Unit" asp-action="Create" method="post">
+		Name:  <input asp-for="UnitName" /> <br />
+		Inactive: <input asp-for="Inactive" /><br />
+		<button type="submit">Create</button>
+	</form> 
+	<div>
+		@Html.ActionLink("Back to List", "Index")
+	</div>
