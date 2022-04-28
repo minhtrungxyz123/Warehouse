@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.Model", "Warehous
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Front-End", "Front-End", "{FC586F49-3049-4106-9FAC-F22533FAA1AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warehouse.WebApp", "Warehouse.WebApp\Warehouse.WebApp.csproj", "{30F4CF77-4321-42B3-A02F-3D9B8D4BF7B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.WebApp", "Warehouse.WebApp\Warehouse.WebApp.csproj", "{30F4CF77-4321-42B3-A02F-3D9B8D4BF7B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

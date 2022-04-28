@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Warehouse.Data.EF;
 using Warehouse.Service.Audit;
 using Warehouse.Service.AuditDetail;
+using Warehouse.Service.Inward;
 using Warehouse.Service.Unit;
 using Warehouse.Service.Vendor;
 using Warehouse.Service.WareHouse;
@@ -27,6 +28,7 @@ builder.Services.AddScoped(typeof(IAuditService), typeof(AuditService));
 builder.Services.AddScoped<IWareHouseItemCategoryService, WareHouseItemCategoryService>();
 builder.Services.AddScoped<IWareHouseItemService, WareHouseItemService>();
 builder.Services.AddScoped<IVendorService, VendorService>();
+builder.Services.AddScoped<IInwardService, InwardService>();
 #endregion
 
 var app = builder.Build();
