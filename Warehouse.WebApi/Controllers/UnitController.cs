@@ -26,7 +26,7 @@ namespace Warehouse.WebApi.Controllers
             return Ok(await _unitService.GetAll());
         }
 
-        [HttpGet("filter")]
+        [HttpGet("get")]
         public async Task<ActionResult> GetAllPaging(string? search, int pageIndex, int pageSize)
         {
             return Ok(await _unitService.GetAllPaging(search, pageIndex, pageSize));

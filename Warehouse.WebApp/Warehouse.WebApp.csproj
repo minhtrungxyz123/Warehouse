@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="DevExpress.Reporting.Core" Version="20.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
@@ -13,5 +14,8 @@
     <ProjectReference Include="..\Warehouse.Model\Warehouse.Model.csproj" />
     <PackageReference Include="DevExtreme.AspNet.Core" Version="20.1.3" />
     <PackageReference Include="DevExtreme.AspNet.Data" Version="2.6.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Warehouse\" />
   </ItemGroup>
 </Project>

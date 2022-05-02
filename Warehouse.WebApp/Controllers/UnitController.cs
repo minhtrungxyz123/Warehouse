@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Warehouse.Model.Unit;
 using Warehouse.WebApp.ApiClient;
@@ -14,14 +16,21 @@ namespace Warehouse.WebApp.Controllers
             _unitApiClient = unitApiClient;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var response = await _unitApiClient.GetAll();
+            return View();
+        }
 
-            var model = JsonConvert.DeserializeObject<List<UnitModel>>(response);
-
-            return View(model);
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UnitModel>>> Get(DataSourceLoadOptions loadOptions)
+        {
+            HttpClient client = new HttpClient();
+            using HttpResponseMessage httpResponseMessage = await client.GetAsync("https://localhost:2000/unit");
+            string httpResponseContent = await httpResponseMessage.Content.ReadAsStringAsync();
+            if (!httpResponseMessage.IsSuccessStatusCode)
+                return BadRequest();
+            IEnumerable<UnitModel> entities = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<UnitModel>>(httpResponseContent);
+            return Ok(DataSourceLoader.Load(entities, loadOptions));
         }
 
         [HttpGet]

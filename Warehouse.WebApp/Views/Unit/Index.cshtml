@@ -1,8 +1,19 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Test</h1>
+@(Html.DevExtreme().DataGrid<Warehouse.Model.Unit.UnitModel>()
+    .DataSource(d => d.Mvc()
+        .Controller("Unit")
+        .LoadAction("Get")
+        .Key("Id")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        columns.AddFor(m => m.UnitName);
+        columns.AddFor(m => m.Inactive);
+    })
+)
 
