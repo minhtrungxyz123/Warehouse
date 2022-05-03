@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Warehouse.Common;
+using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.Unit;
 
@@ -27,29 +28,35 @@ namespace Warehouse.Service.Unit
                             .ToListAsync();
         }
 
-        public async Task<Pagination<Data.Entities.Unit>> GetAllPaging(string? search, int pageIndex, int pageSize)
+        public async Task<ApiResult<Pagination<Data.Entities.Unit>>> GetAllPaging(GetUnitPagingRequest request)
         {
             var query = _context.Units.AsQueryable();
-
-            if (!string.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.UnitName.Contains(search)
-                || x.UnitName.Contains(search));
+                query = query.Where(x => x.UnitName.Contains(request.Keyword));
             }
-            var totalRecords = await query.CountAsync();
 
-            var items = await query.Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).ToListAsync();
+            //3. Paging
+            int totalRow = await query.CountAsync();
 
-            var pagination = new Pagination<Data.Entities.Unit>
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new Data.Entities.Unit()
+                {
+                    UnitName = x.UnitName,
+                    Inactive = x.Inactive,
+                    Id = x.Id
+                }).ToListAsync();
+
+            //4. Select and projection
+            var pagedResult = new Pagination<Data.Entities.Unit>()
             {
-                Items = items,
-                TotalRecords = totalRecords,
-                PageIndex = pageIndex,
-                PageSize = pageSize,
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Items = data
             };
-
-            return pagination;
+            return new ApiSuccessResult<Pagination<Data.Entities.Unit>>(pagedResult);
         }
 
         public async Task<Data.Entities.Unit?> GetById(string? id)

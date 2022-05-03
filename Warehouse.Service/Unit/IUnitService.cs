@@ -1,4 +1,5 @@
 ﻿using Warehouse.Common;
+using Warehouse.Common.Common;
 using Warehouse.Model.Unit;
 
 namespace Warehouse.Service.Unit
@@ -7,7 +8,7 @@ namespace Warehouse.Service.Unit
     {
         Task<IEnumerable<Data.Entities.Unit>> GetAll();
 
-        Task<Pagination<Data.Entities.Unit>> GetAllPaging(string? search, int pageIndex, int pageSize);
+        Task<ApiResult<Pagination<Data.Entities.Unit>>> GetAllPaging(GetUnitPagingRequest request);
 
         Task<Data.Entities.Unit> GetById(string? id);
 

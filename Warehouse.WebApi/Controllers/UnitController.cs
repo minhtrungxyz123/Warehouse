@@ -27,9 +27,10 @@ namespace Warehouse.WebApi.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<ActionResult> GetAllPaging(string? search, int pageIndex, int pageSize)
+        public async Task<IActionResult> GetAllPaging([FromQuery]GetUnitPagingRequest request)
         {
-            return Ok(await _unitService.GetAllPaging(search, pageIndex, pageSize));
+            var products = await _unitService.GetAllPaging(request);
+            return Ok(products);
         }
 
         [HttpGet("{id}")]

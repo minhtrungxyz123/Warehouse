@@ -12,6 +12,8 @@ builder.Services.AddTransient<IUnitApiClient, UnitApiClient>();
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

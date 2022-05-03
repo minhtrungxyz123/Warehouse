@@ -1,7 +1,4 @@
-﻿using DevExtreme.AspNet.Data;
-using DevExtreme.AspNet.Mvc;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using Warehouse.Model.Unit;
 using Warehouse.WebApp.ApiClient;
 
@@ -16,21 +13,21 @@ namespace Warehouse.WebApp.Controllers
             _unitApiClient = unitApiClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
-            return View();
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UnitModel>>> Get(DataSourceLoadOptions loadOptions)
-        {
-            HttpClient client = new HttpClient();
-            using HttpResponseMessage httpResponseMessage = await client.GetAsync("https://localhost:2000/unit");
-            string httpResponseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-            if (!httpResponseMessage.IsSuccessStatusCode)
-                return BadRequest();
-            IEnumerable<UnitModel> entities = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<UnitModel>>(httpResponseContent);
-            return Ok(DataSourceLoader.Load(entities, loadOptions));
+            var request = new GetUnitPagingRequest()
+            {
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
+            var data = await _unitApiClient.GetPagings(request);
+            ViewBag.Keyword = keyword;
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            return View(data.ResultObj);
         }
 
         [HttpGet]
@@ -53,6 +50,5 @@ namespace Warehouse.WebApp.Controllers
                 return View();
             }
         }
-
     }
 }
