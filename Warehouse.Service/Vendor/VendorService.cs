@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Warehouse.Common;
+using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.Vendor;
 
@@ -27,29 +28,40 @@ namespace Warehouse.Service.Vendor
                             .ToListAsync();
         }
 
-        public async Task<Pagination<Data.Entities.Vendor>> GetAllPaging(string? search, int pageIndex, int pageSize)
+        public async Task<ApiResult<Pagination<Data.Entities.Vendor>>> GetAllPaging(GetVendorPagingRequest request)
         {
             var query = _context.Vendors.AsQueryable();
-
-            if (!string.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.Name.Contains(search)
-                || x.Name.Contains(search));
+                query = query.Where(x => x.Name.Contains(request.Keyword));
             }
-            var totalRecords = await query.CountAsync();
 
-            var items = await query.Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).ToListAsync();
+            // Paging
+            int totalRow = await query.CountAsync();
 
-            var pagination = new Pagination<Data.Entities.Vendor>
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new Data.Entities.Vendor()
+                {
+                    Name = x.Name,
+                    Address = x.Address,
+                    Code = x.Code,
+                    ContactPerson = x.ContactPerson,
+                    Email = x.Email,
+                    Phone = x.Phone,
+                    Inactive = x.Inactive,
+                    Id = x.Id
+                }).ToListAsync();
+
+            //Select and projection
+            var pagedResult = new Pagination<Data.Entities.Vendor>()
             {
-                Items = items,
-                TotalRecords = totalRecords,
-                PageIndex = pageIndex,
-                PageSize = pageSize,
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Items = data
             };
-
-            return pagination;
+            return new ApiSuccessResult<Pagination<Data.Entities.Vendor>>(pagedResult);
         }
 
         public async Task<Data.Entities.Vendor?> GetById(string? id)

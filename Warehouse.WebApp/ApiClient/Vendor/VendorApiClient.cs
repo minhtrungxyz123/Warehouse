@@ -2,19 +2,17 @@
 using System.Text;
 using Warehouse.Common;
 using Warehouse.Common.Common;
-using Warehouse.Model.Unit;
+using Warehouse.Model.Vendor;
 
 namespace Warehouse.WebApp.ApiClient
 {
-    public class UnitApiClient : IUnitApiClient
+    public class VendorApiClient : IVendorApiClient
     {
-        #region Fields
-
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UnitApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor,
+        public VendorApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor,
                     IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
@@ -22,39 +20,30 @@ namespace Warehouse.WebApp.ApiClient
             _httpContextAccessor = httpContextAccessor;
         }
 
-        #endregion
-
-        #region Method
-
-        public async Task<string> Create(UnitModel request)
+        public async Task<string> Create(VendorModel request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
-            var response = await client.PostAsync("unit/create", httpContent);
+            var response = await client.PostAsync("vendor/create", httpContent);
 
             return await response.Content.ReadAsStringAsync();
         }
-        #endregion
 
-        #region List
-
-        public async Task<ApiResult<Pagination<UnitModel>>> GetPagings(GetUnitPagingRequest request)
+        public async Task<ApiResult<Pagination<VendorModel>>> GetPagings(GetVendorPagingRequest request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
 
-            var response = await client.GetAsync($"/unit/get?keyword={request.Keyword}&pageIndex=" +
+            var response = await client.GetAsync($"/vendor/get?keyword={request.Keyword}&pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}");
             var body = await response.Content.ReadAsStringAsync();
-            var unit = JsonConvert.DeserializeObject<ApiSuccessResult<Pagination<UnitModel>>>(body);
-            return unit;
+            var vendor = JsonConvert.DeserializeObject<ApiSuccessResult<Pagination<VendorModel>>>(body);
+            return vendor;
         }
-
-        #endregion
     }
 }

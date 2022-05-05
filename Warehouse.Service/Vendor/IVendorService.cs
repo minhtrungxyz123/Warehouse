@@ -1,4 +1,5 @@
 ﻿using Warehouse.Common;
+using Warehouse.Common.Common;
 using Warehouse.Model.Vendor;
 
 namespace Warehouse.Service.Vendor
@@ -7,7 +8,7 @@ namespace Warehouse.Service.Vendor
     {
         Task<IEnumerable<Data.Entities.Vendor>> GetAll();
 
-        Task<Pagination<Data.Entities.Vendor>> GetAllPaging(string? search, int pageIndex, int pageSize);
+        Task<ApiResult<Pagination<Data.Entities.Vendor>>> GetAllPaging(GetVendorPagingRequest request);
 
         Task<Data.Entities.Vendor> GetById(string? id);
 

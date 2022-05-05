@@ -28,10 +28,10 @@ namespace Warehouse.WebApi.Controllers
             return Ok(await _vendorService.GetAll());
         }
 
-        [HttpGet("filter")]
-        public async Task<ActionResult> GetAllPaging(string? search, int pageIndex, int pageSize)
+        [HttpGet("get")]
+        public async Task<ActionResult> GetAllPaging([FromQuery] GetVendorPagingRequest request)
         {
-            return Ok(await _vendorService.GetAllPaging(search, pageIndex, pageSize));
+            return Ok(await _vendorService.GetAllPaging(request));
         }
 
         [HttpGet("{id}")]
