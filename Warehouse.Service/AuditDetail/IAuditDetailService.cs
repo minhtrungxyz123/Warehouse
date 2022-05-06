@@ -1,12 +1,13 @@
 ﻿using Warehouse.Common;
+using Warehouse.Common.Common;
 using Warehouse.Model.Audit;
 using Warehouse.Model.AuditDetail;
 
-namespace Warehouse.Service.AuditDetail
+namespace Warehouse.Service
 {
     public interface IAuditDetailService
     {
-        Task<Pagination<AuditGridModel>> GetAllPaging(string? search, Guid? wahouseId, int pageIndex, int pageSize);
+        Task<ApiResult<Pagination<AuditGridModel>>> GetAllPaging(GetAuditPagingRequest request);
 
         Task<Data.Entities.AuditDetail> GetById(string? id);
 

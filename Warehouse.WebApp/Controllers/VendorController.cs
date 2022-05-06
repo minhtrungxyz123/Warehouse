@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Warehouse.Model.Unit;
+using Warehouse.Model.Vendor;
 using Warehouse.WebApp.ApiClient;
 
 namespace Warehouse.WebApp.Controllers
 {
-    public class UnitController : Controller
+    public class VendorController : Controller
     {
         #region Fields
-        private readonly IUnitApiClient _unitApiClient;
+        private readonly IVendorApiClient _vendorApiClient;
 
-        public UnitController(IUnitApiClient unitApiClient)
+        public VendorController(IVendorApiClient vendorApiClient)
         {
-            _unitApiClient = unitApiClient;
+            _vendorApiClient = vendorApiClient;
         }
 
         #endregion
@@ -20,13 +20,13 @@ namespace Warehouse.WebApp.Controllers
 
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 2)
         {
-            var request = new GetUnitPagingRequest()
+            var request = new GetVendorPagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };
-            var data = await _unitApiClient.GetPagings(request);
+            var data = await _vendorApiClient.GetPagings(request);
             ViewBag.Keyword = keyword;
             if (TempData["result"] != null)
             {
@@ -46,11 +46,11 @@ namespace Warehouse.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(UnitModel request)
+        public async Task<IActionResult> Create(VendorModel request)
         {
             try
             {
-                var response = await _unitApiClient.Create(request);
+                var response = await _vendorApiClient.Create(request);
 
                 return RedirectToAction("Index");
             }

@@ -2,11 +2,11 @@
 using System.Text;
 using Warehouse.Common;
 using Warehouse.Common.Common;
-using Warehouse.Model.Vendor;
+using Warehouse.Model.WareHouse;
 
-namespace Warehouse.WebApp.ApiClient
+namespace Warehouse.WebApp.ApiClient.WareHouse
 {
-    public class VendorApiClient : IVendorApiClient
+    public class WareHouseApiClient : IWareHouseApiClient
     {
         #region Fields
 
@@ -14,7 +14,7 @@ namespace Warehouse.WebApp.ApiClient
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public VendorApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor,
+        public WareHouseApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor,
                     IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
@@ -26,34 +26,33 @@ namespace Warehouse.WebApp.ApiClient
 
         #region Method
 
-        public async Task<string> Create(VendorModel request)
+        public async Task<string> Create(WareHouseModel request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
-            var response = await client.PostAsync("vendor/create", httpContent);
+            var response = await client.PostAsync("warehouse/create", httpContent);
 
             return await response.Content.ReadAsStringAsync();
         }
-
         #endregion
 
         #region List
 
-        public async Task<ApiResult<Pagination<VendorModel>>> GetPagings(GetVendorPagingRequest request)
+        public async Task<ApiResult<Pagination<WareHouseModel>>> GetPagings(GetWareHousePagingRequest request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
 
-            var response = await client.GetAsync($"/vendor/get?keyword={request.Keyword}&pageIndex=" +
+            var response = await client.GetAsync($"/warehouse/get?keyword={request.Keyword}&pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}");
             var body = await response.Content.ReadAsStringAsync();
-            var vendor = JsonConvert.DeserializeObject<ApiSuccessResult<Pagination<VendorModel>>>(body);
-            return vendor;
+            var warehouse = JsonConvert.DeserializeObject<ApiSuccessResult<Pagination<WareHouseModel>>>(body);
+            return warehouse;
         }
 
         #endregion

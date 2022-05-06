@@ -2,7 +2,7 @@
 using Warehouse.Common.Common;
 using Warehouse.Model.Unit;
 
-namespace Warehouse.Service.Unit
+namespace Warehouse.Service
 {
     public interface IUnitService
     {

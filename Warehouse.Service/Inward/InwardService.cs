@@ -1,14 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Warehouse.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.Inward;
 
-namespace Warehouse.Service.Inward
+namespace Warehouse.Service
 {
     public class InwardService : IInwardService
     {
@@ -21,9 +16,10 @@ namespace Warehouse.Service.Inward
             _context = context;
         }
 
-        #endregion
+        #endregion Fields
 
         #region List
+
         public async Task<Data.Entities.Inward?> GetById(string? id)
         {
             var item = await _context.Inwards
@@ -34,7 +30,7 @@ namespace Warehouse.Service.Inward
             return item;
         }
 
-        #endregion
+        #endregion List
 
         #region Method
 
@@ -97,8 +93,8 @@ namespace Warehouse.Service.Inward
             item.ReceiverAddress = model.ReceiverAddress;
             item.ReceiverAddress = model.ReceiverAddress;
             item.ReceiverDepartment = model.ReceiverDepartment;
-            item.ReceiverPhone= model.ReceiverPhone;
-            item.Description = model.Description; 
+            item.ReceiverPhone = model.ReceiverPhone;
+            item.Description = model.Description;
 
             _context.Inwards.Update(item);
             var result = await _context.SaveChangesAsync();
@@ -120,6 +116,6 @@ namespace Warehouse.Service.Inward
             return result;
         }
 
-        #endregion
+        #endregion Method
     }
 }

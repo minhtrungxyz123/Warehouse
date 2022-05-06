@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Warehouse.Common;
 using Warehouse.Model.WareHouse;
-using Warehouse.Service.WareHouse;
+using Warehouse.Service;
 
 namespace Warehouse.WebApi.Controllers
 {
-    [Route("ware-house")]
+    [Route("warehouse")]
     [ApiController]
     public class WareHouseController : ControllerBase
     {
@@ -28,10 +28,11 @@ namespace Warehouse.WebApi.Controllers
             return Ok(await _wareHouseService.GetAll());
         }
 
-        [HttpGet("filter")]
-        public async Task<ActionResult> GetAllPaging(string? search, int pageIndex, int pageSize)
+        [HttpGet("get")]
+        public async Task<ActionResult> GetAllPaging([FromQuery] GetWareHousePagingRequest request)
         {
-            return Ok(await _wareHouseService.GetAllPaging(search, pageIndex, pageSize));
+            var warehouse = await _wareHouseService.GetAllPaging(request);
+            return Ok(warehouse);
         }
 
         [HttpGet("{id}")]

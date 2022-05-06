@@ -1,7 +1,7 @@
 ﻿using Warehouse.Common;
 using Warehouse.Model.Inward;
 
-namespace Warehouse.Service.Inward
+namespace Warehouse.Service
 {
     public interface IInwardService
     {

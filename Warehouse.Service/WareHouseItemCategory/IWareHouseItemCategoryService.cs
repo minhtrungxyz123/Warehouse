@@ -1,7 +1,7 @@
 ﻿using Warehouse.Common;
 using Warehouse.Model.WareHouseItemCategory;
 
-namespace Warehouse.Service.WareHouseItemCategory
+namespace Warehouse.Service
 {
     public interface IWareHouseItemCategoryService
     {

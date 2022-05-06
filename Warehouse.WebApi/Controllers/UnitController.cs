@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Warehouse.Common;
 using Warehouse.Model.Unit;
-using Warehouse.Service.Unit;
+using Warehouse.Service;
 
 namespace Warehouse.WebApi.Controllers
 {
@@ -10,13 +10,15 @@ namespace Warehouse.WebApi.Controllers
     public class UnitController : ControllerBase
     {
         #region Fields
+
         private readonly IUnitService _unitService;
 
         public UnitController(IUnitService unitService)
         {
             _unitService = unitService;
         }
-        #endregion
+
+        #endregion Fields
 
         #region List
 
@@ -27,7 +29,7 @@ namespace Warehouse.WebApi.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<IActionResult> GetAllPaging([FromQuery]GetUnitPagingRequest request)
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetUnitPagingRequest request)
         {
             var products = await _unitService.GetAllPaging(request);
             return Ok(products);
@@ -46,7 +48,7 @@ namespace Warehouse.WebApi.Controllers
             return Ok(item);
         }
 
-        #endregion
+        #endregion List
 
         #region Method
 
@@ -104,6 +106,6 @@ namespace Warehouse.WebApi.Controllers
             }
         }
 
-        #endregion
+        #endregion Method
     }
 }

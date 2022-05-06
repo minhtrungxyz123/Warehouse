@@ -4,7 +4,7 @@ using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.Vendor;
 
-namespace Warehouse.Service.Vendor
+namespace Warehouse.Service
 {
     public class VendorService : IVendorService
     {

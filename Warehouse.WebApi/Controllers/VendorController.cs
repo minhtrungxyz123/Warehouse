@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Warehouse.Common;
 using Warehouse.Model.Vendor;
-using Warehouse.Service.Vendor;
+using Warehouse.Service;
 
 namespace Warehouse.WebApi.Controllers
 {

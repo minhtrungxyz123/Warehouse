@@ -1,13 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Warehouse.Data.EF;
-using Warehouse.Service.Audit;
-using Warehouse.Service.AuditDetail;
-using Warehouse.Service.Inward;
-using Warehouse.Service.Unit;
-using Warehouse.Service.Vendor;
-using Warehouse.Service.WareHouse;
-using Warehouse.Service.WareHouseItem;
-using Warehouse.Service.WareHouseItemCategory;
+using Warehouse.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,15 +14,17 @@ builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseSqlServe
                             builder.Configuration.GetConnectionString("WarehouseDatabase")));
 
 #region addService
-builder.Services.AddScoped(typeof(IWareHouseService), typeof(WareHouseService));
-builder.Services.AddScoped(typeof(IUnitService), typeof(UnitService));
-builder.Services.AddScoped(typeof(IAuditDetailService), typeof(AuditDetailService));
-builder.Services.AddScoped(typeof(IAuditService), typeof(AuditService));
+
+builder.Services.AddScoped<IWareHouseService, WareHouseService>();
+builder.Services.AddScoped<IUnitService, UnitService>();
+builder.Services.AddScoped<IAuditDetailService, AuditDetailService>();
+builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<IWareHouseItemCategoryService, WareHouseItemCategoryService>();
 builder.Services.AddScoped<IWareHouseItemService, WareHouseItemService>();
 builder.Services.AddScoped<IVendorService, VendorService>();
 builder.Services.AddScoped<IInwardService, InwardService>();
-#endregion
+
+#endregion addService
 
 var app = builder.Build();
 

@@ -1,7 +1,7 @@
 ﻿using Warehouse.Common;
 using Warehouse.Model.WareHouseItem;
 
-namespace Warehouse.Service.WareHouseItem
+namespace Warehouse.Service
 {
     public interface IWareHouseItemService
     {

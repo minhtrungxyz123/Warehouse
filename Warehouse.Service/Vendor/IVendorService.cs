@@ -2,7 +2,7 @@
 using Warehouse.Common.Common;
 using Warehouse.Model.Vendor;
 
-namespace Warehouse.Service.Vendor
+namespace Warehouse.Service
 {
     public interface IVendorService
     {

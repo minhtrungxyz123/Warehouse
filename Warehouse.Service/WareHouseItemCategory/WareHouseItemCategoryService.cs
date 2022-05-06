@@ -3,7 +3,7 @@ using Warehouse.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.WareHouseItemCategory;
 
-namespace Warehouse.Service.WareHouseItemCategory
+namespace Warehouse.Service
 {
     public class WareHouseItemCategoryService : IWareHouseItemCategoryService
     {

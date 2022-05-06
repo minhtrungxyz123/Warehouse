@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Warehouse.Common;
+using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.Audit;
 using Warehouse.Model.AuditDetail;
 
-namespace Warehouse.Service.AuditDetail
+namespace Warehouse.Service
 {
     public class AuditDetailService : IAuditDetailService
     {
@@ -21,7 +22,7 @@ namespace Warehouse.Service.AuditDetail
 
         #region List
 
-        public async Task<Pagination<AuditGridModel>> GetAllPaging(string? search, Guid? wahouseId, int pageIndex, int pageSize)
+        public async Task<ApiResult<Pagination<AuditGridModel>>> GetAllPaging(GetAuditPagingRequest request)
         {
             var query = from pr in _context.AuditDetails
                         join c in _context.Audits on pr.AuditId equals c.Id into pt
@@ -32,21 +33,21 @@ namespace Warehouse.Service.AuditDetail
                         from ti in it.DefaultIfEmpty()
                         select new { pr, tp, tw, ti };
 
-            if (!string.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.tp.Description.Contains(search)
-                || x.tp.Description.Contains(search));
+                query = query.Where(x => x.tp.Description.Contains(request.Keyword)
+                || x.tp.VoucherCode.Contains(request.Keyword));
             }
 
-            if (wahouseId.HasValue)
+            if (!string.IsNullOrEmpty(request.WarehouseId))
             {
-                query = query.Where(x => x.tp.WareHouseId == wahouseId.Value.ToString());
+                query = query.Where(x => x.tp.WareHouseId == request.WarehouseId);
             }
 
             var totalRecords = await query.CountAsync();
 
-            var items = await query.Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize)
+            var items = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
                 .Select(u => new AuditGridModel()
                 {
                     Id = u.tp.Id,
@@ -68,11 +69,11 @@ namespace Warehouse.Service.AuditDetail
             {
                 Items = items,
                 TotalRecords = totalRecords,
-                PageIndex = pageIndex,
-                PageSize = pageSize,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
             };
 
-            return pagination;
+            return new ApiSuccessResult<Pagination<AuditGridModel>>(pagination);
         }
 
         public async Task<Data.Entities.AuditDetail?> GetById(string? id)

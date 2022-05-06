@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Warehouse.Common;
 using Warehouse.Model.Inward;
-using Warehouse.Service.Inward;
+using Warehouse.Service;
 
 namespace Warehouse.WebApi.Controllers
 {
@@ -12,10 +12,12 @@ namespace Warehouse.WebApi.Controllers
         #region Fields
 
         private readonly IInwardService _inwardService;
+        private readonly IInwardDetailService _inwardDetailService;
 
-        public InwardController(IInwardService inwardService)
+        public InwardController(IInwardService inwardService, IInwardDetailService inwardDetailService)
         {
             _inwardService = inwardService;
+            _inwardDetailService = inwardDetailService;
         }
 
         #endregion Fields
@@ -33,6 +35,14 @@ namespace Warehouse.WebApi.Controllers
             }
 
             return Ok(item);
+        }
+
+        [Route("get")]
+        [HttpGet]
+        public async Task<ActionResult> GetAllPaging([FromQuery] GetInwardPagingRequest request)
+        {
+            var audit = await _inwardDetailService.GetAllPaging(request);
+            return Ok(audit);
         }
 
         #endregion List

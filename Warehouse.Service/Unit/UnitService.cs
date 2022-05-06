@@ -4,7 +4,7 @@ using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.Unit;
 
-namespace Warehouse.Service.Unit
+namespace Warehouse.Service
 {
     public class UnitService : IUnitService
     {

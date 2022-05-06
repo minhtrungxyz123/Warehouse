@@ -3,7 +3,7 @@ using Warehouse.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.Audit;
 
-namespace Warehouse.Service.Audit
+namespace Warehouse.Service
 {
     public class AuditService : IAuditService
     {

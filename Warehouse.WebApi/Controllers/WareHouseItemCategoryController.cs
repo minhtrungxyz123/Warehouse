@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Warehouse.Common;
 using Warehouse.Model.WareHouseItemCategory;
-using Warehouse.Service.WareHouseItemCategory;
+using Warehouse.Service;
 
 namespace Warehouse.WebApi.Controllers
 {

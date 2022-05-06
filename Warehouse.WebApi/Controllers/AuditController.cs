@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Warehouse.Common;
 using Warehouse.Model.Audit;
-using Warehouse.Service.Audit;
-using Warehouse.Service.AuditDetail;
+using Warehouse.Service;
 
 namespace Warehouse.WebApi.Controllers
 {
@@ -27,9 +26,10 @@ namespace Warehouse.WebApi.Controllers
 
         [Route("get")]
         [HttpGet]
-        public async Task<ActionResult> GetAllPaging(string? search, Guid? auditId, int pageIndex, int pageSize)
+        public async Task<ActionResult> GetAllPaging([FromQuery] GetAuditPagingRequest request)
         {
-            return Ok(await _auditDetailService.GetAllPaging(search, auditId, pageIndex, pageSize));
+            var audit = await _auditDetailService.GetAllPaging(request);
+            return Ok(audit);
         }
 
         [HttpGet("{id}")]

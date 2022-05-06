@@ -1,7 +1,7 @@
 ﻿using Warehouse.Common;
 using Warehouse.Model.Audit;
 
-namespace Warehouse.Service.Audit
+namespace Warehouse.Service
 {
     public interface IAuditService
     {

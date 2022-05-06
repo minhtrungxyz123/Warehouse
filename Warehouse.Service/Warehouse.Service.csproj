@@ -12,8 +12,4 @@
     <ProjectReference Include="..\Warehouse.Model\Warehouse.Model.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="InwardDetail\" />
-  </ItemGroup>
-
 </Project>

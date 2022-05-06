@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Warehouse.Common;
+using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.WareHouse;
 
-namespace Warehouse.Service.WareHouse
+namespace Warehouse.Service
 {
     public class WareHouseService : IWareHouseService
     {
@@ -27,29 +28,29 @@ namespace Warehouse.Service.WareHouse
                             .ToListAsync();
         }
 
-        public async Task<Pagination<Data.Entities.WareHouse>> GetAllPaging(string? search, int pageIndex, int pageSize)
+        public async Task<ApiResult<Pagination<Data.Entities.WareHouse>>> GetAllPaging(GetWareHousePagingRequest request)
         {
             var query = _context.WareHouses.AsQueryable();
 
-            if (!string.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.Name.Contains(search)
-                || x.Name.Contains(search));
+                query = query.Where(x => x.Name.Contains(request.Keyword)
+                || x.Description.Contains(request.Keyword));
             }
             var totalRecords = await query.CountAsync();
 
-            var items = await query.Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).ToListAsync();
+            var items = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize).ToListAsync();
 
             var pagination = new Pagination<Data.Entities.WareHouse>
             {
                 Items = items,
                 TotalRecords = totalRecords,
-                PageIndex = pageIndex,
-                PageSize = pageSize,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
             };
 
-            return pagination;
+            return new ApiSuccessResult<Pagination<Data.Entities.WareHouse>>(pagination);
         }
 
         public async Task<Data.Entities.WareHouse?> GetById(string? id)
