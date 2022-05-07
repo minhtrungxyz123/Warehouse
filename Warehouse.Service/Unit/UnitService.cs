@@ -21,6 +21,23 @@ namespace Warehouse.Service
 
         #region List
 
+        public async Task<ApiResult<Data.Entities.Unit>> GetByIdAsyn(string id)
+        {
+            var item = await _context.Units
+                            .OrderByDescending(p => p.UnitName)
+                            .DefaultIfEmpty()
+                            .FirstOrDefaultAsync(p => p.Id == id);
+
+            var userViewModel = new Data.Entities.Unit()
+            {
+                UnitName = item.UnitName,
+                Inactive = item.Inactive,
+                Id = item.Id
+            };
+            return new ApiSuccessResult<Data.Entities.Unit>(userViewModel);
+            
+        }
+
         public async Task<IEnumerable<Data.Entities.Unit>> GetAll()
         {
             return await _context.Units

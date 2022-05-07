@@ -8,8 +8,10 @@ namespace Warehouse.WebApp.ApiClient
     {
         public Task<bool> Create(UnitModel request);
 
-        public Task<bool> Edit(UnitModel request, string id);
+        public Task<bool> Edit(string id, UnitModel request);
 
         Task<ApiResult<Pagination<UnitModel>>> GetPagings(GetUnitPagingRequest request);
+
+        Task<ApiResult<UnitModel>> GetById(string id);
     }
 }

@@ -22,7 +22,14 @@ namespace Warehouse.WebApi.Controllers
 
         #region List
 
-        [HttpGet("")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var user = await _unitService.GetByIdAsyn(id);
+            return Ok(user);
+        }
+
+        [HttpGet("get-all")]
         public async Task<ActionResult> GetAll()
         {
             return Ok(await _unitService.GetAll());
@@ -53,7 +60,7 @@ namespace Warehouse.WebApi.Controllers
         #region Method
 
         [HttpPost("create")]
-        public async Task<IActionResult> Post(UnitModel model)
+        public async Task<IActionResult> Post([FromBody] UnitModel model)
         {
             var result = await _unitService.Create(model);
 
@@ -68,7 +75,7 @@ namespace Warehouse.WebApi.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Put(UnitModel model, string id)
+        public async Task<IActionResult> Put([FromBody] UnitModel model, string id)
         {
             var item = await _unitService.GetById(id);
             if (item == null)

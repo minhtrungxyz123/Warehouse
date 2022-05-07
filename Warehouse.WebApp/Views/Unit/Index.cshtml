@@ -68,7 +68,7 @@
                                     @Html.DisplayFor(modelItem => item.Inactive)
                                 </td>
                                 <td>
-                                    <button data-id="@item.UnitName" class="btn-edit-unit">Edit</button>
+                                    <button onclick="Edit('@item.Id')" class="btn-edit-unit">Edit</button>
                                     <button>delete</button>
                                 </td>
                             </tr>
@@ -89,6 +89,7 @@
     setTimeout(function () {
         $('#msgAlert').fadeOut('slow');
     }, 2000);
+
     function Create() {
         $.get("/Unit/Create", function (data) {
             $("#contactDetails").html(data);
@@ -96,6 +97,14 @@
             $(".k-overlay").removeClass("d-none");   
         });    
     }
+
+     function Edit(id) {
+            $.get("/Unit/Edit", { unitId: id }, function (data) {
+                $("#contactDetails").html(data);
+                $("#contactDetails").dialog("open");
+            });
+            console.log(id)
+     }
         
     $(function() { 
         $("#contactDetails").dialog({  

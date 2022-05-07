@@ -55,13 +55,48 @@ namespace Warehouse.WebApp.Controllers
 
             if (result)
             {
-                TempData["result"] = "Thêm mới đơn vị tính thành công";
+                TempData["result"] = "Thêm mới thành công";
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", "Thêm mới đơn vị tính thất bại");
+            ModelState.AddModelError("", "Thêm mới thất bại");
             return View(request);
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string unitId)
+        {
+            var result = await _unitApiClient.GetById(unitId);
+            if (result.IsSuccessed)
+            {
+                var user = result.ResultObj;
+                var updateRequest = new UnitModel()
+                {
+                    UnitName = user.UnitName,
+                    Inactive = user.Inactive,
+                    Id = unitId
+                };
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UnitModel request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _unitApiClient.Edit(request.Id, request);
+            if (result)
+            {
+                TempData["result"] = "Sửa thành công";
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", "Thêm mới thất bại");
+            return View(request);
         }
 
         #endregion

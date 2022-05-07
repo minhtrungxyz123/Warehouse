@@ -22,7 +22,7 @@ namespace Warehouse.WebApp.ApiClient
             _httpContextAccessor = httpContextAccessor;
         }
 
-        #endregion
+        #endregion Fields
 
         #region Method
 
@@ -38,18 +38,19 @@ namespace Warehouse.WebApp.ApiClient
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> Edit(UnitModel request, string id)
+        public async Task<bool> Edit(string id, UnitModel request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
-            var response = await client.PostAsync($"unit/update/"+id+"", httpContent);
+            var response = await client.PutAsync($"unit/update/" + id + "", httpContent);
 
             return response.IsSuccessStatusCode;
         }
-        #endregion
+
+        #endregion Method
 
         #region List
 
@@ -67,6 +68,18 @@ namespace Warehouse.WebApp.ApiClient
             return unit;
         }
 
-        #endregion
+        public async Task<ApiResult<UnitModel>> GetById(string id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:2000");
+            var response = await client.GetAsync($"/unit/{id}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<UnitModel>>(body);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<UnitModel>>(body);
+        }
+
+        #endregion List
     }
 }
