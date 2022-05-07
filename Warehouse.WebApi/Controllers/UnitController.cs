@@ -22,7 +22,8 @@ namespace Warehouse.WebApi.Controllers
 
         #region List
 
-        [HttpGet("{id}")]
+        [Route("get-by-id")]
+        [HttpGet]
         public async Task<IActionResult> GetById(string id)
         {
             var user = await _unitService.GetByIdAsyn(id);
@@ -93,24 +94,14 @@ namespace Warehouse.WebApi.Controllers
             }
         }
 
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [Route("delete")]
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string unitId)
         {
-            var item = _unitService.GetById(id);
-
-            if (item == null)
-                return NotFound(new ApiNotFoundResponse($"Unit with id: {id} is not found"));
-
-            var result = await _unitService.Delete(id);
-
-            if (result > 0)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest(new ApiBadRequestResponse("Delete unit failed"));
-            }
+            var delete = await _unitService.Delete(unitId);
+            if (delete == 0)
+                return BadRequest();
+            return Ok();
         }
 
         #endregion Method

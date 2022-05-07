@@ -98,13 +98,12 @@
         });    
     }
 
-     function Edit(id) {
+    function Edit(id) {
             $.get("/Unit/Edit", { unitId: id }, function (data) {
                 $("#contactDetails").html(data);
                 $("#contactDetails").dialog("open");
             });
-            console.log(id)
-     }
+    }
         
     $(function() { 
         $("#contactDetails").dialog({  

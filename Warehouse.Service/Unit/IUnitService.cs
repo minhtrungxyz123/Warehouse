@@ -16,7 +16,7 @@ namespace Warehouse.Service
 
         Task<RepositoryResponse> Update(string id, UnitModel model);
 
-        Task<int> Delete(string id);
+        Task<int> Delete(string unitId);
 
         Task<ApiResult<Data.Entities.Unit>> GetByIdAsyn(string id);
     }

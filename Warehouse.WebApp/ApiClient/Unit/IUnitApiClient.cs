@@ -13,5 +13,7 @@ namespace Warehouse.WebApp.ApiClient
         Task<ApiResult<Pagination<UnitModel>>> GetPagings(GetUnitPagingRequest request);
 
         Task<ApiResult<UnitModel>> GetById(string id);
+
+        Task<ApiResult<bool>> Delete(string id);
     }
 }

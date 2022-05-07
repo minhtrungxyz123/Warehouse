@@ -50,6 +50,18 @@ namespace Warehouse.WebApp.ApiClient
             return response.IsSuccessStatusCode;
         }
 
+        public async Task<ApiResult<bool>> Delete(string id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:2000");
+            var response = await client.DeleteAsync($"/unit/delete?unitId={id}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
+        }
+
         #endregion Method
 
         #region List
@@ -72,7 +84,7 @@ namespace Warehouse.WebApp.ApiClient
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
-            var response = await client.GetAsync($"/unit/{id}");
+            var response = await client.GetAsync($"/unit/get-by-id?id={id}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<UnitModel>>(body);

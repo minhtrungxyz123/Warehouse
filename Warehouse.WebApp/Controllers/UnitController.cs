@@ -7,6 +7,7 @@ namespace Warehouse.WebApp.Controllers
     public class UnitController : Controller
     {
         #region Fields
+
         private readonly IUnitApiClient _unitApiClient;
 
         public UnitController(IUnitApiClient unitApiClient)
@@ -14,7 +15,7 @@ namespace Warehouse.WebApp.Controllers
             _unitApiClient = unitApiClient;
         }
 
-        #endregion
+        #endregion Fields
 
         #region List
 
@@ -35,12 +36,12 @@ namespace Warehouse.WebApp.Controllers
             return View(data.ResultObj);
         }
 
-        #endregion
+        #endregion List
 
         #region Method
 
         [HttpGet]
-        public  ActionResult Create()
+        public ActionResult Create()
         {
             return ViewComponent("CreateUnit");
         }
@@ -51,7 +52,7 @@ namespace Warehouse.WebApp.Controllers
             if (!ModelState.IsValid)
                 return View(request);
 
-                var result = await _unitApiClient.Create(request);
+            var result = await _unitApiClient.Create(request);
 
             if (result)
             {
@@ -61,7 +62,6 @@ namespace Warehouse.WebApp.Controllers
 
             ModelState.AddModelError("", "Thêm mới thất bại");
             return View(request);
-
         }
 
         [HttpGet]
@@ -77,7 +77,7 @@ namespace Warehouse.WebApp.Controllers
                     Inactive = user.Inactive,
                     Id = unitId
                 };
-                return View(updateRequest);
+                return ViewComponent("EditUnit", updateRequest);
             }
             return RedirectToAction("Error", "Home");
         }

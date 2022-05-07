@@ -17,7 +17,7 @@ namespace Warehouse.Service
             _context = context;
         }
 
-        #endregion
+        #endregion Fields
 
         #region List
 
@@ -35,7 +35,6 @@ namespace Warehouse.Service
                 Id = item.Id
             };
             return new ApiSuccessResult<Data.Entities.Unit>(userViewModel);
-            
         }
 
         public async Task<IEnumerable<Data.Entities.Unit>> GetAll()
@@ -86,7 +85,7 @@ namespace Warehouse.Service
             return item;
         }
 
-        #endregion
+        #endregion List
 
         #region Method
 
@@ -125,6 +124,16 @@ namespace Warehouse.Service
             };
         }
 
+        public async Task<int> Delete(int unitId)
+        {
+            var unit = await _context.Units.FindAsync(unitId);
+            if (unit == null) throw new WarehouseException($"Cannot find a unit: {unitId}");
+
+            _context.Units.Remove(unit);
+
+            return await _context.SaveChangesAsync();
+        }
+
         public async Task<int> Delete(string id)
         {
             var item = await _context.Units.FindAsync(id);
@@ -135,6 +144,6 @@ namespace Warehouse.Service
             return result;
         }
 
-        #endregion
+        #endregion Method
     }
 }
