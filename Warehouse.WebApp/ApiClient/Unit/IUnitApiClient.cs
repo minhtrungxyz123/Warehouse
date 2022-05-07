@@ -14,6 +14,6 @@ namespace Warehouse.WebApp.ApiClient
 
         Task<ApiResult<UnitModel>> GetById(string id);
 
-        Task<ApiResult<bool>> Delete(string id);
+        Task<bool> Delete(string id);
     }
 }

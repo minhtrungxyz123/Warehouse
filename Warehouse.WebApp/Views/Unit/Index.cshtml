@@ -68,8 +68,10 @@
                                     @Html.DisplayFor(modelItem => item.Inactive)
                                 </td>
                                 <td>
-                                    <button onclick="Edit('@item.Id')" class="btn-edit-unit">Edit</button>
-                                    <button>delete</button>
+                                    <button onclick="Edit('@item.Id')" class="btn btn-primary">Edit</button>
+                                    <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                        <input type="submit" value="Delete" class="btn btn-danger" />
+                                    </form>
                                 </td>
                             </tr>
                         }
@@ -104,6 +106,25 @@
                 $("#contactDetails").dialog("open");
             });
     }
+
+    jQueryAjaxDelete = form => {
+    if (confirm('Are you sure to delete this record ?')) {
+        try {
+            $.ajax({
+                type: 'Delete',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+            })
+        } catch (ex) {
+            console.log(ex)
+        }
+    }
+
+    //prevent default form submit event
+    return false;
+}
         
     $(function() { 
         $("#contactDetails").dialog({  

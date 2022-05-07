@@ -99,6 +99,23 @@ namespace Warehouse.WebApp.Controllers
             return View(request);
         }
 
+        [HttpDelete, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var result = await _unitApiClient.Delete(id);
+            if (result)
+            {
+                TempData["result"] = "Xóa thành công";
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", "Xóa không thành công");
+            return View();
+        }
+
         #endregion
     }
 }

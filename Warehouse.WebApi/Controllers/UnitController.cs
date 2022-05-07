@@ -98,10 +98,8 @@ namespace Warehouse.WebApi.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(string unitId)
         {
-            var delete = await _unitService.Delete(unitId);
-            if (delete == 0)
-                return BadRequest();
-            return Ok();
+            var result = await _unitService.Delete(unitId);
+            return Ok(result);
         }
 
         #endregion Method
