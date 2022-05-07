@@ -18,7 +18,7 @@ namespace Warehouse.WebApp.Controllers
 
         #region List
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 2)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetUnitPagingRequest()
             {
@@ -40,24 +40,28 @@ namespace Warehouse.WebApp.Controllers
         #region Method
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public  ActionResult Create()
         {
-            return View();
+            return ViewComponent("CreateUnit");
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(UnitModel request)
         {
-            try
-            {
-                var response = await _unitApiClient.Create(request);
+            if (!ModelState.IsValid)
+                return View(request);
 
+                var result = await _unitApiClient.Create(request);
+
+            if (result)
+            {
+                TempData["result"] = "Thêm mới đơn vị tính thành công";
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            ModelState.AddModelError("", "Thêm mới đơn vị tính thất bại");
+            return View(request);
+
         }
 
         #endregion

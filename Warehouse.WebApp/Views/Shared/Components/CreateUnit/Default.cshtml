@@ -1,0 +1,28 @@
+﻿@model Warehouse.Model.Unit.UnitModel
+
+<div>
+    <h4>Thêm mới đơn vị tính</h4>
+    <hr />
+    <form asp-controller="Unit" asp-action="Create">
+        <div class="form-body">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label asp-for="UnitName" class="control-label"></label>
+                    <input asp-for="UnitName" class="form-control" min="0" />
+                    <span asp-validation-for="UnitName" class="text-danger"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    Trang thai
+                    <div class="col-md-9">
+                        @Html.EditorFor(m => m.Inactive)
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer form-actions">
+                <button type="submit" class="btn btn-success btn-sm">
+                    Lưu
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

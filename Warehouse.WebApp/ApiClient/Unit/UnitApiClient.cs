@@ -26,7 +26,7 @@ namespace Warehouse.WebApp.ApiClient
 
         #region Method
 
-        public async Task<string> Create(UnitModel request)
+        public async Task<bool> Create(UnitModel request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -35,7 +35,19 @@ namespace Warehouse.WebApp.ApiClient
             client.BaseAddress = new Uri("https://localhost:2000");
             var response = await client.PostAsync("unit/create", httpContent);
 
-            return await response.Content.ReadAsStringAsync();
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> Edit(UnitModel request, string id)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:2000");
+            var response = await client.PostAsync($"unit/update/"+id+"", httpContent);
+
+            return response.IsSuccessStatusCode;
         }
         #endregion
 

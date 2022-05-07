@@ -6,7 +6,9 @@ namespace Warehouse.WebApp.ApiClient
 {
     public interface IUnitApiClient
     {
-        public Task<string> Create(UnitModel request);
+        public Task<bool> Create(UnitModel request);
+
+        public Task<bool> Edit(UnitModel request, string id);
 
         Task<ApiResult<Pagination<UnitModel>>> GetPagings(GetUnitPagingRequest request);
     }

@@ -4,13 +4,7 @@
     ViewData["Title"] = "Danh sách người dùng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section Scripts{ 
-<script>
-    setTimeout(function () {
-        $('#msgAlert').fadeOut('slow');
-    }, 2000);
-</script>
-}
+
 <div class="container-fluid">
     <h1 class="mt-4">Danh sách người dùng</h1>
     <ol class="breadcrumb mb-4">
@@ -21,7 +15,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6 col-xs-12">
-                    <a class="btn btn-success" asp-action="Create" asp-controller="User">Tạo mới</a>
+                    <a class="btn btn-success" onclick="Create()">Tạo mới</a>
                 </div>
                 <div class="col-md-6 col-xs-12">
                     <form asp-action="Index" method="get">
@@ -31,7 +25,7 @@
                             </div>
                             <div class="cold-md-3">
                                 <button type="submit" class="btn btn-primary">Tìm</button>
-                                <button type="button" onclick="window.location.href='/User/Index'" class="btn btn-dark">Reset</button>
+                                <button type="button" onclick="window.location.href='/Unit/Index'" class="btn btn-dark">Tải lại</button>
                             </div>
                         </div>
                     </form>
@@ -60,7 +54,7 @@
                             <th>
                                 Trạng thái
                             </th>
-                            <th></th>
+                            <th>Chức năng</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,6 +67,10 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Inactive)
                                 </td>
+                                <td>
+                                    <button data-id="@item.UnitName" class="btn-edit-unit">Edit</button>
+                                    <button>delete</button>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -83,3 +81,37 @@
     </div>
 </div>
 
+<div id="contactDetails"></div>
+
+@section Scripts{
+
+<script>
+    setTimeout(function () {
+        $('#msgAlert').fadeOut('slow');
+    }, 2000);
+    function Create() {
+        $.get("/Unit/Create", function (data) {
+            $("#contactDetails").html(data);
+            $("#contactDetails").dialog("open");
+            $(".k-overlay").removeClass("d-none");   
+        });    
+    }
+        
+    $(function() { 
+        $("#contactDetails").dialog({  
+            autoOpen: false, 
+            modal: true,      
+            width: 500, 
+            show: {   
+                effect: "blind",   
+                duration: 1000   
+            },  
+            hide: {    
+                effect: "explode",            
+                duration: 1000 
+            }   
+        });  
+    });
+
+</script>
+}
