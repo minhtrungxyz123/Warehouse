@@ -22,11 +22,11 @@ namespace Warehouse.WebApp.ApiClient.WareHouse
             _httpContextAccessor = httpContextAccessor;
         }
 
-        #endregion
+        #endregion Fields
 
         #region Method
 
-        public async Task<string> Create(WareHouseModel request)
+        public async Task<bool> Create(WareHouseModel request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -35,9 +35,34 @@ namespace Warehouse.WebApp.ApiClient.WareHouse
             client.BaseAddress = new Uri("https://localhost:2000");
             var response = await client.PostAsync("warehouse/create", httpContent);
 
-            return await response.Content.ReadAsStringAsync();
+            return response.IsSuccessStatusCode;
         }
-        #endregion
+
+        public async Task<bool> Edit(string id, WareHouseModel request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:2000");
+            var response = await client.PutAsync($"warehouse/update/" + id + "", httpContent);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> Delete(string id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:2000");
+            var response = await client.DeleteAsync($"/warehouse/delete?warehouseId={id}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<bool>(body);
+
+            return JsonConvert.DeserializeObject<bool>(body);
+        }
+
+        #endregion Method
 
         #region List
 
@@ -55,6 +80,18 @@ namespace Warehouse.WebApp.ApiClient.WareHouse
             return warehouse;
         }
 
-        #endregion
+        public async Task<ApiResult<WareHouseModel>> GetById(string id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:2000");
+            var response = await client.GetAsync($"/warehouse/get-by-id?id={id}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<WareHouseModel>>(body);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<WareHouseModel>>(body);
+        }
+
+        #endregion List
     }
 }

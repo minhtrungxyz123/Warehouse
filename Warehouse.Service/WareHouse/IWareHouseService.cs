@@ -16,6 +16,8 @@ namespace Warehouse.Service
 
         Task<RepositoryResponse> Update(string id, WareHouseModel model);
 
-        Task<int> Delete(string id);
+        Task<int> Delete(string warehouseId);
+
+        Task<ApiResult<Data.Entities.WareHouse>> GetByIdAsyn(string id);
     }
 }

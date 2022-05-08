@@ -9,36 +9,45 @@ namespace Warehouse.WebApi.Controllers
     [ApiController]
     public class WareHouseController : ControllerBase
     {
+
         #region Fields
 
-        private readonly IWareHouseService _wareHouseService;
+        private readonly IWareHouseService _warehouseService;
 
         public WareHouseController(IWareHouseService wareHouseService)
         {
-            _wareHouseService = wareHouseService;
+            _warehouseService = wareHouseService;
         }
 
         #endregion Fields
 
         #region List
 
-        [HttpGet("")]
+        [Route("get-by-id")]
+        [HttpGet]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var user = await _warehouseService.GetByIdAsyn(id);
+            return Ok(user);
+        }
+
+        [HttpGet("get-all")]
         public async Task<ActionResult> GetAll()
         {
-            return Ok(await _wareHouseService.GetAll());
+            return Ok(await _warehouseService.GetAll());
         }
 
         [HttpGet("get")]
-        public async Task<ActionResult> GetAllPaging([FromQuery] GetWareHousePagingRequest request)
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetWareHousePagingRequest request)
         {
-            var warehouse = await _wareHouseService.GetAllPaging(request);
-            return Ok(warehouse);
+            var products = await _warehouseService.GetAllPaging(request);
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(string id)
         {
-            var item = await _wareHouseService.GetById(id);
+            var item = await _warehouseService.GetById(id);
 
             if (item == null)
             {
@@ -53,9 +62,9 @@ namespace Warehouse.WebApi.Controllers
         #region Method
 
         [HttpPost("create")]
-        public async Task<IActionResult> Post(WareHouseModel model)
+        public async Task<IActionResult> Post([FromBody] WareHouseModel model)
         {
-            var result = await _wareHouseService.Create(model);
+            var result = await _warehouseService.Create(model);
 
             if (result.Result > 0)
             {
@@ -63,23 +72,18 @@ namespace Warehouse.WebApi.Controllers
             }
             else
             {
-                return BadRequest(new ApiBadRequestResponse("Create wareHouse failed"));
+                return BadRequest(new ApiBadRequestResponse("Create warehouse failed"));
             }
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Put(WareHouseModel model, string id)
+        public async Task<IActionResult> Put([FromBody] WareHouseModel model, string id)
         {
-            var item = await _wareHouseService.GetById(id);
+            var item = await _warehouseService.GetById(id);
             if (item == null)
                 return NotFound(new ApiNotFoundResponse($"WareHouse with id: {id} is not found"));
 
-            if (id == model.ParentId)
-            {
-                return BadRequest(new ApiBadRequestResponse("WareHouse cannot be a child itself."));
-            }
-
-            var result = await _wareHouseService.Update(id, model);
+            var result = await _warehouseService.Update(id, model);
 
             if (result.Result > 0)
             {
@@ -87,28 +91,16 @@ namespace Warehouse.WebApi.Controllers
             }
             else
             {
-                return BadRequest(new ApiBadRequestResponse("Update wareHouse failed"));
+                return BadRequest(new ApiBadRequestResponse("Update warehouse failed"));
             }
         }
 
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [Route("delete")]
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string warehouseId)
         {
-            var item = _wareHouseService.GetById(id);
-
-            if (item == null)
-                return NotFound(new ApiNotFoundResponse($"WareHouse with id: {id} is not found"));
-
-            var result = await _wareHouseService.Delete(id);
-
-            if (result > 0)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest(new ApiBadRequestResponse("Delete wareHouse failed"));
-            }
+            var result = await _warehouseService.Delete(warehouseId);
+            return Ok(result);
         }
 
         #endregion Method

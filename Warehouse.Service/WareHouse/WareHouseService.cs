@@ -21,6 +21,27 @@ namespace Warehouse.Service
 
         #region List
 
+        public async Task<ApiResult<Data.Entities.WareHouse>> GetByIdAsyn(string id)
+        {
+            var item = await _context.WareHouses
+                            .OrderByDescending(p => p.Name)
+                            .DefaultIfEmpty()
+                            .FirstOrDefaultAsync(p => p.Id == id);
+
+            var userViewModel = new Data.Entities.WareHouse()
+            {
+                Name = item.Name,
+                Inactive = item.Inactive,
+                Id = item.Id,
+                Code= item.Code,
+                Path = item.Path,
+                Address = item.Address,
+                ParentId = item.ParentId,
+                Description = item.Description
+            };
+            return new ApiSuccessResult<Data.Entities.WareHouse>(userViewModel);
+        }
+
         public async Task<IEnumerable<Data.Entities.WareHouse>> GetAll()
         {
             return await _context.WareHouses
@@ -31,26 +52,37 @@ namespace Warehouse.Service
         public async Task<ApiResult<Pagination<Data.Entities.WareHouse>>> GetAllPaging(GetWareHousePagingRequest request)
         {
             var query = _context.WareHouses.AsQueryable();
-
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.Name.Contains(request.Keyword)
-                || x.Description.Contains(request.Keyword));
+                query = query.Where(x => x.Name.Contains(request.Keyword));
             }
-            var totalRecords = await query.CountAsync();
 
-            var items = await query.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize).ToListAsync();
+            //3. Paging
+            int totalRow = await query.CountAsync();
 
-            var pagination = new Pagination<Data.Entities.WareHouse>
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new Data.Entities.WareHouse()
+                {
+                    Name = x.Name,
+                    Inactive = x.Inactive,
+                    Id = x.Id,
+                    Description = x.Description,
+                    ParentId = x.ParentId,
+                    Address = x.Address,
+                    Path = x.Path,
+                    Code=x.Code,
+                }).ToListAsync();
+
+            //4. Select and projection
+            var pagedResult = new Pagination<Data.Entities.WareHouse>()
             {
-                Items = items,
-                TotalRecords = totalRecords,
+                TotalRecords = totalRow,
                 PageIndex = request.PageIndex,
                 PageSize = request.PageSize,
+                Items = data
             };
-
-            return new ApiSuccessResult<Pagination<Data.Entities.WareHouse>>(pagination);
+            return new ApiSuccessResult<Pagination<Data.Entities.WareHouse>>(pagedResult);
         }
 
         public async Task<Data.Entities.WareHouse?> GetById(string? id)
@@ -72,14 +104,12 @@ namespace Warehouse.Service
             Data.Entities.WareHouse item = new Data.Entities.WareHouse()
             {
                 Name = model.Name,
+                Inactive = model.Inactive,
                 Address = model.Address,
                 Code = model.Code,
-                Description = model.Description,
                 ParentId = model.ParentId,
-                Path = model.Path,
-                Inactive = model.Inactive
+                Description = model.Description
             };
-
             item.Id = Guid.NewGuid().ToString();
 
             _context.WareHouses.Add(item);
@@ -96,12 +126,11 @@ namespace Warehouse.Service
         {
             var item = await _context.WareHouses.FindAsync(id);
             item.Name = model.Name;
+            item.Inactive = model.Inactive;
             item.Address = model.Address;
             item.Code = model.Code;
-            item.Description = model.Description;
             item.ParentId = model.ParentId;
-            item.Path = model.Path;
-            item.Inactive = model.Inactive;
+            item.Description = model.Description;
 
             _context.WareHouses.Update(item);
             var result = await _context.SaveChangesAsync();
