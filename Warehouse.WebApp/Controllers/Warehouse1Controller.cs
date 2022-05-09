@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Warehouse.Model.WareHouse;
-using Warehouse.WebApp.ApiClient.WareHouse;
+using Warehouse.WebApp.ApiClient;
 
 namespace Warehouse.WebApp.Controllers
 {
-    public class WarehouseController : Controller
+    public class Warehouse1Controller : Controller
     {
         #region Fields
 
         private readonly IWareHouseApiClient _warehouseApiClient;
 
-        public WarehouseController(IWareHouseApiClient wareHouseApiClient)
+        public Warehouse1Controller(IWareHouseApiClient wareHouseApiClient)
         {
             _warehouseApiClient = wareHouseApiClient;
         }
@@ -43,7 +43,7 @@ namespace Warehouse.WebApp.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return ViewComponent("CreateWareHouse");
+            return ViewComponent("CreateWareHouse1");
         }
 
         [HttpPost]
@@ -82,7 +82,7 @@ namespace Warehouse.WebApp.Controllers
                     ParentId = user.ParentId,
                     Path = user.Path
                 };
-                return ViewComponent("EditWareHouse", updateRequest);
+                return ViewComponent("EditWareHouse1", updateRequest);
             }
             return RedirectToAction("Error", "Home");
         }
@@ -104,8 +104,7 @@ namespace Warehouse.WebApp.Controllers
             return View(request);
         }
 
-        [HttpDelete, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (!ModelState.IsValid)

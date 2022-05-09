@@ -2,11 +2,11 @@
 using System.Text;
 using Warehouse.Common;
 using Warehouse.Common.Common;
-using Warehouse.Model.Vendor;
+using Warehouse.Model.WareHouseItemCategory;
 
 namespace Warehouse.WebApp.ApiClient
 {
-    public class VendorApiClient : IVendorApiClient
+    public class WareHouseItemCategoryApiClient :IWareHouseItemCategoryApiClient
     {
         #region Fields
 
@@ -14,7 +14,7 @@ namespace Warehouse.WebApp.ApiClient
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public VendorApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor,
+        public WareHouseItemCategoryApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor,
                     IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
@@ -26,26 +26,26 @@ namespace Warehouse.WebApp.ApiClient
 
         #region Method
 
-        public async Task<bool> Create(VendorModel request)
+        public async Task<bool> Create(WareHouseItemCategoryModel request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
-            var response = await client.PostAsync("vendor/create", httpContent);
+            var response = await client.PostAsync("wareHouse-itemCategory/create", httpContent);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> Edit(string id, VendorModel request)
+        public async Task<bool> Edit(string id, WareHouseItemCategoryModel request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
-            var response = await client.PutAsync($"vendor/update/" + id + "", httpContent);
+            var response = await client.PutAsync($"wareHouse-itemCategory/update/" + id + "", httpContent);
 
             return response.IsSuccessStatusCode;
         }
@@ -54,7 +54,7 @@ namespace Warehouse.WebApp.ApiClient
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
-            var response = await client.DeleteAsync($"/vendor/delete?vendorId={id}");
+            var response = await client.DeleteAsync($"/wareHouse-itemCategory/delete?id={id}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<bool>(body);
@@ -66,30 +66,30 @@ namespace Warehouse.WebApp.ApiClient
 
         #region List
 
-        public async Task<ApiResult<Pagination<VendorModel>>> GetPagings(GetVendorPagingRequest request)
+        public async Task<ApiResult<Pagination<WareHouseItemCategoryModel>>> GetPagings(GetWareHouseItemCategoryPagingRequest request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
 
-            var response = await client.GetAsync($"/vendor/get?keyword={request.Keyword}&pageIndex=" +
+            var response = await client.GetAsync($"/wareHouse-itemCategory/get?keyword={request.Keyword}&pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}");
             var body = await response.Content.ReadAsStringAsync();
-            var vendor = JsonConvert.DeserializeObject<ApiSuccessResult<Pagination<VendorModel>>>(body);
+            var vendor = JsonConvert.DeserializeObject<ApiSuccessResult<Pagination<WareHouseItemCategoryModel>>>(body);
             return vendor;
         }
 
-        public async Task<ApiResult<VendorModel>> GetById(string id)
+        public async Task<ApiResult<WareHouseItemCategoryModel>> GetById(string id)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:2000");
-            var response = await client.GetAsync($"/vendor/get-by-id?id={id}");
+            var response = await client.GetAsync($"/wareHouse-itemCategory/get-by-id?id={id}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<VendorModel>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<WareHouseItemCategoryModel>>(body);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<VendorModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<WareHouseItemCategoryModel>>(body);
         }
 
         #endregion List

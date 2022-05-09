@@ -21,6 +21,27 @@ namespace Warehouse.Service
 
         #region List
 
+        public async Task<ApiResult<Data.Entities.Vendor>> GetByIdAsyn(string id)
+        {
+            var item = await _context.Vendors
+                            .OrderByDescending(p => p.Name)
+                            .DefaultIfEmpty()
+                            .FirstOrDefaultAsync(p => p.Id == id);
+
+            var userViewModel = new Data.Entities.Vendor()
+            {
+                Name = item.Name,
+                Address = item.Address,
+                Code = item.Code,
+                ContactPerson = item.ContactPerson,
+                Email = item.Email,
+                Phone=item.Phone,
+                Inactive = item.Inactive,
+                Id = item.Id
+            };
+            return new ApiSuccessResult<Data.Entities.Vendor>(userViewModel);
+        }
+
         public async Task<IEnumerable<Data.Entities.Vendor>> GetAll()
         {
             return await _context.Vendors
@@ -36,7 +57,7 @@ namespace Warehouse.Service
                 query = query.Where(x => x.Name.Contains(request.Keyword));
             }
 
-            // Paging
+            //3. Paging
             int totalRow = await query.CountAsync();
 
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
@@ -44,16 +65,16 @@ namespace Warehouse.Service
                 .Select(x => new Data.Entities.Vendor()
                 {
                     Name = x.Name,
-                    Address = x.Address,
-                    Code = x.Code,
                     ContactPerson = x.ContactPerson,
-                    Email = x.Email,
                     Phone = x.Phone,
+                    Email = x.Email,
+                    Code = x.Code,
+                    Address=x.Address,
                     Inactive = x.Inactive,
                     Id = x.Id
                 }).ToListAsync();
 
-            //Select and projection
+            //4. Select and projection
             var pagedResult = new Pagination<Data.Entities.Vendor>()
             {
                 TotalRecords = totalRow,
@@ -83,11 +104,11 @@ namespace Warehouse.Service
             Data.Entities.Vendor item = new Data.Entities.Vendor()
             {
                 Name = model.Name,
+                Phone = model.Phone,
                 Address = model.Address,
                 Code = model.Code,
-                ContactPerson = model.ContactPerson,
                 Email = model.Email,
-                Phone = model.Phone,
+                ContactPerson = model.Phone,
                 Inactive = model.Inactive
             };
             item.Id = Guid.NewGuid().ToString();
@@ -106,11 +127,11 @@ namespace Warehouse.Service
         {
             var item = await _context.Vendors.FindAsync(id);
             item.Name = model.Name;
+            item.Phone = model.Phone;
             item.Address = model.Address;
             item.Code = model.Code;
-            item.ContactPerson = model.ContactPerson;
             item.Email = model.Email;
-            item.Phone = model.Phone;
+            item.ContactPerson = model.Phone;
             item.Inactive = model.Inactive;
 
             _context.Vendors.Update(item);

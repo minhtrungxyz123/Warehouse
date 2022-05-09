@@ -6,8 +6,14 @@ namespace Warehouse.WebApp.ApiClient
 {
     public interface IVendorApiClient
     {
-        public Task<string> Create(VendorModel request);
+        public Task<bool> Create(VendorModel request);
+
+        public Task<bool> Edit(string id, VendorModel request);
 
         Task<ApiResult<Pagination<VendorModel>>> GetPagings(GetVendorPagingRequest request);
+
+        Task<ApiResult<VendorModel>> GetById(string id);
+
+        Task<bool> Delete(string id);
     }
 }

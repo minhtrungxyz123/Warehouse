@@ -22,16 +22,25 @@ namespace Warehouse.WebApi.Controllers
 
         #region List
 
-        [HttpGet("")]
+        [Route("get-by-id")]
+        [HttpGet]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var user = await _vendorService.GetByIdAsyn(id);
+            return Ok(user);
+        }
+
+        [HttpGet("get-all")]
         public async Task<ActionResult> GetAll()
         {
             return Ok(await _vendorService.GetAll());
         }
 
         [HttpGet("get")]
-        public async Task<ActionResult> GetAllPaging([FromQuery] GetVendorPagingRequest request)
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetVendorPagingRequest request)
         {
-            return Ok(await _vendorService.GetAllPaging(request));
+            var products = await _vendorService.GetAllPaging(request);
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
@@ -52,7 +61,7 @@ namespace Warehouse.WebApi.Controllers
         #region Method
 
         [HttpPost("create")]
-        public async Task<IActionResult> Post(VendorModel model)
+        public async Task<IActionResult> Post([FromBody] VendorModel model)
         {
             var result = await _vendorService.Create(model);
 
@@ -67,7 +76,7 @@ namespace Warehouse.WebApi.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Put(VendorModel model, string id)
+        public async Task<IActionResult> Put([FromBody] VendorModel model, string id)
         {
             var item = await _vendorService.GetById(id);
             if (item == null)
@@ -85,24 +94,12 @@ namespace Warehouse.WebApi.Controllers
             }
         }
 
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [Route("delete")]
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string vendorId)
         {
-            var item = _vendorService.GetById(id);
-
-            if (item == null)
-                return NotFound(new ApiNotFoundResponse($"Vendor with id: {id} is not found"));
-
-            var result = await _vendorService.Delete(id);
-
-            if (result > 0)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest(new ApiBadRequestResponse("Delete vendor failed"));
-            }
+            var result = await _vendorService.Delete(vendorId);
+            return Ok(result);
         }
 
         #endregion Method

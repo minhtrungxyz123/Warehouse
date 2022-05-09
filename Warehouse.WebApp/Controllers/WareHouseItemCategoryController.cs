@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Warehouse.Model.Vendor;
+using Warehouse.Model.WareHouseItemCategory;
 using Warehouse.WebApp.ApiClient;
 
 namespace Warehouse.WebApp.Controllers
 {
-    public class VendorController : Controller
+    public class WareHouseItemCategoryController : Controller
     {
         #region Fields
 
-        private readonly IVendorApiClient _vendorApiClient;
+        private readonly IWareHouseItemCategoryApiClient _wareHouseItemCategoryApiClient;
 
-        public VendorController(IVendorApiClient vendorApiClient)
+        public WareHouseItemCategoryController(IWareHouseItemCategoryApiClient wareHouseItemCategoryApiClient)
         {
-            _vendorApiClient = vendorApiClient;
+            _wareHouseItemCategoryApiClient = wareHouseItemCategoryApiClient;
         }
 
         #endregion Fields
@@ -21,13 +21,13 @@ namespace Warehouse.WebApp.Controllers
 
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
-            var request = new GetVendorPagingRequest()
+            var request = new GetWareHouseItemCategoryPagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };
-            var data = await _vendorApiClient.GetPagings(request);
+            var data = await _wareHouseItemCategoryApiClient.GetPagings(request);
             ViewBag.Keyword = keyword;
             if (TempData["result"] != null)
             {
@@ -43,16 +43,16 @@ namespace Warehouse.WebApp.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return ViewComponent("CreateVendor");
+            return ViewComponent("CreateWareHouseItemCategory");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(VendorModel request)
+        public async Task<IActionResult> Create(WareHouseItemCategoryModel request)
         {
             if (!ModelState.IsValid)
                 return View(request);
 
-            var result = await _vendorApiClient.Create(request);
+            var result = await _wareHouseItemCategoryApiClient.Create(request);
 
             if (result)
             {
@@ -65,35 +65,34 @@ namespace Warehouse.WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(string vendorId)
+        public async Task<IActionResult> Edit(string wareHouseItemCategoryId)
         {
-            var result = await _vendorApiClient.GetById(vendorId);
+            var result = await _wareHouseItemCategoryApiClient.GetById(wareHouseItemCategoryId);
             if (result.IsSuccessed)
             {
                 var user = result.ResultObj;
-                var updateRequest = new VendorModel()
+                var updateRequest = new WareHouseItemCategoryModel()
                 {
+                    Code = user.Code,
+                    Description = user.Description,
+                    ParentId = user.ParentId,
+                    Path = user.Path,
                     Name = user.Name,
                     Inactive = user.Inactive,
-                    Id = vendorId,
-                    Address = user.Address,
-                    Code = user.Code,
-                    ContactPerson = user.ContactPerson,
-                    Email = user.Email,
-                    Phone=user.Phone,
+                    Id = wareHouseItemCategoryId
                 };
-                return ViewComponent("EditVendor", updateRequest);
+                return ViewComponent("EditWareHouseItemCategory", updateRequest);
             }
             return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(VendorModel request)
+        public async Task<IActionResult> Edit(WareHouseItemCategoryModel request)
         {
             if (!ModelState.IsValid)
                 return View();
 
-            var result = await _vendorApiClient.Edit(request.Id, request);
+            var result = await _wareHouseItemCategoryApiClient.Edit(request.Id, request);
             if (result)
             {
                 TempData["result"] = "Sửa thành công";
@@ -109,7 +108,7 @@ namespace Warehouse.WebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-            var result = await _vendorApiClient.Delete(id);
+            var result = await _wareHouseItemCategoryApiClient.Delete(id);
             if (result)
             {
                 TempData["result"] = "Xóa thành công";

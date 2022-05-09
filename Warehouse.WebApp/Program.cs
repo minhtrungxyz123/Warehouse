@@ -7,8 +7,12 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient();
 
-// Add DI
+#region Add DI
 builder.Services.AddTransient<IUnitApiClient, UnitApiClient>();
+builder.Services.AddTransient<IWareHouseApiClient, WareHouseApiClient>();
+builder.Services.AddTransient<IVendorApiClient, VendorApiClient>();
+builder.Services.AddTransient<IWareHouseItemCategoryApiClient, WareHouseItemCategoryApiClient>();
+#endregion
 
 builder.Services.AddControllersWithViews();
 

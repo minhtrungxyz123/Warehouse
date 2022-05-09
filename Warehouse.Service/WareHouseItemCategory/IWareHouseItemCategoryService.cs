@@ -1,4 +1,5 @@
 ﻿using Warehouse.Common;
+using Warehouse.Common.Common;
 using Warehouse.Model.WareHouseItemCategory;
 
 namespace Warehouse.Service
@@ -7,7 +8,7 @@ namespace Warehouse.Service
     {
         Task<IEnumerable<Data.Entities.WareHouseItemCategory>> GetAll();
 
-        Task<Pagination<Data.Entities.WareHouseItemCategory>> GetAllPaging(string? search, int pageIndex, int pageSize);
+        Task<ApiResult<Pagination<Data.Entities.WareHouseItemCategory>>> GetAllPaging(GetWareHouseItemCategoryPagingRequest request);
 
         Task<Data.Entities.WareHouseItemCategory> GetById(string? id);
 
@@ -16,5 +17,7 @@ namespace Warehouse.Service
         Task<RepositoryResponse> Update(string id, WareHouseItemCategoryModel model);
 
         Task<int> Delete(string id);
+
+        Task<ApiResult<Data.Entities.WareHouseItemCategory>> GetByIdAsyn(string id);
     }
 }

@@ -2,7 +2,7 @@
 using Warehouse.Common.Common;
 using Warehouse.Model.WareHouse;
 
-namespace Warehouse.WebApp.ApiClient.WareHouse
+namespace Warehouse.WebApp.ApiClient
 {
     public interface IWareHouseApiClient
     {

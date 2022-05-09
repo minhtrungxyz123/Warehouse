@@ -1,0 +1,9 @@
+﻿using Warehouse.Common.Common;
+
+namespace Warehouse.Model.WareHouseItemCategory
+{
+    public class GetWareHouseItemCategoryPagingRequest : PagingRequestBase
+    {
+        public string? Keyword { get; set; }
+    }
+}

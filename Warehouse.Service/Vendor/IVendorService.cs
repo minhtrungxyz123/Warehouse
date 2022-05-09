@@ -16,6 +16,8 @@ namespace Warehouse.Service
 
         Task<RepositoryResponse> Update(string id, VendorModel model);
 
-        Task<int> Delete(string id);
+        Task<int> Delete(string vendorId);
+
+        Task<ApiResult<Data.Entities.Vendor>> GetByIdAsyn(string id);
     }
 }
