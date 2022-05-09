@@ -93,6 +93,17 @@ namespace Warehouse.Service
             return item;
         }
 
+        public IList<Data.Entities.WareHouseItemCategory> GetMvcListItems(bool showHidden = true)
+        {
+            var query = from p in _context.WareHouseItemCategories.AsQueryable() select p;
+            if (showHidden)
+            {
+                query = from p in query where p.Inactive select p;
+            }
+            query = from p in query orderby p.Name select p;
+            return query.ToList();
+        }
+
         #endregion List
 
         #region Method

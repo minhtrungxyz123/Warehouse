@@ -135,7 +135,8 @@
         }
 
         function Edit(id) {
-                $.get("/WareHouseItem/Edit", { wareHouseItemId: id }, function (data) {
+            console.log(id)
+                $.get("/WareHouseItem/Edit", { itemId: id }, function (data) {
                     $("#contactDetails").html(data);
                     $("#contactDetails").dialog("open");
                 });

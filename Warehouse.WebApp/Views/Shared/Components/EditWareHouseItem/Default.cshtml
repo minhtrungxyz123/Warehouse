@@ -1,12 +1,13 @@
 ﻿@model Warehouse.Model.WareHouseItem.WareHouseItemModel
 
 <div>
-    <h4>Thêm mới vật tư</h4>
+    <h4>Sửa nhà cung cấp</h4>
     <hr />
-    <form asp-controller="WareHouseItem" asp-action="Create">
+    <form asp-controller="WareHouseItem" asp-action="Edit">
         <div class="form-body">
+            <input type="hidden" asp-for="Id" />
             <div class="modal-body">
-                <div class="form-group">
+                 <div class="form-group">
                     <label asp-for="Code" class="control-label"></label>
                     <input asp-for="Code" class="form-control" min="0" />
                     <span asp-validation-for="Code" class="text-danger"></span>
@@ -41,7 +42,7 @@
                     <input asp-for="Description" class="form-control" min="0" />
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
-                <div class="form-group form-group-sm">
+                 <div class="form-group form-group-sm">
                     Trang thai
                     <div class="col-md-9">
                         @Html.EditorFor(m => m.Inactive)

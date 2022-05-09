@@ -19,5 +19,7 @@ namespace Warehouse.Service
         Task<int> Delete(string id);
 
         Task<ApiResult<Data.Entities.WareHouseItemCategory>> GetByIdAsyn(string id);
+
+        IList<Data.Entities.WareHouseItemCategory> GetMvcListItems(bool showHidden = true);
     }
 }

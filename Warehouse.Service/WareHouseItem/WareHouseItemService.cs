@@ -89,7 +89,7 @@ namespace Warehouse.Service
                 .Take(request.PageSize)
                 .Select(u => new WareHouseItemModel()
                 {
-                    Id = u.tp.Id,
+                    Id = u.pr.Id,
                     Description = u.pr.Description,
                     Name = u.tp.Name,
                     CategoryId = u.tw.Name,

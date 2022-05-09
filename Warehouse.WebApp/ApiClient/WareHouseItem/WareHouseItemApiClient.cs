@@ -3,7 +3,9 @@ using System.Text;
 using Warehouse.Common;
 using Warehouse.Common.Common;
 using Warehouse.Model.Unit;
+using Warehouse.Model.Vendor;
 using Warehouse.Model.WareHouseItem;
+using Warehouse.Model.WareHouseItemCategory;
 
 namespace Warehouse.WebApp.ApiClient
 {
@@ -102,6 +104,30 @@ namespace Warehouse.WebApp.ApiClient
                 return JsonConvert.DeserializeObject<IList<UnitModel>>(body);
 
             return JsonConvert.DeserializeObject<IList<UnitModel>>(body);
+        }
+
+        public async Task<IList<VendorModel>> GetVendor(bool showHidden = true)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:2000");
+            var response = await client.GetAsync($"/vendor/get-available?showHidden={showHidden}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<IList<VendorModel>>(body);
+
+            return JsonConvert.DeserializeObject<IList<VendorModel>>(body);
+        }
+
+        public async Task<IList<WareHouseItemCategoryModel>> GetCategory(bool showHidden = true)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:2000");
+            var response = await client.GetAsync($"/wareHouse-itemCategory/get-available?showHidden={showHidden}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<IList<WareHouseItemCategoryModel>>(body);
+
+            return JsonConvert.DeserializeObject<IList<WareHouseItemCategoryModel>>(body);
         }
 
         #endregion List

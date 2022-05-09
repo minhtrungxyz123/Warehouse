@@ -1,7 +1,9 @@
 ﻿using Warehouse.Common;
 using Warehouse.Common.Common;
 using Warehouse.Model.Unit;
+using Warehouse.Model.Vendor;
 using Warehouse.Model.WareHouseItem;
+using Warehouse.Model.WareHouseItemCategory;
 
 namespace Warehouse.WebApp.ApiClient
 {
@@ -16,6 +18,10 @@ namespace Warehouse.WebApp.ApiClient
         Task<ApiResult<WareHouseItemModel>> GetById(string id);
 
         Task<IList<UnitModel>> GetAvailableList(bool showHidden = true);
+
+        Task<IList<VendorModel>> GetVendor(bool showHidden = true);
+
+        Task<IList<WareHouseItemCategoryModel>> GetCategory(bool showHidden = true);
 
         Task<bool> Delete(string id);
     }

@@ -13,6 +13,6 @@ namespace Warehouse.Data.Entities
         public string ParentId { get; set; }
         public string Path { get; set; }
         public string Description { get; set; }
-        public bool? Inactive { get; set; }
+        public bool Inactive { get; set; }
     }
 }

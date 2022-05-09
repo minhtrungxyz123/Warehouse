@@ -56,6 +56,14 @@ namespace Warehouse.WebApi.Controllers
             return Ok(item);
         }
 
+        [Route("get-available")]
+        [HttpGet]
+        public async Task<IActionResult> GetAvailableList(bool showHidden = true)
+        {
+            var user = _wareHouseItemCategoryService.GetMvcListItems(showHidden);
+            return Ok(user);
+        }
+
         #endregion List
 
         #region Method

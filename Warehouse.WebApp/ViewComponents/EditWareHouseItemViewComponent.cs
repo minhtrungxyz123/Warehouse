@@ -16,12 +16,11 @@ namespace Warehouse.WebApp.ViewComponents
             model.Name = unitModel.Name;
             model.Inactive = unitModel.Inactive;
             model.Description = unitModel.Description;
-            model.Country = unitModel.Country;
-            model.Code = unitModel.Code;
             model.CategoryId = unitModel.CategoryId;
+            model.Code = unitModel.Code;
             model.VendorId = unitModel.VendorId;
-            model.VendorName = unitModel.VendorName;
             model.UnitId = unitModel.UnitId;
+            model.Country = unitModel.Country;
             return View(model);
         }
     }
