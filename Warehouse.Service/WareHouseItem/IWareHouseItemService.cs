@@ -1,4 +1,5 @@
 ﻿using Warehouse.Common;
+using Warehouse.Common.Common;
 using Warehouse.Model.WareHouseItem;
 
 namespace Warehouse.Service
@@ -7,7 +8,7 @@ namespace Warehouse.Service
     {
         Task<IEnumerable<Data.Entities.WareHouseItem>> GetAll();
 
-        Task<Pagination<Data.Entities.WareHouseItem>> GetAllPaging(string? search, int pageIndex, int pageSize);
+        Task<ApiResult<Pagination<WareHouseItemModel>>> GetAllPaging(GetWareHouseItemPagingRequest request);
 
         Task<Data.Entities.WareHouseItem> GetById(string? id);
 
@@ -16,5 +17,7 @@ namespace Warehouse.Service
         Task<RepositoryResponse> Update(string id, WareHouseItemModel model);
 
         Task<int> Delete(string id);
+
+        Task<ApiResult<Data.Entities.WareHouseItem>> GetByIdAsyn(string id);
     }
 }

@@ -85,6 +85,17 @@ namespace Warehouse.Service
             return item;
         }
 
+        public IList<Data.Entities.Unit> GetMvcListItems(bool showHidden = true)
+        {
+            var query = from p in _context.Units.AsQueryable() select p;
+            if (!showHidden)
+            {
+                query = from p in query where !p.Inactive select p;
+            }
+            query = from p in query orderby p.UnitName select p;
+            return query.ToList();
+        }
+
         #endregion List
 
         #region Method

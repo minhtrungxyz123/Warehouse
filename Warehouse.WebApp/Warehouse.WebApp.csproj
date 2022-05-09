@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Warehouse.Model\Warehouse.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Shared\Components\EditWareHouseItem\" />
+  </ItemGroup>
+
 </Project>

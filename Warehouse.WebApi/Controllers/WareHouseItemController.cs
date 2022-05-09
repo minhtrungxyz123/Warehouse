@@ -22,16 +22,25 @@ namespace Warehouse.WebApi.Controllers
 
         #region List
 
-        [HttpGet("")]
+        [Route("get-by-id")]
+        [HttpGet]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var user = await _wareHouseItemService.GetByIdAsyn(id);
+            return Ok(user);
+        }
+
+        [HttpGet("get-all")]
         public async Task<ActionResult> GetAll()
         {
             return Ok(await _wareHouseItemService.GetAll());
         }
 
-        [HttpGet("filter")]
-        public async Task<ActionResult> GetAllPaging(string? search, int pageIndex, int pageSize)
+        [HttpGet("get")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetWareHouseItemPagingRequest request)
         {
-            return Ok(await _wareHouseItemService.GetAllPaging(search, pageIndex, pageSize));
+            var products = await _wareHouseItemService.GetAllPaging(request);
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
@@ -52,7 +61,7 @@ namespace Warehouse.WebApi.Controllers
         #region Method
 
         [HttpPost("create")]
-        public async Task<IActionResult> Post(WareHouseItemModel model)
+        public async Task<IActionResult> Post([FromBody] WareHouseItemModel model)
         {
             var result = await _wareHouseItemService.Create(model);
 
@@ -62,12 +71,12 @@ namespace Warehouse.WebApi.Controllers
             }
             else
             {
-                return BadRequest(new ApiBadRequestResponse("Create wareHouseItem failed"));
+                return BadRequest(new ApiBadRequestResponse("Create WareHouseItem failed"));
             }
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Put(WareHouseItemModel model, string id)
+        public async Task<IActionResult> Put([FromBody] WareHouseItemModel model, string id)
         {
             var item = await _wareHouseItemService.GetById(id);
             if (item == null)
@@ -81,28 +90,16 @@ namespace Warehouse.WebApi.Controllers
             }
             else
             {
-                return BadRequest(new ApiBadRequestResponse("Update wareHouseItem failed"));
+                return BadRequest(new ApiBadRequestResponse("Update WareHouseItem failed"));
             }
         }
 
-        [HttpDelete("delete/{id}")]
+        [Route("delete")]
+        [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
-            var item = _wareHouseItemService.GetById(id);
-
-            if (item == null)
-                return NotFound(new ApiNotFoundResponse($"WareHouseItem with id: {id} is not found"));
-
             var result = await _wareHouseItemService.Delete(id);
-
-            if (result > 0)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest(new ApiBadRequestResponse("Delete wareHouseItem failed"));
-            }
+            return Ok(result);
         }
 
         #endregion Method

@@ -2,6 +2,7 @@
 using Warehouse.Common;
 using Warehouse.Model.Unit;
 using Warehouse.Service;
+using System.Collections.Generic;
 
 namespace Warehouse.WebApi.Controllers
 {
@@ -54,6 +55,14 @@ namespace Warehouse.WebApi.Controllers
             }
 
             return Ok(item);
+        }
+
+        [Route("get-available")]
+        [HttpGet]
+        public async Task<IActionResult> GetAvailableList(bool showHidden = true)
+        {
+            var user =  _unitService.GetMvcListItems(showHidden);
+            return Ok(user);
         }
 
         #endregion List

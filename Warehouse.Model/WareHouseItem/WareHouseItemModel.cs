@@ -1,7 +1,10 @@
-﻿namespace Warehouse.Model.WareHouseItem
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace Warehouse.Model.WareHouseItem
 {
     public class WareHouseItemModel
     {
+        public string? Id  { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string CategoryId { get; set; }
@@ -11,5 +14,6 @@
         public string Country { get; set; }
         public string UnitId { get; set; }
         public bool? Inactive { get; set; }
+        public IList<SelectListItem> AvailableUnit { get; set; }
     }
 }

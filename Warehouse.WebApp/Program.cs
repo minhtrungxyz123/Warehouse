@@ -12,6 +12,7 @@ builder.Services.AddTransient<IUnitApiClient, UnitApiClient>();
 builder.Services.AddTransient<IWareHouseApiClient, WareHouseApiClient>();
 builder.Services.AddTransient<IVendorApiClient, VendorApiClient>();
 builder.Services.AddTransient<IWareHouseItemCategoryApiClient, WareHouseItemCategoryApiClient>();
+builder.Services.AddTransient<IWareHouseItemApiClient, WareHouseItemApiClient>();
 #endregion
 
 builder.Services.AddControllersWithViews();

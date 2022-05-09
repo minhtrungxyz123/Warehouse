@@ -1,0 +1,58 @@
+﻿@model Warehouse.Model.WareHouseItem.WareHouseItemModel
+
+<div>
+    <h4>Thêm mới vật tư</h4>
+    <hr />
+    <form asp-controller="WareHouseItem" asp-action="Create">
+        <div class="form-body">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label asp-for="Code" class="control-label"></label>
+                    <input asp-for="Code" class="form-control" min="0" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" min="0" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UnitId" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.UnitId, Model.AvailableUnit, "Đơn vị tính", new { @class = "form-control", style = "width: 100%" })
+                    <span asp-validation-for="UnitId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.CategoryId, Model.AvailableUnit, "Loại vật tư", new { @class = "form-control", style = "width: 100%" })
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="VendorId" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.VendorId, Model.AvailableUnit, "Đơn vị tính", new { @class = "form-control", style = "width: 100%" })
+                    <span asp-validation-for="VendorId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Country" class="control-label"></label>
+                    <input asp-for="Country" class="form-control" min="0" />
+                    <span asp-validation-for="Country" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" min="0" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    Trang thai
+                    <div class="col-md-9">
+                        @Html.EditorFor(m => m.Inactive)
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer form-actions">
+                <button type="submit" class="btn btn-success btn-sm">
+                    Lưu
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
