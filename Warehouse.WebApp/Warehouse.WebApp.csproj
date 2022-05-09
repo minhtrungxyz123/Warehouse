@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Warehouse.Model\Warehouse.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewComponents\Warehouse\" />
+  </ItemGroup>
+
 </Project>

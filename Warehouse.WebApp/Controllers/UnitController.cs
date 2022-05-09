@@ -99,8 +99,7 @@ namespace Warehouse.WebApp.Controllers
             return View(request);
         }
 
-        [HttpDelete, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (!ModelState.IsValid)

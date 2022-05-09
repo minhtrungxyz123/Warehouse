@@ -68,10 +68,8 @@
                                     @Html.DisplayFor(modelItem => item.Inactive)
                                 </td>
                                 <td>
-                                    <button onclick="Edit('@item.Id')" class="btn btn-primary">Edit</button>
-                                    <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
-                                        <input type="submit" value="Delete" class="btn btn-danger" />
-                                    </form>
+                                    <button onclick="Edit('@item.Id')" class="btn btn-primary">Sửa</button>
+                                    <button onclick="Delete('@item.Id')" class="btn btn-danger">Xóa</button>
                                 </td>
                             </tr>
                         }
@@ -88,59 +86,53 @@
 @section Scripts{
 
 <script>
-    setTimeout(function () {
-        $('#msgAlert').fadeOut('slow');
-    }, 2000);
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
 
-    function Create() {
-        $.get("/Unit/Create", function (data) {
-            $("#contactDetails").html(data);
-            $("#contactDetails").dialog("open");
-            $(".k-overlay").removeClass("d-none");   
-        });    
-    }
-
-    function Edit(id) {
-            $.get("/Unit/Edit", { unitId: id }, function (data) {
+        function Create() {
+            $.get("/Unit/Create", function (data) {
                 $("#contactDetails").html(data);
                 $("#contactDetails").dialog("open");
+                $(".k-overlay").removeClass("d-none");
             });
-    }
-
-    jQueryAjaxDelete = form => {
-    if (confirm('Are you sure to delete this record ?')) {
-        try {
-            $.ajax({
-                type: 'Delete',
-                url: form.action,
-                data: new FormData(form),
-                contentType: false,
-                processData: false,
-            })
-        } catch (ex) {
-            console.log(ex)
         }
-    }
 
-    //prevent default form submit event
-    return false;
-}
-        
-    $(function() { 
-        $("#contactDetails").dialog({  
-            autoOpen: false, 
-            modal: true,      
-            width: 500, 
-            show: {   
-                effect: "blind",   
-                duration: 1000   
-            },  
-            hide: {    
-                effect: "explode",            
-                duration: 1000 
-            }   
-        });  
-    });
+        function Edit(id) {
+                $.get("/Unit/Edit", { unitId: id }, function (data) {
+                    $("#contactDetails").html(data);
+                    $("#contactDetails").dialog("open");
+                });
+        }
+
+        function Delete(id) {         
+            if (confirm("Bạn có chắc chắn xóa không?")) {                  
+                $.post("/Unit/DeleteConfirmed", { id: id }, function (data) {              
+                    if (data) {                
+                        if (confirm("Xóa thành công"))                         
+                        window.location.assign('/Unit/Index')                     
+                    } else {                            
+                        alert("Quá trình thực hiện không thành công. Hãy thử lại");                      
+                    }                      
+                });                       
+            }                    
+        }
+
+        $(function() {
+            $("#contactDetails").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 500,
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+            });
+        });
 
 </script>
 }
