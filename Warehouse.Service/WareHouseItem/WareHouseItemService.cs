@@ -34,7 +34,7 @@ namespace Warehouse.Service
                 Code = item.Code,
                 Description = item.Description,
                 CategoryId = item.CategoryId,
-                Country = item.CategoryId,
+                Country = item.Country,
                 Inactive = item.Inactive,
                 UnitId = item.UnitId,
                 VendorId = item.VendorId,
@@ -91,7 +91,7 @@ namespace Warehouse.Service
                 {
                     Id = u.pr.Id,
                     Description = u.pr.Description,
-                    Name = u.tp.Name,
+                    Name = u.pr.Name,
                     CategoryId = u.tw.Name,
                     VendorId = u.tp.Name,
                     UnitId = u.ti.UnitName,

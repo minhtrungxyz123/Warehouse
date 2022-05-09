@@ -130,6 +130,18 @@ namespace Warehouse.WebApp.ApiClient
             return JsonConvert.DeserializeObject<IList<WareHouseItemCategoryModel>>(body);
         }
 
+        public async Task<WareHouseItemModel> GetByIdAync(string id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:2000");
+            var response = await client.GetAsync($"/wareHouse-item/edit?id={id}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<WareHouseItemModel>(body);
+
+            return JsonConvert.DeserializeObject<WareHouseItemModel>(body);
+        }
+
         #endregion List
     }
 }

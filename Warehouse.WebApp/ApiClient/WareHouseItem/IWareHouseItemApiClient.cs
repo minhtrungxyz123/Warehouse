@@ -24,5 +24,7 @@ namespace Warehouse.WebApp.ApiClient
         Task<IList<WareHouseItemCategoryModel>> GetCategory(bool showHidden = true);
 
         Task<bool> Delete(string id);
+
+        Task<WareHouseItemModel> GetByIdAync(string id);
     }
 }

@@ -76,27 +76,47 @@ namespace Warehouse.WebApp.Controllers
         public async Task<IActionResult> Edit(string itemId)
         {
             var result = await _wareHouseItemApiClient.GetById(itemId);
-            if (result.IsSuccessed)
-            {
-                var user = result.ResultObj;
-                var updateRequest = new WareHouseItemModel()
-                {
-                    Name = user.Name,
-                    Inactive = user.Inactive,
-                    Id = itemId,
-                    CategoryId = user.CategoryId,
-                    Code = user.Code,
-                    Country = user.Country,
-                    Description = user.Description,
-                    UnitId = user.UnitId,
-                    VendorId = user.VendorId,
-                    VendorName = user.VendorName,
-                };
+            var model = result.ResultObj;
 
-                await GetDropDownList(updateRequest);
-                return ViewComponent("EditWareHouseItem", updateRequest);
+            await GetDropDownList(model);
+
+            if (model.AvailableVendor.Count > 0 &&
+                !string.IsNullOrEmpty(model.VendorId))
+            {
+                var item = model.AvailableVendor
+                    .FirstOrDefault(x => x.Value.Equals(model.VendorId));
+
+                if (item != null)
+                {
+                    item.Selected = true;
+                }
             }
-            return RedirectToAction("Error", "Home");
+
+            if (model.AvailableCategory.Count > 0 &&
+                !string.IsNullOrEmpty(model.CategoryId))
+            {
+                var item1 = model.AvailableCategory
+                    .FirstOrDefault(x => x.Value.Equals(model.CategoryId));
+
+                if (item1 != null)
+                {
+                    item1.Selected = true;
+                }
+            }
+
+            if (model.AvailableUnit.Count > 0 &&
+                !string.IsNullOrEmpty(model.UnitId))
+            {
+                var item2 = model.AvailableUnit
+                    .FirstOrDefault(x => x.Value.Equals(model.UnitId));
+
+                if (item2 != null)
+                {
+                    item2.Selected = true;
+                }
+            }
+
+            return ViewComponent("EditWareHouseItem", model);
         }
 
         [HttpPost]
@@ -213,7 +233,8 @@ namespace Warehouse.WebApp.Controllers
             }
 
             model.AvailableCategory = new List<SelectListItem>(categories2);
-        } 
+        }
+
         #endregion
     }
 }

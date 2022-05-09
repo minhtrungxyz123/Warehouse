@@ -75,6 +75,19 @@ namespace Warehouse.WebApi.Controllers
             }
         }
 
+        [Route("edit")]
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var entity = await _wareHouseItemService.GetById(id);
+            if (entity == null)
+            {
+                return NotFound(new ApiNotFoundResponse($"WareHouseItem with id: {id} is not found"));
+            }
+
+            return Ok(entity);
+        }
+
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Put([FromBody] WareHouseItemModel model, string id)
         {
