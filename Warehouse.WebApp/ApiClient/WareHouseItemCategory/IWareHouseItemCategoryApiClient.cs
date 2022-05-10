@@ -15,5 +15,7 @@ namespace Warehouse.WebApp.ApiClient
         Task<ApiResult<WareHouseItemCategoryModel>> GetById(string id);
 
         Task<bool> Delete(string id);
+
+        Task<IList<WareHouseItemCategoryModel>> GetAvailableList(bool showHidden = true);
     }
 }

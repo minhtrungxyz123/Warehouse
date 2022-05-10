@@ -99,6 +99,7 @@
                                 </td>
                                 <td>
                                     <button onclick="Edit('@item.Id')" class="btn btn-primary">Sửa</button>
+                                    <button onclick="Detail('@item.Id')" class="btn" style="background: yellow;" >Chi tiết</button>
                                     <button onclick="Delete('@item.Id')" class="btn btn-danger">Xóa</button>
                                 </td>
                             </tr>
@@ -130,6 +131,13 @@
 
         function Edit(id) {
                 $.get("/Vendor/Edit", { vendorId: id }, function (data) {
+                    $("#contactDetails").html(data);
+                    $("#contactDetails").dialog("open");
+                });
+        }
+
+        function Detail(id) {
+                $.get("/Vendor/Detail", { vendorId: id }, function (data) {
                     $("#contactDetails").html(data);
                     $("#contactDetails").dialog("open");
                 });

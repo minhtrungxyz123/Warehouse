@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Warehouse.Common.Common;
 using Warehouse.Model.Vendor;
 using Warehouse.WebApp.ApiClient;
 
@@ -51,6 +52,8 @@ namespace Warehouse.WebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(request);
+
+            request.Code = ExtensionFull.GetVoucherCode("NCC");
 
             var result = await _vendorApiClient.Create(request);
 
@@ -118,6 +121,29 @@ namespace Warehouse.WebApp.Controllers
 
             ModelState.AddModelError("", "Xóa không thành công");
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Detail(string vendorId)
+        {
+            var result = await _vendorApiClient.GetById(vendorId);
+            if (result.IsSuccessed)
+            {
+                var user = result.ResultObj;
+                var updateRequest = new VendorModel()
+                {
+                    Name = user.Name,
+                    Inactive = user.Inactive,
+                    Id = vendorId,
+                    Address = user.Address,
+                    Code = user.Code,
+                    ContactPerson = user.ContactPerson,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                };
+                return ViewComponent("DetailVendor", updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
         }
 
         #endregion

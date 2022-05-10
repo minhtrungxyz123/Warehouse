@@ -2,7 +2,7 @@
 {
     public class AuditModel
     {
-        public string VoucherCode { get; set; }
+        public string? VoucherCode { get; set; }
         public DateTime VoucherDate { get; set; }
         public string WareHouseId { get; set; }
         public string Description { get; set; }

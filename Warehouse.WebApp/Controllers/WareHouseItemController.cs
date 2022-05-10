@@ -4,6 +4,7 @@ using Warehouse.Model.Unit;
 using Warehouse.Model.WareHouseItem;
 using Warehouse.WebApp.ApiClient;
 using System.Linq;
+using Warehouse.Common.Common;
 
 namespace Warehouse.WebApp.Controllers
 {
@@ -59,6 +60,8 @@ namespace Warehouse.WebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(request);
+
+            request.Code = ExtensionFull.GetVoucherCode("NCC");
 
             var result = await _wareHouseItemApiClient.Create(request);
 

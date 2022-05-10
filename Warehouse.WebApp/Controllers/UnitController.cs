@@ -115,6 +115,24 @@ namespace Warehouse.WebApp.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Detail(string unitId)
+        {
+            var result = await _unitApiClient.GetById(unitId);
+            if (result.IsSuccessed)
+            {
+                var user = result.ResultObj;
+                var updateRequest = new UnitModel()
+                {
+                    UnitName = user.UnitName,
+                    Inactive = user.Inactive,
+                    Id = unitId
+                };
+                return ViewComponent("DetailUnit", updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+
         #endregion
     }
 }

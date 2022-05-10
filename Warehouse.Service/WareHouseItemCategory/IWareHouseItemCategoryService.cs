@@ -8,7 +8,7 @@ namespace Warehouse.Service
     {
         Task<IEnumerable<Data.Entities.WareHouseItemCategory>> GetAll();
 
-        Task<ApiResult<Pagination<Data.Entities.WareHouseItemCategory>>> GetAllPaging(GetWareHouseItemCategoryPagingRequest request);
+        Task<ApiResult<Pagination<WareHouseItemCategoryModel>>> GetAllPaging(GetWareHouseItemCategoryPagingRequest request);
 
         Task<Data.Entities.WareHouseItemCategory> GetById(string? id);
 

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Warehouse.Common.Common;
 using Warehouse.Model.WareHouseItemCategory;
 using Warehouse.WebApp.ApiClient;
 
@@ -19,13 +21,14 @@ namespace Warehouse.WebApp.Controllers
 
         #region List
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, string categoryId, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetWareHouseItemCategoryPagingRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
-                PageSize = pageSize
+                PageSize = pageSize,
+                CategoryId = categoryId
             };
             var data = await _wareHouseItemCategoryApiClient.GetPagings(request);
             ViewBag.Keyword = keyword;
@@ -41,9 +44,11 @@ namespace Warehouse.WebApp.Controllers
         #region Method
 
         [HttpGet]
-        public ActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return ViewComponent("CreateWareHouseItemCategory");
+            var model = new WareHouseItemCategoryModel();
+            await GetDropDownList(model);
+            return ViewComponent("CreateWareHouseItemCategory", model);
         }
 
         [HttpPost]
@@ -51,6 +56,8 @@ namespace Warehouse.WebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(request);
+
+            request.Code = ExtensionFull.GetVoucherCode("NCC");
 
             var result = await _wareHouseItemCategoryApiClient.Create(request);
 
@@ -68,22 +75,23 @@ namespace Warehouse.WebApp.Controllers
         public async Task<IActionResult> Edit(string wareHouseItemCategoryId)
         {
             var result = await _wareHouseItemCategoryApiClient.GetById(wareHouseItemCategoryId);
-            if (result.IsSuccessed)
+            var model = result.ResultObj;
+
+            await GetDropDownList(model);
+
+            if (model.AvailableCategory.Count > 0 &&
+                !string.IsNullOrEmpty(model.ParentId))
             {
-                var user = result.ResultObj;
-                var updateRequest = new WareHouseItemCategoryModel()
+                var item = model.AvailableCategory
+                    .FirstOrDefault(x => x.Value.Equals(model.ParentId));
+
+                if (item != null)
                 {
-                    Code = user.Code,
-                    Description = user.Description,
-                    ParentId = user.ParentId,
-                    Path = user.Path,
-                    Name = user.Name,
-                    Inactive = user.Inactive,
-                    Id = wareHouseItemCategoryId
-                };
-                return ViewComponent("EditWareHouseItemCategory", updateRequest);
+                    item.Selected = true;
+                }
             }
-            return RedirectToAction("Error", "Home");
+
+            return ViewComponent("EditWareHouseItemCategory", model);
         }
 
         [HttpPost]
@@ -117,6 +125,60 @@ namespace Warehouse.WebApp.Controllers
 
             ModelState.AddModelError("", "Xóa không thành công");
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Detail(string wareHouseItemCategoryId)
+        {
+            var result = await _wareHouseItemCategoryApiClient.GetById(wareHouseItemCategoryId);
+            var model = result.ResultObj;
+
+            await GetDropDownList(model);
+
+            if (model.AvailableCategory.Count > 0 &&
+                !string.IsNullOrEmpty(model.ParentId))
+            {
+                var item = model.AvailableCategory
+                    .FirstOrDefault(x => x.Value.Equals(model.ParentId));
+
+                if (item != null)
+                {
+                    item.Selected = true;
+                }
+            }
+
+            return ViewComponent("DetailWareHouseItemCategory", model);
+        }
+
+        #endregion
+
+        #region Utilities
+        private async Task GetDropDownList(WareHouseItemCategoryModel model)
+        {
+            var availableCategory = await _wareHouseItemCategoryApiClient.GetAvailableList();
+
+            var categories = new List<SelectListItem>();
+            var data = availableCategory;
+
+            if (data?.Count > 0)
+            {
+                foreach (var m in data)
+                {
+                    var item = new SelectListItem
+                    {
+                        Text = m.Name,
+                        Value = m.Id,
+                    };
+                    categories.Add(item);
+                }
+            }
+            categories.OrderBy(e => e.Text);
+            if (categories == null || categories.Count == 0)
+            {
+                categories = new List<SelectListItem>();
+            }
+
+            model.AvailableCategory = new List<SelectListItem>(categories);
         }
 
         #endregion

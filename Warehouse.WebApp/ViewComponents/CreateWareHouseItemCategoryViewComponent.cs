@@ -10,10 +10,9 @@ namespace Warehouse.WebApp.ViewComponents
         {
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(WareHouseItemCategoryModel wareHouseItemCategory)
         {
-            var model = new WareHouseItemCategoryModel();
-            return View(model);
+            return View(wareHouseItemCategory);
         }
     }
 }

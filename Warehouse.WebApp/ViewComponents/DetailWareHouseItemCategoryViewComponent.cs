@@ -3,9 +3,9 @@ using Warehouse.Model.WareHouseItemCategory;
 
 namespace Warehouse.WebApp.ViewComponents
 {
-    public class EditWareHouseItemCategoryViewComponent : ViewComponent
+    public class DetailWareHouseItemCategoryViewComponent : ViewComponent
     {
-        public EditWareHouseItemCategoryViewComponent()
+        public DetailWareHouseItemCategoryViewComponent()
         {
         }
 

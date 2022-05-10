@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Warehouse.Common.Common;
 using Warehouse.Model.WareHouse;
 using Warehouse.WebApp.ApiClient;
 
@@ -51,7 +52,8 @@ namespace Warehouse.WebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(request);
-
+            
+            request.Code = ExtensionFull.GetVoucherCode("NCC");
             var result = await _warehouseApiClient.Create(request);
 
             if (result)
