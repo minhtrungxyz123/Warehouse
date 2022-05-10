@@ -155,6 +155,53 @@ namespace Warehouse.WebApp.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Detail(string itemId)
+        {
+            var result = await _wareHouseItemApiClient.GetById(itemId);
+            var model = result.ResultObj;
+
+            await GetDropDownList(model);
+
+            if (model.AvailableVendor.Count > 0 &&
+                !string.IsNullOrEmpty(model.VendorId))
+            {
+                var item = model.AvailableVendor
+                    .FirstOrDefault(x => x.Value.Equals(model.VendorId));
+
+                if (item != null)
+                {
+                    item.Selected = true;
+                }
+            }
+
+            if (model.AvailableCategory.Count > 0 &&
+                !string.IsNullOrEmpty(model.CategoryId))
+            {
+                var item1 = model.AvailableCategory
+                    .FirstOrDefault(x => x.Value.Equals(model.CategoryId));
+
+                if (item1 != null)
+                {
+                    item1.Selected = true;
+                }
+            }
+
+            if (model.AvailableUnit.Count > 0 &&
+                !string.IsNullOrEmpty(model.UnitId))
+            {
+                var item2 = model.AvailableUnit
+                    .FirstOrDefault(x => x.Value.Equals(model.UnitId));
+
+                if (item2 != null)
+                {
+                    item2.Selected = true;
+                }
+            }
+
+            return ViewComponent("DetailWareHouseItem", model);
+        }
+
         #endregion
 
         #region Utilities
