@@ -8,7 +8,7 @@ namespace Warehouse.Service
     {
         Task<IEnumerable<Data.Entities.WareHouse>> GetAll();
 
-        Task<ApiResult<Pagination<Data.Entities.WareHouse>>> GetAllPaging(GetWareHousePagingRequest request);
+        Task<ApiResult<Pagination<WareHouseModel>>> GetAllPaging(GetWareHousePagingRequest request);
 
         Task<Data.Entities.WareHouse> GetById(string? id);
 
@@ -19,5 +19,7 @@ namespace Warehouse.Service
         Task<int> Delete(string warehouseId);
 
         Task<ApiResult<Data.Entities.WareHouse>> GetByIdAsyn(string id);
+
+        IList<Data.Entities.WareHouse> GetMvcListItems(bool showHidden = true);
     }
 }

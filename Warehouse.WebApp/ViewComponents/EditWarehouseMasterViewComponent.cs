@@ -3,9 +3,9 @@ using Warehouse.Model.WareHouse;
 
 namespace Warehouse.WebApp.ViewComponents
 {
-    public class EditWarehouse1ViewComponent : ViewComponent
+    public class EditWarehouseMasterViewComponent : ViewComponent
     {
-        public EditWarehouse1ViewComponent()
+        public EditWarehouseMasterViewComponent()
         {
         }
 
@@ -19,7 +19,7 @@ namespace Warehouse.WebApp.ViewComponents
             model.Path = warehouseModel.Path;
             model.Description = warehouseModel.Description;
             model.Code = warehouseModel.Code;
-            model.ParentId = warehouseModel.ParentId;
+            model.AvailableCategory = warehouseModel.AvailableCategory;
             return View(model);
         }
     }

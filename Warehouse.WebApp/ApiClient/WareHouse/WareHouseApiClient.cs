@@ -92,6 +92,20 @@ namespace Warehouse.WebApp.ApiClient
             return JsonConvert.DeserializeObject<ApiErrorResult<WareHouseModel>>(body);
         }
 
+        public async Task<IList<WareHouseModel>> GetAvailableList(bool showHidden = true)
+        {
+            {
+                var client = _httpClientFactory.CreateClient();
+                client.BaseAddress = new Uri("https://localhost:2000");
+                var response = await client.GetAsync($"/warehouse/get-available?showHidden={showHidden}");
+                var body = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                    return JsonConvert.DeserializeObject<IList<WareHouseModel>>(body);
+
+                return JsonConvert.DeserializeObject<IList<WareHouseModel>>(body);
+            }
+        }
+
         #endregion List
     }
 }

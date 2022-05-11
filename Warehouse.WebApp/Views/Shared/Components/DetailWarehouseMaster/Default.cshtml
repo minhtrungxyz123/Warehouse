@@ -1,47 +1,43 @@
 ﻿@model Warehouse.Model.WareHouse.WareHouseModel
 
 <div>
-    <h4>Thêm mới kho vận</h4>
+    <h4>Sửa kho vận</h4>
     <hr />
-    <form asp-controller="Warehouse1" asp-action="Create">
+    <form asp-controller="WarehouseMaster" asp-action="Detail">
         <div class="form-body">
+            <input type="hidden" asp-for="Id" />
             <div class="modal-body">
                 <div class="form-group">
+                    <label asp-for="Code" class="control-label"></label>
+                    <input asp-for="Code" class="form-control" min="0" readonly="@(true)" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" min="0" />
+                    <input asp-for="Name" class="form-control" min="0" readonly="@(true)" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" min="0" />
+                    <input asp-for="Description" class="form-control" min="0" readonly="@(true)" />
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Address" class="control-label"></label>
-                    <input asp-for="Address" class="form-control" min="0" />
+                    <input asp-for="Address" class="form-control" min="0" readonly="@(true)" />
                     <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ParentId" class="control-label"></label>
-                    <input asp-for="ParentId" class="form-control" min="0" />
+                    @Html.DropDownListFor(m => m.ParentId, Model.AvailableCategory, "Thuộc loại", new { @class = "form-control", style = "width: 100%" , disabled = "disabled" })
                     <span asp-validation-for="ParentId" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Path" class="control-label"></label>
-                    <input asp-for="Path" class="form-control" min="0" />
-                    <span asp-validation-for="Path" class="text-danger"></span>
-                </div>
                 <div class="form-group form-group-sm">
-                    Trạng thái
+                    Trang thai
                     <div class="col-md-9">
-                        @Html.EditorFor(m => m.Inactive)
+                        @Html.DisplayFor(m => m.Inactive)
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer form-actions">
-                <button type="submit" class="btn btn-success btn-sm">
-                    Lưu
-                </button>
             </div>
         </div>
     </form>

@@ -24,7 +24,7 @@
                             </div>
                             <div class="cold-md-3">
                                 <button type="submit" class="btn btn-primary">Tìm</button>
-                                <button type="button" onclick="window.location.href='/Warehouse1/Index'" class="btn btn-dark">Tải lại</button>
+                                <button type="button" onclick="window.location.href='/WarehouseMaster/Index'" class="btn btn-dark">Tải lại</button>
                             </div>
                         </div>
                     </form>
@@ -115,7 +115,7 @@
         }, 2000);
 
         function Create() {
-            $.get("/Warehouse1/Create", function (data) {
+            $.get("/WarehouseMaster/Create", function (data) {
                 $("#contactDetails").html(data);
                 $("#contactDetails").dialog("open");
                 $(".k-overlay").removeClass("d-none");
@@ -123,7 +123,14 @@
         }
 
         function Edit(id) {
-                $.get("/Warehouse1/Edit", { warehouseId: id }, function (data) {
+                $.get("/WarehouseMaster/Edit", { warehouseId: id }, function (data) {
+                    $("#contactDetails").html(data);
+                    $("#contactDetails").dialog("open");
+                });
+        }
+
+        function Detail(id) {
+                $.get("/WarehouseMaster/Detail", { warehouseId: id }, function (data) {
                     $("#contactDetails").html(data);
                     $("#contactDetails").dialog("open");
                 });
@@ -131,10 +138,10 @@
 
         function Delete(id) {         
             if (confirm("Bạn có chắc chắn xóa không?")) {                  
-                $.post("/Warehouse1/DeleteConfirmed", { id: id }, function (data) {              
+                $.post("/WarehouseMaster/DeleteConfirmed", { id: id }, function (data) {              
                     if (data) {                
                         if (confirm("Xóa thành công"))                         
-                        window.location.assign('/Warehouse1/Index')                     
+                        window.location.assign('/WarehouseMaster/Index')                     
                     } else {                            
                         alert("Quá trình thực hiện không thành công. Hãy thử lại");                      
                     }                      

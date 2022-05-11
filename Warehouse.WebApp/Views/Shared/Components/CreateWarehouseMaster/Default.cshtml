@@ -1,17 +1,11 @@
 ﻿@model Warehouse.Model.WareHouse.WareHouseModel
 
 <div>
-    <h4>Sửa kho vận</h4>
+    <h4>Thêm mới kho vận</h4>
     <hr />
-    <form asp-controller="Warehouse1" asp-action="Edit">
+    <form asp-controller="WarehouseMaster" asp-action="Create">
         <div class="form-body">
-            <input type="hidden" asp-for="Id" />
             <div class="modal-body">
-                <div class="form-group">
-                    <label asp-for="Code" class="control-label"></label>
-                    <input asp-for="Code" class="form-control" min="0" readonly="@(true)" />
-                    <span asp-validation-for="Code" class="text-danger"></span>
-                </div>
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" min="0" />
@@ -29,16 +23,11 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="ParentId" class="control-label"></label>
-                    <input asp-for="ParentId" class="form-control" min="0" />
+                    @Html.DropDownListFor(m => m.ParentId, Model.AvailableCategory, "Thuộc loại", new { @class = "form-control", style = "width: 100%" })
                     <span asp-validation-for="ParentId" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Path" class="control-label"></label>
-                    <input asp-for="Path" class="form-control" min="0" />
-                    <span asp-validation-for="Path" class="text-danger"></span>
-                </div>
                 <div class="form-group form-group-sm">
-                    Trang thai
+                    Trạng thái
                     <div class="col-md-9">
                         @Html.EditorFor(m => m.Inactive)
                     </div>

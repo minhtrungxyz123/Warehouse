@@ -49,40 +49,50 @@ namespace Warehouse.Service
                             .ToListAsync();
         }
 
-        public async Task<ApiResult<Pagination<Data.Entities.WareHouse>>> GetAllPaging(GetWareHousePagingRequest request)
+        public async Task<ApiResult<Pagination<WareHouseModel>>> GetAllPaging(GetWareHousePagingRequest request)
         {
-            var query = _context.WareHouses.AsQueryable();
+            var query = from pr in _context.WareHouses
+                        join c in _context.WareHouses on pr.ParentId equals c.Id into pt
+                        from tp in pt.DefaultIfEmpty()
+                        select new { pr, tp };
+
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.Name.Contains(request.Keyword));
+                query = query.Where(x => x.pr.Name.Contains(request.Keyword)
+                || x.pr.Description.Contains(request.Keyword));
             }
 
-            //3. Paging
-            int totalRow = await query.CountAsync();
-
-            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .Select(x => new Data.Entities.WareHouse()
-                {
-                    Name = x.Name,
-                    Inactive = x.Inactive,
-                    Id = x.Id,
-                    Description = x.Description,
-                    ParentId = x.ParentId,
-                    Address = x.Address,
-                    Path = x.Path,
-                    Code=x.Code,
-                }).ToListAsync();
-
-            //4. Select and projection
-            var pagedResult = new Pagination<Data.Entities.WareHouse>()
+            if (!string.IsNullOrEmpty(request.ParentId))
             {
-                TotalRecords = totalRow,
+                query = query.Where(x => x.tp.ParentId == request.ParentId);
+            }
+
+            var totalRecords = await query.CountAsync();
+
+            var items = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(u => new WareHouseModel()
+                {
+                    Id = u.pr.Id,
+                    Description = u.pr.Description,
+                    Name = u.pr.Name,
+                    Code = u.pr.Code,
+                    ParentId = u.tp.Name,
+                    Inactive = u.pr.Inactive,
+                    Path = u.pr.Path,
+                    Address = u.pr.Address,
+                })
+                .ToListAsync();
+
+            var pagination = new Pagination<WareHouseModel>
+            {
+                Items = items,
+                TotalRecords = totalRecords,
                 PageIndex = request.PageIndex,
                 PageSize = request.PageSize,
-                Items = data
             };
-            return new ApiSuccessResult<Pagination<Data.Entities.WareHouse>>(pagedResult);
+
+            return new ApiSuccessResult<Pagination<WareHouseModel>>(pagination);
         }
 
         public async Task<Data.Entities.WareHouse?> GetById(string? id)
@@ -150,6 +160,17 @@ namespace Warehouse.Service
             var result = await _context.SaveChangesAsync();
 
             return result;
+        }
+
+        public IList<Data.Entities.WareHouse> GetMvcListItems(bool showHidden = true)
+        {
+            var query = from p in _context.WareHouses.AsQueryable() select p;
+            if (showHidden)
+            {
+                query = from p in query where p.Inactive select p;
+            }
+            query = from p in query orderby p.Name select p;
+            return query.ToList();
         }
 
         #endregion Method
