@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Warehouse.Data.Configuration;
 using Warehouse.Data.Entities;
+using Warehouse.Data.UnitOfWork;
 
 namespace Warehouse.Data.EF
 {
-    public class WarehouseDbContext : DbContext
+    public class WarehouseDbContext : DbContext, IUnitOfWork
     {
         public WarehouseDbContext(DbContextOptions options) : base(options)
         {
@@ -31,6 +33,20 @@ namespace Warehouse.Data.EF
             modelBuilder.ApplyConfiguration(new WareHouseItemConfiguration());
             modelBuilder.ApplyConfiguration(new WareHouseItemUnitConfiguration());
             modelBuilder.ApplyConfiguration(new WareHouseLimitConfiguration());
+            modelBuilder.ApplyConfiguration(new CreatedByConfiguration());
+        }
+
+        private readonly IMediator _mediator;
+
+        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await _mediator.DispatchDomainEventsAsync(this);
+
+            var result = await base.SaveChangesAsync(cancellationToken);
+            if (result > 0)
+                return true;
+            else
+                return false;
         }
 
         public DbSet<AuditDetailSerial> AuditDetailSerials { get; set; }
@@ -40,7 +56,7 @@ namespace Warehouse.Data.EF
         public DbSet<Outward> Outwards { get; set; }
         public DbSet<OutwardDetail> OutwardDetails { get; set; }
         public DbSet<SerialWareHouse> SerialWareHouses { get; set; }
-        public DbSet<Unit> Units { get; set; }
+        public DbSet<Data.Entities.Unit> Units { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<WarehouseBalance> WarehouseBalances { get; set; }
         public DbSet<WareHouse> WareHouses { get; set; }
@@ -51,5 +67,6 @@ namespace Warehouse.Data.EF
         public DbSet<AuditDetail> AuditDetails { get; set; }
         public DbSet<WareHouseLimit> WareHouseLimits { get; set; }
         public DbSet<WareHouseItemUnit> WareHouseItemUnits { get; set; }
+        public DbSet<CreatedBy> CreatedBies { get; set; }
     }
 }
