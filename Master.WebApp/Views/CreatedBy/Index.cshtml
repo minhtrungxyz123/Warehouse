@@ -1,0 +1,171 @@
+﻿@using Warehouse.Common
+@model Pagination<Warehouse.Model.CreatedBy.CreatedByModel>
+
+@{
+    ViewData["Title"] = "Danh sách người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Danh sách người dùng</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách người dùng</li>
+    </ol>
+    <div class="card mb-12">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <a class="btn btn-success" onclick="Create()"><i class="fa-solid fa-plus"></i> Tạo mới</a>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <form asp-action="Index" method="get">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            <div class="cold-md-3">
+                                <button type="submit" class="btn btn-primary">Tìm</button>
+                                <button type="button" onclick="window.location.href='/CreatedBy/Index'" class="btn btn-dark">Tải lại</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    @if (ViewBag.SuccessMsg != null)
+                    {
+                        <div id="msgAlert" class="alert alert-success" role="alert">
+                            @ViewBag.SuccessMsg
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Tài khoản
+                            </th>
+                            <th>
+                                Tên đầy đủ
+                            </th>
+                            <th>
+                                Ngày tạo
+                            </th>
+                            <th>
+                                Ngày đăng ký
+                            </th>
+                            <th>
+                                Gmail
+                            </th>
+                            <th>
+                                Quyền
+                            </th>
+                            <th>Chức năng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AccountName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FullName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateCreate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateRegister)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Role)
+                                </td>
+                                <td>
+                                    <button onclick="Edit('@item.Id')" class="btn btn-primary"><i class="fa-solid fa-pen"></i> Sửa</button>
+                                    <button onclick="Detail('@item.Id')" class="btn" style="background: yellow;" ><i class="fa-solid fa-eye"></i> Chi tiết</button>
+                                    <button onclick="Delete('@item.Id')" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Xóa</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @await Component.InvokeAsync("Pager", Model)
+        </div>
+    </div>
+</div>
+
+<div id="contactDetails"></div>
+
+@section Scripts{
+
+<script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+
+        function Create() {
+            $.get("/CreatedBy/Create", function (data) {
+                $("#contactDetails").html(data);
+                $("#contactDetails").dialog("open");
+                $(".k-overlay").removeClass("d-none");
+            });
+        }
+
+        function Edit(id) {
+                $.get("/CreatedBy/Edit", { createdById: id }, function (data) {
+                    $("#contactDetails").html(data);
+                    $("#contactDetails").dialog("open");
+                });
+        }
+
+        function Detail(id) {
+                $.get("/CreatedBy/Detail", { createdById: id }, function (data) {
+                    $("#contactDetails").html(data);
+                    $("#contactDetails").dialog("open");
+                });
+        }
+
+        function Delete(id) {         
+            if (confirm("Bạn có chắc chắn xóa không?")) {                  
+                $.post("/CreatedBy/DeleteConfirmed", { id: id }, function (data) {              
+                    if (data) {                
+                        if (confirm("Xóa thành công"))                         
+                        window.location.assign('/CreatedBy/Index')                     
+                    } else {                            
+                        alert("Quá trình thực hiện không thành công. Hãy thử lại");                      
+                    }                      
+                });                       
+            }                    
+        }
+
+        $(function() {
+            $("#contactDetails").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 500,
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+            });
+        });
+
+</script>
+}
