@@ -16,7 +16,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6 col-xs-12">
-                    <a class="btn btn-success" onclick="Create()"><i class="fa-solid fa-plus"></i> Tạo mới</a>
+                    <a class="btn btn-success" id="them" onclick="Create()"><i class="fa-solid fa-plus"></i> Tạo mới</a>
                 </div>
                 <div class="col-md-6 col-xs-12">
                     <form asp-action="Index" method="get">
@@ -165,6 +165,44 @@
                     duration: 1000
                 }
             });
+        });
+
+        const connection = new signalR.HubConnectionBuilder()  
+        .withUrl("https://localhost:1000/signalr") 
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+        async function start() {
+            try {
+                await connection.start();
+                console.log("SignalR Connected.");
+            } catch (err) {
+                console.log(err);
+                setTimeout(start, 5000);
+            }
+        };
+
+        connection.onclose(async () => {
+            await start();
+        });
+
+        // Start the connection.
+        start();
+
+        connection.on("WareHouseBookTrachkingToCLient", (user, message) => {
+            console.log(user);
+            if(user)
+                location.reload();
+            $("#msgAlert").text(user.data)
+        });
+
+        $("#them").click(async  function()
+        { 
+            try {
+           await   connection.invoke("WareHouseBookTrachking", $("#msgAlert").val());
+        } catch (err) {
+            console.error(err);
+        }
         });
 
 </script>

@@ -7,6 +7,7 @@ namespace Master.Service
 {
     public interface ICreatedByService
     {
+        public CreatedBy User { get; }
         Task<IEnumerable<CreatedBy>> GetAll();
 
         Task<ApiResult<Pagination<CreatedBy>>> GetAllPaging(GetCreatedByPagingRequest request);

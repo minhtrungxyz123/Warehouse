@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Warehouse.Common;
 using Warehouse.Common.Common;
 using Warehouse.Data.EF;
@@ -12,15 +13,29 @@ namespace Master.Service
         #region Fields
 
         private readonly WarehouseDbContext _context;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public CreatedByService(WarehouseDbContext context)
+        public CreatedBy User => GetUser();
+
+        public CreatedByService(WarehouseDbContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _httpContext = httpContext;
         }
 
         #endregion Fields
 
         #region List
+
+        private CreatedBy GetUser()
+        {
+            var id = _httpContext.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Id");
+            if (id is null)
+                return null;
+            var res = _context.CreatedBies.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id.Value));
+            res.Password = "";
+            return res;
+        }
 
         public async Task<ApiResult<CreatedBy>> GetByIdAsyn(string id)
         {

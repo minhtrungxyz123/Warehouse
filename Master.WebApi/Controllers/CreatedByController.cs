@@ -1,6 +1,8 @@
 ﻿using Master.Service;
+using Master.WebApi.SignalRHubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Warehouse.Common;
 using Warehouse.Model.CreatedBy;
 
@@ -13,10 +15,11 @@ namespace Master.WebApi.Controllers
         #region Fields
 
         private readonly ICreatedByService _createdByService;
-
-        public CreatedByController(ICreatedByService createdByService)
+        private readonly IHubContext<ConnectRealTimeHub> _hubContext;
+        public CreatedByController(ICreatedByService createdByService, IHubContext<ConnectRealTimeHub> hubContext)
         {
             _createdByService = createdByService;
+            _hubContext = hubContext;
         }
 
         #endregion Fields
@@ -68,6 +71,7 @@ namespace Master.WebApi.Controllers
 
             if (result.Result > 0)
             {
+                await _hubContext.Clients.All.SendAsync("WareHouseBookTrachkingToCLient", model, Guid.NewGuid().ToString());
                 return RedirectToAction(nameof(Get), new { id = result.Id });
             }
             else
