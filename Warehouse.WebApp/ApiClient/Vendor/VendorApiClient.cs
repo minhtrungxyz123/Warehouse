@@ -71,7 +71,7 @@ namespace Warehouse.WebApp.ApiClient
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
 
             var response = await client.GetAsync($"/vendor/get?keyword={request.Keyword}&pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}");
@@ -83,7 +83,7 @@ namespace Warehouse.WebApp.ApiClient
         public async Task<ApiResult<VendorModel>> GetById(string id)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.GetAsync($"/vendor/get-by-id?id={id}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)

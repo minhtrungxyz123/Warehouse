@@ -1,7 +1,11 @@
 using Master.WebApp.ApiClient;
+using Master.WebApp.CustomHandler;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System.Net.Http;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using Warehouse.Data.EF;
 using Warehouse.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,16 +19,30 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddTransient<ICreatedByApiClient, CreatedByApiClient>();
 
-#endregion
+#endregion Add DI
+
+//DbContext
+builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseSqlServer(
+                            builder.Configuration.GetConnectionString("WarehouseDatabase")));
+
+//Repository
+builder.Services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+//Authorization
+builder.Services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+builder.Services.AddAuthorization(options =>
+{
+});
+
 
 //AddCookie
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
  .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, config =>
  {
      config.LoginPath = "/Login/Index";
-     config.AccessDeniedPath = "/Login/Index";
+     config.AccessDeniedPath = "/Login/FalseLogin";
      config.ExpireTimeSpan = TimeSpan.FromHours(1);
      config.Cookie.HttpOnly = true;
      config.Cookie.IsEssential = true;
@@ -42,14 +60,6 @@ builder.Services.Configure<PasswordHasherOptions>(option =>
     option.IterationCount = 12000;
 });
 
-//Repository
-builder.Services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
-
-//Authorization
-builder.Services.AddAuthorization(options =>
-{
-    
-});
 
 var app = builder.Build();
 

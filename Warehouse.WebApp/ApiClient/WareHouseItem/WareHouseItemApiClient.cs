@@ -35,7 +35,7 @@ namespace Warehouse.WebApp.ApiClient
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.PostAsync("wareHouse-item/create", httpContent);
 
             return response.IsSuccessStatusCode;
@@ -47,7 +47,7 @@ namespace Warehouse.WebApp.ApiClient
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.PutAsync($"wareHouse-item/update/" + id + "", httpContent);
 
             return response.IsSuccessStatusCode;
@@ -56,7 +56,7 @@ namespace Warehouse.WebApp.ApiClient
         public async Task<bool> Delete(string id)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.DeleteAsync($"/wareHouse-item/delete?id={id}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -73,7 +73,7 @@ namespace Warehouse.WebApp.ApiClient
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
 
             var response = await client.GetAsync($"/wareHouse-item/get?keyword={request.Keyword}&pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}");
@@ -85,7 +85,7 @@ namespace Warehouse.WebApp.ApiClient
         public async Task<ApiResult<WareHouseItemModel>> GetById(string id)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.GetAsync($"/wareHouse-item/get-by-id?id={id}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -97,7 +97,7 @@ namespace Warehouse.WebApp.ApiClient
         public async Task<IList<UnitModel>> GetAvailableList(bool showHidden = true)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.GetAsync($"/unit/get-available?showHidden={showHidden}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -109,7 +109,7 @@ namespace Warehouse.WebApp.ApiClient
         public async Task<IList<VendorModel>> GetVendor(bool showHidden = true)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.GetAsync($"/vendor/get-available?showHidden={showHidden}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -121,7 +121,7 @@ namespace Warehouse.WebApp.ApiClient
         public async Task<IList<WareHouseItemCategoryModel>> GetCategory(bool showHidden = true)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.GetAsync($"/wareHouse-itemCategory/get-available?showHidden={showHidden}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -133,7 +133,7 @@ namespace Warehouse.WebApp.ApiClient
         public async Task<WareHouseItemModel> GetByIdAync(string id)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:2000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.GetAsync($"/wareHouse-item/edit?id={id}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)

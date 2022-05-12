@@ -11,10 +11,12 @@ namespace Master.WebApp.ApiClient
         #region Fields
 
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        public CreatedByApiClient(IHttpClientFactory httpClientFactory)
+        public CreatedByApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
         #endregion Fields
@@ -27,7 +29,7 @@ namespace Master.WebApp.ApiClient
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:1000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.PostAsync("created-by/create", httpContent);
 
             return response.IsSuccessStatusCode;
@@ -39,7 +41,7 @@ namespace Master.WebApp.ApiClient
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:1000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.PutAsync($"created-by/update/" + id + "", httpContent);
 
             return response.IsSuccessStatusCode;
@@ -48,7 +50,7 @@ namespace Master.WebApp.ApiClient
         public async Task<bool> Delete(string id)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:1000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.DeleteAsync($"/created-by/delete?id={id}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -65,7 +67,7 @@ namespace Master.WebApp.ApiClient
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:1000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
 
             var response = await client.GetAsync($"/created-by/get?keyword={request.Keyword}&pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}");
@@ -77,7 +79,7 @@ namespace Master.WebApp.ApiClient
         public async Task<ApiResult<CreatedByModel>> GetById(string id)
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:1000");
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.GetAsync($"/created-by/get-by-id?id={id}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
