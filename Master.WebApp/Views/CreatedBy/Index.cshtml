@@ -93,9 +93,9 @@
                                     @Html.DisplayFor(modelItem => item.Role)
                                 </td>
                                 <td>
-                                    <button onclick="Edit('@item.Id')" class="btn btn-primary"><i class="fa-solid fa-pen"></i> Sửa</button>
+                                    <button id="sua" onclick="Edit('@item.Id')" class="btn btn-primary"><i class="fa-solid fa-pen"></i> Sửa</button>
                                     <button onclick="Detail('@item.Id')" class="btn" style="background: yellow;" ><i class="fa-solid fa-eye"></i> Chi tiết</button>
-                                    <button onclick="Delete('@item.Id')" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Xóa</button>
+                                    <button id="xoa" onclick="Delete('@item.Id')" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Xóa</button>
                                 </td>
                             </tr>
                         }
@@ -167,6 +167,7 @@
             });
         });
 
+        //signalR
         const connection = new signalR.HubConnectionBuilder()  
         .withUrl("https://localhost:1000/signalr") 
         .configureLogging(signalR.LogLevel.Information)
@@ -189,6 +190,7 @@
         // Start the connection.
         start();
 
+        //Create
         connection.on("WareHouseBookTrachkingToCLient", (user, message) => {
             console.log(user);
             if(user)
@@ -200,6 +202,41 @@
         { 
             try {
            await   connection.invoke("WareHouseBookTrachking", $("#msgAlert").val());
+        } catch (err) {
+            console.error(err);
+        }
+        });
+
+
+        //Edit 
+        connection.on("UnitEditToCLient", (user, message) => {
+            console.log(user);
+            if(user)
+                location.reload();
+            $("#msgAlert").text(user.data)
+        });
+
+        $("#sua").click(async  function()
+        { 
+            try {
+           await   connection.invoke("UnitEdit", $("#msgAlert").val());
+        } catch (err) {
+            console.error(err);
+        }
+        });
+
+        //Delete 
+        connection.on("UnitDeleteToCLient", (user, message) => {
+            console.log(user);
+            if(user)
+                location.reload();
+            $("#msgAlert").text(user.data)
+        });
+
+        $("#xoa").click(async  function()
+        { 
+            try {
+           await   connection.invoke("UnitDelete", $("#msgAlert").val());
         } catch (err) {
             console.error(err);
         }

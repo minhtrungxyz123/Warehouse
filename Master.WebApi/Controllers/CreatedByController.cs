@@ -1,5 +1,6 @@
 ﻿using Master.Service;
 using Master.WebApi.SignalRHubs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -91,6 +92,7 @@ namespace Master.WebApi.Controllers
 
             if (result.Result > 0)
             {
+                await _hubContext.Clients.All.SendAsync("UnitEditToCLient", model, id);
                 return Ok();
             }
             else
@@ -104,6 +106,7 @@ namespace Master.WebApi.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             var result = await _createdByService.Delete(id);
+            await _hubContext.Clients.All.SendAsync("UnitDeleteToCLient", id);
             return Ok(result);
         }
 
