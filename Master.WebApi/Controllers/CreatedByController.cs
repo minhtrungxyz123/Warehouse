@@ -1,7 +1,5 @@
 ﻿using Master.Service;
 using Master.WebApi.SignalRHubs;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Warehouse.Common;
@@ -17,6 +15,7 @@ namespace Master.WebApi.Controllers
 
         private readonly ICreatedByService _createdByService;
         private readonly IHubContext<ConnectRealTimeHub> _hubContext;
+
         public CreatedByController(ICreatedByService createdByService, IHubContext<ConnectRealTimeHub> hubContext)
         {
             _createdByService = createdByService;

@@ -4,7 +4,7 @@ using Warehouse.Model.Unit;
 using Warehouse.Model.WareHouseItem;
 using Warehouse.WebApp.ApiClient;
 using System.Linq;
-using Warehouse.Common.Common;
+using Warehouse.Common;
 
 namespace Warehouse.WebApp.Controllers
 {

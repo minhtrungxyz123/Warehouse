@@ -1,0 +1,158 @@
+﻿@model Pagination<Warehouse.Model.BeginningWareHouse.BeginningWareHouseModel>
+
+@{
+    ViewData["Title"] = "Danh mục";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Danh sách người dùng</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách người dùng</li>
+    </ol>
+    <div class="card mb-12">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <a class="btn btn-success" onclick="Create()"><i class="fa-solid fa-plus"></i> Tạo mới</a>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <form asp-action="Index" method="get">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            <div class="cold-md-3">
+                                <button type="submit" class="btn btn-primary">Tìm</button>
+                                <button type="button" onclick="window.location.href='/BeginningWareHouse/Index'" class="btn btn-dark">Tải lại</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    @if (ViewBag.SuccessMsg != null)
+                    {
+                        <div id="msgAlert" class="alert alert-success" role="alert">
+                            @ViewBag.SuccessMsg
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Kho
+                            </th>
+                            <th>
+                                Vật tư
+                            </th>
+                            <th>
+                                Đơn vị tính
+                            </th>
+                            <th>
+                                Số lượng tồn
+                            </th>
+                            <th>Chức năng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.WareHouseId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ItemId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UnitId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+                                <td>
+                                    <button onclick="Edit('@item.Id')" class="btn btn-primary"><i class="fa-solid fa-pen"></i> Sửa</button>
+                                    <button onclick="Detail('@item.Id')" class="btn" style="background: yellow;" ><i class="fa-solid fa-eye"></i> Chi tiết</button>
+                                    <button onclick="Delete('@item.Id')" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Xóa</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @await Component.InvokeAsync("Pager", Model)
+        </div>
+    </div>
+</div>
+
+<div id="contactDetails"></div>
+
+@section Scripts{
+
+<script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+
+        function Create() {
+            $.get("/BeginningWareHouse/Create", function (data) {
+                $("#contactDetails").html(data);
+                $("#contactDetails").dialog("open");
+                $(".k-overlay").removeClass("d-none");
+            });
+        }
+
+        function Edit(id) {
+                $.get("/BeginningWareHouse/Edit", { beginningWareHouseId: id }, function (data) {
+                    $("#contactDetails").html(data);
+                    $("#contactDetails").dialog("open");
+                });
+        }
+
+        function Detail(id) {
+                $.get("/BeginningWareHouse/Detail", { beginningWareHouseId: id }, function (data) {
+                    $("#contactDetails").html(data);
+                    $("#contactDetails").dialog("open");
+                });
+        }
+
+        function Delete(id) {         
+            if (confirm("Bạn có chắc chắn xóa không?")) {                  
+                $.post("/BeginningWareHouse/DeleteConfirmed", { id: id }, function (data) {              
+                    if (data) {                
+                        if (confirm("Xóa thành công"))                         
+                        window.location.assign('/BeginningWareHouse/Index')                     
+                    } else {                            
+                        alert("Quá trình thực hiện không thành công. Hãy thử lại");                      
+                    }                      
+                });                       
+            }                    
+        }
+
+        $(function() {
+            $("#contactDetails").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 500,
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+            });
+        });
+
+</script>
+}

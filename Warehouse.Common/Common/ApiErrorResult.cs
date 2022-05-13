@@ -1,4 +1,4 @@
-﻿namespace Warehouse.Common.Common
+﻿namespace Warehouse.Common
 {
     public class ApiErrorResult<T> : ApiResult<T>
     {

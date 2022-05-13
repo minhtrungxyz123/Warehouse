@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
 using Warehouse.Common;
-using Warehouse.Common.Common;
 using Warehouse.Model.Unit;
 using Warehouse.Model.Vendor;
 using Warehouse.Model.WareHouseItem;
@@ -140,6 +139,18 @@ namespace Warehouse.WebApp.ApiClient
                 return JsonConvert.DeserializeObject<WareHouseItemModel>(body);
 
             return JsonConvert.DeserializeObject<WareHouseItemModel>(body);
+        }
+
+        public async Task<IList<WareHouseItemModel>> GetAvailableItem(bool showHidden = true)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var response = await client.GetAsync($"/wareHouse-item/get-available?showHidden={showHidden}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<IList<WareHouseItemModel>>(body);
+
+            return JsonConvert.DeserializeObject<IList<WareHouseItemModel>>(body);
         }
 
         #endregion List

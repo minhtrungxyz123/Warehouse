@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Warehouse.Data.Entities;
 using Warehouse.Model.CreatedBy;
 
 namespace Master.WebApp.Controllers
@@ -67,7 +66,7 @@ namespace Master.WebApp.Controllers
 
             request.DateCreate = DateTime.Now;
             request.DateRegister = DateTime.Now;
-            var hashedPassword = new PasswordHasher<CreatedBy>().HashPassword(new CreatedBy(), request.Password);
+            var hashedPassword = new PasswordHasher<CreatedByModel>().HashPassword(new CreatedByModel(), request.Password);
             request.Password = hashedPassword;
 
             var result = await _createdByApiClient.Create(request);

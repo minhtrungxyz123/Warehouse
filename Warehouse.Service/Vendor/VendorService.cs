@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Warehouse.Common;
-using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.Vendor;
 
@@ -35,7 +34,7 @@ namespace Warehouse.Service
                 Code = item.Code,
                 ContactPerson = item.ContactPerson,
                 Email = item.Email,
-                Phone=item.Phone,
+                Phone = item.Phone,
                 Inactive = item.Inactive,
                 Id = item.Id
             };
@@ -69,7 +68,7 @@ namespace Warehouse.Service
                     Phone = x.Phone,
                     Email = x.Email,
                     Code = x.Code,
-                    Address=x.Address,
+                    Address = x.Address,
                     Inactive = x.Inactive,
                     Id = x.Id
                 }).ToListAsync();

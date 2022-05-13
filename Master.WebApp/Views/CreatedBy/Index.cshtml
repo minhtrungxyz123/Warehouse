@@ -37,6 +37,15 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
+                        <div id="msgReload" class="alert alert-success d-none" role="alert">
+                           Thêm dữ liệu thành công
+                        </div>
+                        <div id="msgEdit" class="alert alert-success d-none" role="alert">
+                           Sửa dữ liệu thành công
+                        </div>
+                        <div id="msgDelete" class="alert alert-success d-none" role="alert">
+                           Xóa dữ liệu thành công
+                        </div>
                     @if (ViewBag.SuccessMsg != null)
                     {
                         <div id="msgAlert" class="alert alert-success" role="alert">
@@ -192,16 +201,21 @@
 
         //Create
         connection.on("WareHouseBookTrachkingToCLient", (user, message) => {
-            console.log(user);
+ 
             if(user)
-                location.reload();
+            {
+              $('#msgReload').removeClass("d-none");
+                setInterval(function(){
+                  location.reload();
+                },3000)
+            }
             $("#msgAlert").text(user.data)
         });
 
         $("#them").click(async  function()
         { 
             try {
-           await   connection.invoke("WareHouseBookTrachking", $("#msgAlert").val());
+           await   connection.invoke("WareHouseBookTrachking"/ $("#msgAlert").val());
         } catch (err) {
             console.error(err);
         }
@@ -210,9 +224,13 @@
 
         //Edit 
         connection.on("UnitEditToCLient", (user, message) => {
-            console.log(user);
             if(user)
-                location.reload();
+                {
+                    $('#msgEdit').removeClass("d-none");
+                    setInterval(function(){
+                        location.reload();
+                    },3000)
+                }
             $("#msgAlert").text(user.data)
         });
 
@@ -227,9 +245,11 @@
 
         //Delete 
         connection.on("UnitDeleteToCLient", (user, message) => {
-            console.log(user);
             if(user)
-                location.reload();
+                $('#msgDelete').removeClass("d-none");
+                setInterval(function(){
+                  location.reload();
+                },3000)
             $("#msgAlert").text(user.data)
         });
 

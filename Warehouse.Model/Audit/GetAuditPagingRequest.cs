@@ -1,4 +1,4 @@
-﻿using Warehouse.Common.Common;
+﻿using Warehouse.Common;
 
 namespace Warehouse.Model.Audit
 {
@@ -6,6 +6,6 @@ namespace Warehouse.Model.Audit
     {
         public string? Keyword { get; set; }
 
-        public  string? WarehouseId { get; set; }
+        public string? WarehouseId { get; set; }
     }
 }

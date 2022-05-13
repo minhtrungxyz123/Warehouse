@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Warehouse.Common;
-using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Data.Entities;
 using Warehouse.Model.CreatedBy;

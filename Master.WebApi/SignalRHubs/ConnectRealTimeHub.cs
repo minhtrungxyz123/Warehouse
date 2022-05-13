@@ -1,19 +1,17 @@
 ﻿using Master.Service;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Warehouse.Common;
 
 namespace Master.WebApi.SignalRHubs
 {
-    //[Authorize("Admin")]
     public class ConnectRealTimeHub : Hub
     {
         private ICreatedByService _userService;
 
         public ConnectRealTimeHub()
         {
-
         }
+
         private void GetUserByService()
         {
             if (_userService == null)
@@ -22,14 +20,15 @@ namespace Master.WebApi.SignalRHubs
 
         public async Task WareHouseBookTrachking(string id)
         {
-            GetUserByService();
+            //GetUserByService();
             var res = new ResultMessageResponse()
             {
                 data = id,
-                success = _userService != null,
-                message = _userService != null ? "Dữ liệu cập nhật, sau khi " + _userService.User.AccountName + " chỉnh sửa !" : "Không tìm thấy dữ liệu"
+                //success = _userService != null,
+                //message = _userService != null ? "Dữ liệu cập nhật, sau khi " + _userService.User.AccountName + " chỉnh sửa !" : "Không tìm thấy dữ liệu"
+                message = "test"
             };
-            await Clients.Others.SendAsync("WareHouseBookTrachkingToCLient", res, _userService.User.Id);
+            await Clients.Others.SendAsync("WareHouseBookTrachkingToCLient", res/*, _userService.User.Id*/);
         }
 
         public async Task UnitEdit(string id)

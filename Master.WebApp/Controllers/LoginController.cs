@@ -23,10 +23,6 @@ namespace Master.WebApp.Controllers
 
         #endregion Fields
 
-        #region Get Cookie
-
-        //HttpContext.Request.Cookies[".AspNetCore.Cookies"] != null
-        #endregion
         #region Method
 
         public IActionResult Index()

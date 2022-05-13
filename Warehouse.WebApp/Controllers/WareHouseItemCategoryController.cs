@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Warehouse.Common.Common;
+using Warehouse.Common;
 using Warehouse.Model.WareHouseItemCategory;
 using Warehouse.WebApp.ApiClient;
 

@@ -1,4 +1,4 @@
-﻿using Warehouse.Common.Common;
+﻿using Warehouse.Common;
 
 namespace Warehouse.Model.WareHouseItemCategory
 {

@@ -1,5 +1,4 @@
 ﻿using Warehouse.Common;
-using Warehouse.Common.Common;
 using Warehouse.Model.Unit;
 using Warehouse.Model.Vendor;
 using Warehouse.Model.WareHouseItem;
@@ -26,5 +25,7 @@ namespace Warehouse.WebApp.ApiClient
         Task<bool> Delete(string id);
 
         Task<WareHouseItemModel> GetByIdAync(string id);
+
+        Task<IList<WareHouseItemModel>> GetAvailableItem(bool showHidden = true);
     }
 }

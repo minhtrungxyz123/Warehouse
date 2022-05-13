@@ -1,5 +1,4 @@
 ﻿using Warehouse.Common;
-using Warehouse.Common.Common;
 using Warehouse.Model.Inward;
 using Warehouse.Model.InwardDetail;
 

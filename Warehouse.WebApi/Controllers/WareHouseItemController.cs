@@ -22,6 +22,14 @@ namespace Warehouse.WebApi.Controllers
 
         #region List
 
+        [Route("get-available")]
+        [HttpGet]
+        public async Task<IActionResult> GetAvailableList(bool showHidden = true)
+        {
+            var user = _wareHouseItemService.GetMvcListItems(showHidden);
+            return Ok(user);
+        }
+
         [Route("get-by-id")]
         [HttpGet]
         public async Task<IActionResult> GetById(string id)

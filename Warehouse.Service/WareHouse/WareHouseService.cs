@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Warehouse.Common;
-using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.WareHouse;
 

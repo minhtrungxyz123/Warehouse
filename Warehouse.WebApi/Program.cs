@@ -23,6 +23,7 @@ builder.Services.AddScoped<IWareHouseItemCategoryService, WareHouseItemCategoryS
 builder.Services.AddScoped<IWareHouseItemService, WareHouseItemService>();
 builder.Services.AddScoped<IVendorService, VendorService>();
 builder.Services.AddScoped<IInwardService, InwardService>();
+builder.Services.AddScoped<IBeginningWareHouseService, BeginningWareHouseService>();
 
 #endregion addService
 

@@ -1,5 +1,4 @@
 ﻿using Warehouse.Common;
-using Warehouse.Common.Common;
 using Warehouse.Model.WareHouseItem;
 
 namespace Warehouse.Service
@@ -19,5 +18,7 @@ namespace Warehouse.Service
         Task<int> Delete(string id);
 
         Task<ApiResult<Data.Entities.WareHouseItem>> GetByIdAsyn(string id);
+
+        IList<Data.Entities.WareHouseItem> GetMvcListItems(bool showHidden = true);
     }
 }

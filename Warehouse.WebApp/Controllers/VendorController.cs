@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Warehouse.Common.Common;
+using Warehouse.Common;
 using Warehouse.Model.Vendor;
 using Warehouse.WebApp.ApiClient;
 

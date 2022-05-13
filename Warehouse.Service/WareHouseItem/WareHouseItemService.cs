@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Warehouse.Common;
-using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.WareHouseItem;
 
@@ -38,7 +37,7 @@ namespace Warehouse.Service
                 Inactive = item.Inactive,
                 UnitId = item.UnitId,
                 VendorId = item.VendorId,
-                VendorName=item.VendorName,
+                VendorName = item.VendorName,
                 Id = item.Id
             };
             return new ApiSuccessResult<Data.Entities.WareHouseItem>(userViewModel);
@@ -96,9 +95,9 @@ namespace Warehouse.Service
                     VendorId = u.tp.Name,
                     UnitId = u.ti.UnitName,
                     Code = u.pr.Code,
-                    Country=u.pr.Country,
-                    Inactive=u.pr.Inactive,
-                    VendorName=u.pr.VendorName,
+                    Country = u.pr.Country,
+                    Inactive = u.pr.Inactive,
+                    VendorName = u.pr.VendorName,
                 })
                 .ToListAsync();
 
@@ -184,6 +183,17 @@ namespace Warehouse.Service
             var result = await _context.SaveChangesAsync();
 
             return result;
+        }
+
+        public IList<Data.Entities.WareHouseItem> GetMvcListItems(bool showHidden = true)
+        {
+            var query = from p in _context.WareHouseItems.AsQueryable() select p;
+            if (showHidden)
+            {
+                query = from p in query where p.Inactive select p;
+            }
+            query = from p in query orderby p.Name select p;
+            return query.ToList();
         }
 
         #endregion Method
