@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Text;
 using Warehouse.Common;
 using Warehouse.Common.Common;
@@ -9,12 +10,14 @@ namespace Master.WebApp.ApiClient
     public class CreatedByApiClient : ICreatedByApiClient
     {
         #region Fields
-
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
 
-        public CreatedByApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public CreatedByApiClient(IHttpContextAccessor httpContextAccessor, 
+            IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
+            _httpContextAccessor = httpContextAccessor;
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
         }
@@ -23,13 +26,35 @@ namespace Master.WebApp.ApiClient
 
         #region Method
 
-        public async Task<bool> Create(CreatedByModel request)
+        public async Task<ApiResult<string>> Authenticate(CreatedByModel request)
         {
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("/created-by/authenticate", httpContent);
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(await response.Content.ReadAsStringAsync());
+            }
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<string>>(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<bool> Create(CreatedByModel request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PostAsync("created-by/create", httpContent);
 
             return response.IsSuccessStatusCode;

@@ -21,5 +21,7 @@ namespace Master.Service
         Task<int> Delete(string unitId);
 
         Task<ApiResult<CreatedBy>> GetByIdAsyn(string id);
+
+        Task<ApiResult<string>> Authencate(CreatedByModel request);
     }
 }

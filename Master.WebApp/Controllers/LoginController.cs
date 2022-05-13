@@ -1,12 +1,14 @@
-﻿using Master.WebApp.Models;
+﻿using Master.WebApp.ApiClient;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Warehouse.Data.Entities;
-using Warehouse.Data.Repositories;
+using System.Text;
+using Warehouse.Common;
+using Warehouse.Model.CreatedBy;
 
 namespace Master.WebApp.Controllers
 {
@@ -14,11 +16,14 @@ namespace Master.WebApp.Controllers
     {
         #region Fields
 
-        private readonly IRepositoryEF<CreatedBy> _createdByrepositoryEF;
+        private readonly ICreatedByApiClient _userApiClient;
+        private readonly IConfiguration _configuration;
 
-        public LoginController(IRepositoryEF<CreatedBy> repositoryEF)
+        public LoginController(ICreatedByApiClient userApiClient,
+            IConfiguration configuration)
         {
-            _createdByrepositoryEF = repositoryEF;
+            _userApiClient = userApiClient;
+            _configuration = configuration;
         }
 
         #endregion Fields
@@ -26,58 +31,61 @@ namespace Master.WebApp.Controllers
         #region Get Cookie
 
         //HttpContext.Request.Cookies[".AspNetCore.Cookies"] != null
-        #endregion
+
+        #endregion Get Cookie
+
         #region Method
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Index([Bind] LoginViewModel user, string returnUrl)
+        public async Task<IActionResult> Index(CreatedByModel request)
         {
-            returnUrl ??= Url.Content("~/");
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(ModelState);
+
+            var result = await _userApiClient.Authenticate(request);
+            if (result.ResultObj == null)
             {
-                if (ValidateAdmin(user.AccountName, user.Password))
-                {
-                    var users = _createdByrepositoryEF.Get(a => a.AccountName == user.AccountName).SingleOrDefault();
-                    if (users != null)
-                    {
-                        var userClaims = new List<Claim>()
-                        {
-                                new Claim("AccountName", users.AccountName),
-                                new Claim("Email", users.Email),
-                                new Claim("Id", users.Id),
-                        };
-                        var userIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
-                        var authProperties = new AuthenticationProperties
-                        {
-                            AllowRefresh = true,
-                            IsPersistent = true
-                        };
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(userIdentity), authProperties);
-                        if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                           && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
-                        {
-                            return Redirect(returnUrl);
-                        }
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, " Username does not exist ");
-                        return View(user);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Tên đăng nhập hoặc mật khẩu không chính xác.");
-                    return View(user);
-                }
+                ModelState.AddModelError("", result.Message);
+                return View();
             }
-            return View(user);
+            var userPrincipal = this.ValidateToken(result.ResultObj);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                IsPersistent = false
+            };
+            HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
+            await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        userPrincipal,
+                        authProperties);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private ClaimsPrincipal ValidateToken(string jwtToken)
+        {
+            IdentityModelEventSource.ShowPII = true;
+
+            SecurityToken validatedToken;
+            TokenValidationParameters validationParameters = new TokenValidationParameters();
+
+            validationParameters.ValidateLifetime = true;
+
+            validationParameters.ValidAudience = _configuration["Tokens:Issuer"];
+            validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
+            validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
+
+            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
+
+            return principal;
         }
 
         public IActionResult FalseLogin()
@@ -86,16 +94,5 @@ namespace Master.WebApp.Controllers
         }
 
         #endregion Method
-
-        #region Unitiels
-
-        [AllowAnonymous]
-        public bool ValidateAdmin(string username, string password)
-        {
-            var admin = _createdByrepositoryEF.Get(a => a.AccountName.Equals(username)).SingleOrDefault();
-            return admin != null && new PasswordHasher<CreatedBy>().VerifyHashedPassword(new CreatedBy(), admin.Password, password) == PasswordVerificationResult.Success;
-        }
-
-        #endregion Unitiels
     }
 }

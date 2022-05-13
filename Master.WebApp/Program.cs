@@ -1,12 +1,5 @@
 using Master.WebApp.ApiClient;
-using Master.WebApp.CustomHandler;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Configuration;
-using Warehouse.Data.EF;
-using Warehouse.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,52 +8,25 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(options =>
+               {
+                   options.LoginPath = "/Login/Index";
+                   options.AccessDeniedPath = "/User/Forbidden/";
+               });
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+});
+
 #region Add DI
 
 builder.Services.AddTransient<ICreatedByApiClient, CreatedByApiClient>();
 
 #endregion Add DI
 
-//DbContext
-builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseSqlServer(
-                            builder.Configuration.GetConnectionString("WarehouseDatabase")));
-
-//Repository
-builder.Services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
-
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-//Authorization
-builder.Services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
-builder.Services.AddAuthorization(options =>
-{
-});
-
-
-
-//AddCookie
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
- .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, config =>
- {
-     config.LoginPath = "/Login/Index";
-     config.AccessDeniedPath = "/Login/FalseLogin";
-     config.ExpireTimeSpan = TimeSpan.FromHours(1);
-     config.Cookie.HttpOnly = true;
-     config.Cookie.IsEssential = true;
- });
-builder.Services.AddSession(options =>
-{
-    options.Cookie.Name = ".AdventureWorks.Session";
-    options.IdleTimeout = TimeSpan.FromHours(1);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
-builder.Services.Configure<PasswordHasherOptions>(option =>
-{
-    option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
-    option.IterationCount = 12000;
-});
-
 
 var app = builder.Build();
 

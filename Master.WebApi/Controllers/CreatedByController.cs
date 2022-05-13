@@ -65,6 +65,22 @@ namespace Master.WebApi.Controllers
 
         #region Method
 
+        [HttpPost("authenticate")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Authenticate([FromBody] CreatedByModel request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _createdByService.Authencate(request);
+
+            if (string.IsNullOrEmpty(result.ResultObj))
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> Post([FromBody] CreatedByModel model)
         {

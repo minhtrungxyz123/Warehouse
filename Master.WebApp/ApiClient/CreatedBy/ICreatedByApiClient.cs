@@ -15,5 +15,7 @@ namespace Master.WebApp.ApiClient
         Task<ApiResult<CreatedByModel>> GetById(string id);
 
         Task<bool> Delete(string id);
+
+        Task<ApiResult<string>> Authenticate(CreatedByModel request);
     }
 }

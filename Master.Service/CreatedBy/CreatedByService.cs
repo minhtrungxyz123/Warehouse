@@ -1,9 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Warehouse.Common;
 using Warehouse.Common.Common;
 using Warehouse.Data.EF;
 using Warehouse.Data.Entities;
+using Warehouse.Data.Repositories;
 using Warehouse.Model.CreatedBy;
 
 namespace Master.Service
@@ -14,13 +21,18 @@ namespace Master.Service
 
         private readonly WarehouseDbContext _context;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IRepositoryEF<CreatedBy> _createdByrepositoryEF;
+        private readonly IConfiguration _config;
 
         public CreatedBy User => GetUser();
 
-        public CreatedByService(WarehouseDbContext context, IHttpContextAccessor httpContext)
+        public CreatedByService(WarehouseDbContext context, IHttpContextAccessor httpContext, IRepositoryEF<CreatedBy> repositoryEF
+            , IConfiguration config)
         {
             _context = context;
             _httpContext = httpContext;
+            _createdByrepositoryEF = repositoryEF;
+            _config = config;
         }
 
         #endregion Fields
@@ -61,7 +73,7 @@ namespace Master.Service
 
         public async Task<IEnumerable<CreatedBy>> GetAll()
         {
-            var res= await _context.CreatedBies
+            var res = await _context.CreatedBies
                             .OrderByDescending(p => p.AccountName)
                             .ToListAsync();
             return res;
@@ -117,6 +129,34 @@ namespace Master.Service
         #endregion List
 
         #region Method
+
+        public async Task<ApiResult<string>> Authencate(CreatedByModel request)
+        {
+            if (ValidateAdmin(request.AccountName, request.Password))
+            {
+                var users = _createdByrepositoryEF.Get(a => a.AccountName == request.AccountName).SingleOrDefault();
+                if (users != null)
+                {
+                    var claims = new[]
+                    {
+                                new Claim("AccountName", users.AccountName),
+                                new Claim("Email", users.Email),
+                                new Claim("Id", users.Id),
+                    };
+
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+                    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                    var token = new JwtSecurityToken(_config["Tokens:Issuer"],
+                        _config["Tokens:Issuer"],
+                        claims,
+                        expires: DateTime.Now.AddHours(3),
+                        signingCredentials: creds);
+
+                    return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
+                }
+            }
+            return new ApiErrorResult<string>("Lỗi đăng nhập!");
+        }
 
         public async Task<RepositoryResponse> Create(CreatedByModel model)
         {
@@ -176,5 +216,15 @@ namespace Master.Service
         }
 
         #endregion Method
+
+        #region Unitiels
+
+        public bool ValidateAdmin(string username, string password)
+        {
+            var admin = _createdByrepositoryEF.Get(a => a.AccountName.Equals(username)).SingleOrDefault();
+            return admin != null && new PasswordHasher<CreatedBy>().VerifyHashedPassword(new CreatedBy(), admin.Password, password) == PasswordVerificationResult.Success;
+        }
+
+        #endregion Unitiels
     }
 }

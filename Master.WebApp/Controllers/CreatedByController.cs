@@ -9,8 +9,8 @@ using Warehouse.Model.CreatedBy;
 
 namespace Master.WebApp.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class CreatedByController : Controller
+    [Authorize]
+    public class CreatedByController : BaseController
     {
         #region Fields
 
