@@ -72,7 +72,7 @@ namespace Master.WebApp.Controllers
 
             var result = await _createdByApiClient.Create(request);
 
-            if (result)
+            if (result.IsSuccessed)
             {
                 TempData["result"] = "Thêm mới thành công";
                 return RedirectToAction("Index");

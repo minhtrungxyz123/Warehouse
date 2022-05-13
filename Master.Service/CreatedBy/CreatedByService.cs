@@ -132,6 +132,9 @@ namespace Master.Service
 
         public async Task<ApiResult<string>> Authencate(CreatedByModel request)
         {
+            var user = await _context.CreatedBies.FirstOrDefaultAsync(c => c.AccountName.Equals(request.AccountName));
+            if (user == null) return new ApiErrorResult<string>("Tài khoản không tồn tại");
+
             if (ValidateAdmin(request.AccountName, request.Password))
             {
                 var users = _createdByrepositoryEF.Get(a => a.AccountName == request.AccountName).SingleOrDefault();

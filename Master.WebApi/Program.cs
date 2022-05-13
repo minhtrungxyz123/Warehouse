@@ -26,7 +26,7 @@ builder.Services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
 //swagger
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "WareHouse", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Master app", Version = "v1" });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {

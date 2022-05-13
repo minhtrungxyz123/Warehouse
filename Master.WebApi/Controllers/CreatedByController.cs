@@ -1,7 +1,6 @@
 ﻿using Master.Service;
 using Master.WebApi.SignalRHubs;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Warehouse.Common;
@@ -10,6 +9,7 @@ using Warehouse.Model.CreatedBy;
 namespace Master.WebApi.Controllers
 {
     [Route("created-by")]
+    [Authorize]
     [ApiController]
     public class CreatedByController : ControllerBase
     {
@@ -17,6 +17,7 @@ namespace Master.WebApi.Controllers
 
         private readonly ICreatedByService _createdByService;
         private readonly IHubContext<ConnectRealTimeHub> _hubContext;
+
         public CreatedByController(ICreatedByService createdByService, IHubContext<ConnectRealTimeHub> hubContext)
         {
             _createdByService = createdByService;
@@ -82,6 +83,7 @@ namespace Master.WebApi.Controllers
         }
 
         [HttpPost("create")]
+        [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] CreatedByModel model)
         {
             var result = await _createdByService.Create(model);

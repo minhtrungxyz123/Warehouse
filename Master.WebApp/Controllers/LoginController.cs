@@ -18,19 +18,25 @@ namespace Master.WebApp.Controllers
 
         private readonly ICreatedByApiClient _userApiClient;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public LoginController(ICreatedByApiClient userApiClient,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         #endregion Fields
 
         #region Get Cookie
 
-        //HttpContext.Request.Cookies[".AspNetCore.Cookies"] != null
+        //public IActionResult Cookie()
+        //{
+        //    _httpContextAccessor.HttpContext.Session.SetString("Voucher", "");
+        //}
 
         #endregion Get Cookie
 

@@ -6,7 +6,7 @@ namespace Master.WebApp.ApiClient
 {
     public interface ICreatedByApiClient
     {
-        public Task<bool> Create(CreatedByModel request);
+        public Task<ApiResult<bool>> Create(CreatedByModel request);
 
         public Task<bool> Edit(string id, CreatedByModel request);
 

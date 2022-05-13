@@ -5,7 +5,6 @@ using Warehouse.Common;
 
 namespace Master.WebApi.SignalRHubs
 {
-    //[Authorize]
     public class ConnectRealTimeHub : Hub
     {
         private ICreatedByService _userService;
@@ -26,8 +25,9 @@ namespace Master.WebApi.SignalRHubs
             var res = new ResultMessageResponse()
             {
                 data = id,
-                success = _userService != null,
-                message = _userService != null ? "Dữ liệu cập nhật, sau khi " + _userService.User.AccountName + " chỉnh sửa !" : "Không tìm thấy dữ liệu"
+                //success = _userService != null,
+                //message = _userService != null ? "Dữ liệu cập nhật, sau khi " + _userService.User.AccountName + " chỉnh sửa !" : "Không tìm thấy dữ liệu"
+                message = "test"
             };
             await Clients.Others.SendAsync("WareHouseBookTrachkingToCLient", res);
         }
