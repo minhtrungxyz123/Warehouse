@@ -49,7 +49,10 @@
                     <thead>
                         <tr>
                             <th>
-                                Kho
+                                <div class="form-group">
+                                     <label>Example of AJAX Select</label>
+                                    <select name="ajaxSelect2" class="form-control" id="ajaxSelect2"></select>
+                                    </div>
                             </th>
                             <th>
                                 Vật tư
@@ -68,22 +71,9 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.WareHouseId)
+                                    
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ItemId)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UnitId)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Quantity)
-                                </td>
-                                <td>
-                                    <button onclick="Edit('@item.Id')" class="btn btn-primary"><i class="fa-solid fa-pen"></i> Sửa</button>
-                                    <button onclick="Detail('@item.Id')" class="btn" style="background: yellow;" ><i class="fa-solid fa-eye"></i> Chi tiết</button>
-                                    <button onclick="Delete('@item.Id')" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Xóa</button>
-                                </td>
+
                             </tr>
                         }
                     </tbody>
@@ -103,56 +93,32 @@
             $('#msgAlert').fadeOut('slow');
         }, 2000);
 
-        function Create() {
-            $.get("/BeginningWareHouse/Create", function (data) {
-                $("#contactDetails").html(data);
-                $("#contactDetails").dialog("open");
-                $(".k-overlay").removeClass("d-none");
-            });
+        $("#ajaxSelect2").select2({
+        placeholder: "Select a Value from API Data",
+        theme: "bootstrap4",
+        allowClear: true,
+        ajax: {
+        url: "https://localhost:2000/warehouse/get-all",
+        contentType: "application/json; charset=utf-8",
+        data: function (params) {
+            var query =
+            {
+                term: params.term,
+            };
+            return query;
+        },
+        processResults: function (result) {
+            return {
+                results: $.map(result, function (item) {
+                    return {
+                        id: item.id,
+                        text: item.name
+                    };
+                }),
+            };
         }
-
-        function Edit(id) {
-                $.get("/BeginningWareHouse/Edit", { beginningWareHouseId: id }, function (data) {
-                    $("#contactDetails").html(data);
-                    $("#contactDetails").dialog("open");
-                });
-        }
-
-        function Detail(id) {
-                $.get("/BeginningWareHouse/Detail", { beginningWareHouseId: id }, function (data) {
-                    $("#contactDetails").html(data);
-                    $("#contactDetails").dialog("open");
-                });
-        }
-
-        function Delete(id) {         
-            if (confirm("Bạn có chắc chắn xóa không?")) {                  
-                $.post("/BeginningWareHouse/DeleteConfirmed", { id: id }, function (data) {              
-                    if (data) {                
-                        if (confirm("Xóa thành công"))                         
-                        window.location.assign('/BeginningWareHouse/Index')                     
-                    } else {                            
-                        alert("Quá trình thực hiện không thành công. Hãy thử lại");                      
-                    }                      
-                });                       
-            }                    
-        }
-
-        $(function() {
-            $("#contactDetails").dialog({
-                autoOpen: false,
-                modal: true,
-                width: 500,
-                show: {
-                    effect: "blind",
-                    duration: 1000
-                },
-                hide: {
-                    effect: "explode",
-                    duration: 1000
-                }
-            });
-        });
+    }
+});
 
 </script>
 }

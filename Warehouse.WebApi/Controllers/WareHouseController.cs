@@ -34,7 +34,8 @@ namespace Warehouse.WebApi.Controllers
         [HttpGet("get-all")]
         public async Task<ActionResult> GetAll()
         {
-            return Ok(await _warehouseService.GetAll());
+            var getAll = await _warehouseService.GetAll();
+            return Ok(getAll);
         }
 
         [HttpGet("get")]
