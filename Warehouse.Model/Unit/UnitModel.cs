@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel;
 
 namespace Warehouse.Model.Unit
 {
@@ -10,5 +11,6 @@ namespace Warehouse.Model.Unit
         public string UnitName { get; set; }
 
         public bool Inactive { get; set; }
+
     }
 }

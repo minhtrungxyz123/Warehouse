@@ -1,0 +1,33 @@
+﻿@model Warehouse.Model.BeginningWareHouse.BeginningWareHouseModel
+
+<div>
+    <h4>Chi tiết tồn đầu kỳ</h4>
+    <hr />
+    <form asp-controller="BeginningWareHouse" asp-action="Detail">
+        <div class="form-body">
+            <input type="hidden" asp-for="Id" />
+            <div class="modal-body">
+               <div class="form-group">
+                    <label asp-for="WareHouseId" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.WareHouseId, Model.AvailableWarehouse, "Kho", new { @class = "form-control", style = "width: 100%" , disabled = "disabled" })
+                    <span asp-validation-for="WareHouseId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ItemId" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.ItemId, Model.AvailableItem, "Vật tư", new { @class = "form-control", style = "width: 100%" , disabled = "disabled" })
+                    <span asp-validation-for="ItemId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UnitId" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.UnitId, Model.AvailableUnit, "Đơn vị tính", new { @class = "form-control", style = "width: 100%" , disabled = "disabled" })
+                    <span asp-validation-for="UnitId" class="text-danger"></span>
+                </div>
+                 <div class="form-group">
+                    <label asp-for="Quantity" class="control-label"></label>
+                    <input asp-for="Quantity" class="form-control" min="0" readonly="@(true)" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

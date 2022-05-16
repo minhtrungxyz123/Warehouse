@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Warehouse.Model.BeginningWareHouse;
+using Warehouse.Model.WareHouseItem;
+using Warehouse.Model.WareHouseItemUnit;
 using Warehouse.WebApp.ApiClient;
+using Warehouse.WebApp.Models;
 
 namespace Warehouse.WebApp.Controllers
 {
@@ -60,6 +63,9 @@ namespace Warehouse.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(BeginningWareHouseModel request)
         {
+            request.CreatedDate= DateTime.Now;
+            request.ModifiedDate= DateTime.Now;
+
             if (!ModelState.IsValid)
                 return View(request);
 
@@ -284,6 +290,31 @@ namespace Warehouse.WebApp.Controllers
             model.AvailableWarehouse = new List<SelectListItem>(categories2);
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> GetWareHouseItemUnitByItemId(string id)
+        //{
+        //    var getUnitItem = new GetWareHouseItemUnitPagingRequest();
+        //    getUnitItem.ItemId = id;
+        //    var listItem = await ApiHelper.ExecuteAsync<List<WareHouseItemUnitModel>>("/warehouse-item-unit/get",
+        //        getUnitItem, Method.GET, ApiHosts.Warehouse);
+        //    var getItem = await ApiHelper.ExecuteAsync<WareHouseItemModel>($"/warehouse-item/get-by-id?id={id}", null,
+        //        Method.GET, ApiHosts.Warehouse);
+        //    var model = new List<SelectItem>();
+        //    if (listItem.data.Any())
+        //        foreach (var item in listItem.data)
+        //        {
+        //            var tem = new SelectItem
+        //            {
+        //                text = item.UnitName,
+        //                id = item.UnitId
+        //            };
+        //            if (getItem.data != null && getItem.data.UnitId.Equals(item.UnitId))
+        //                tem.selected = true;
+        //            model.Add(tem);
+        //        }
+
+        //    return Ok(model);
+        //}
         #endregion
     }
 }

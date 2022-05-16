@@ -2,6 +2,7 @@
 using System.Text;
 using Warehouse.Common;
 using Warehouse.Model.BeginningWareHouse;
+using Warehouse.Model.Unit;
 
 namespace Warehouse.WebApp.ApiClient
 {

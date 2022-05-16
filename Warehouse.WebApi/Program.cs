@@ -24,6 +24,7 @@ builder.Services.AddScoped<IWareHouseItemService, WareHouseItemService>();
 builder.Services.AddScoped<IVendorService, VendorService>();
 builder.Services.AddScoped<IInwardService, InwardService>();
 builder.Services.AddScoped<IBeginningWareHouseService, BeginningWareHouseService>();
+builder.Services.AddScoped<IWareHouseItemUnitService, WareHouseItemUnitService>();
 
 #endregion addService
 
