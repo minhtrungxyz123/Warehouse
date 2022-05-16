@@ -45,7 +45,7 @@ namespace Warehouse.WebApi.Controllers
                     e.UnitName = units.FirstOrDefault(w => w.Id == e.UnitId)?.UnitName;
             }
 
-            return Ok(models);
+            return Ok(entities);
         }
     }
 }
