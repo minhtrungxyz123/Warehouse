@@ -22,6 +22,17 @@ namespace Warehouse.WebApi.Controllers
 
         #region List
 
+        [Route("get-by-id-unit")]
+        [HttpGet]
+        public async Task<IActionResult> GetByIdUnit(string id)
+        {
+            var entity = await _wareHouseItemService.GetByIdUnitAsync(id);
+            if (entity == null)
+                NotFound(new ApiNotFoundResponse($"WareHouseItem with id: {id} is not found"));
+
+            return Ok(entity);
+        }
+
         [Route("get-available")]
         [HttpGet]
         public async Task<IActionResult> GetAvailableList(bool showHidden = true)

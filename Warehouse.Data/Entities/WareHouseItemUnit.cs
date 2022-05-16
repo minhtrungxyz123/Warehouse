@@ -11,8 +11,6 @@ namespace Warehouse.Data.Entities
     {
         public string ItemId { get; set; }
         public string UnitId { get; set; }
-
-        [NotMapped]
         public string UnitName { get; set; }
         public int ConvertRate { get; set; }
         public bool? IsPrimary { get; set; }

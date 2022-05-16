@@ -1,6 +1,8 @@
 ﻿using Warehouse.Common;
 using Warehouse.Model.BeginningWareHouse;
 using Warehouse.Model.Unit;
+using Warehouse.Model.WareHouseItem;
+using Warehouse.Model.WareHouseItemUnit;
 
 namespace Warehouse.WebApp.ApiClient
 {
@@ -15,6 +17,10 @@ namespace Warehouse.WebApp.ApiClient
         Task<ApiResult<BeginningWareHouseModel>> GetById(string id);
 
         Task<bool> Delete(string id);
+
+        Task<List<WareHouseItemUnitModel>> GetByWareHouseItemUnitId(string getUnitItem);
+
+        Task<WareHouseItemModel> GetByWareHouseItemId(string id);
 
     }
 }

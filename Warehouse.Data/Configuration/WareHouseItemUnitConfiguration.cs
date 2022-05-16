@@ -29,6 +29,11 @@ namespace Warehouse.Data.Configuration
                 .HasMaxLength(36)
                 .IsUnicode(false)
                 .HasDefaultValueSql("('')");
+
+            entity.Property(e => e.UnitName)
+                .HasMaxLength(36)
+                .IsUnicode(false)
+                .HasDefaultValueSql("('')");
         }
     }
 }

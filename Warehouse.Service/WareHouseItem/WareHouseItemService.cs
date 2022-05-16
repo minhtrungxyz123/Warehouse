@@ -196,6 +196,34 @@ namespace Warehouse.Service
             return query.ToList();
         }
 
+        public async Task<Data.Entities.WareHouseItem> GetByIdUnitAsync(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var item = await _context.WareHouseItems
+                           .OrderByDescending(p => p.Name)
+                           .DefaultIfEmpty()
+                           .FirstOrDefaultAsync(p => p.Id == id);
+
+            var userViewModel = new Data.Entities.WareHouseItem()
+            {
+                Name = item.Name,
+                Code = item.Code,
+                Description = item.Description,
+                CategoryId = item.CategoryId,
+                Country = item.Country,
+                Inactive = item.Inactive,
+                UnitId = item.UnitId,
+                VendorId = item.VendorId,
+                VendorName = item.VendorName,
+                Id = item.Id
+            };
+            return item;
+        }
+
         #endregion Method
     }
 }

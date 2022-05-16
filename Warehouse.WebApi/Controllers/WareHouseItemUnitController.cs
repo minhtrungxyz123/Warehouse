@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Warehouse.Model.WareHouseItemUnit;
 using Warehouse.Service;
 
@@ -14,7 +13,7 @@ namespace Warehouse.WebApi.Controllers
         private readonly IWareHouseItemUnitService _wareHouseItemUnitService;
         private readonly IUnitService _unitService;
 
-        public WareHouseItemUnitController(IWareHouseItemUnitService  wareHouseItemUnitService,
+        public WareHouseItemUnitController(IWareHouseItemUnitService wareHouseItemUnitService,
             IUnitService unitService)
         {
             _wareHouseItemUnitService = wareHouseItemUnitService;
@@ -31,15 +30,12 @@ namespace Warehouse.WebApi.Controllers
             {
                 ItemId = ItemId
             };
-
-            var models = new List<WareHouseItemUnitModel>();
             var entities = _wareHouseItemUnitService.GetByWareHouseItemUnitId(searchContext);
 
             var units = _unitService.GetMvcListItems(true);
 
             foreach (var e in entities)
             {
-
                 if (!string.IsNullOrWhiteSpace(e.UnitId))
 
                     e.UnitName = units.FirstOrDefault(w => w.Id == e.UnitId)?.UnitName;

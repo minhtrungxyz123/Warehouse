@@ -3,6 +3,8 @@ using System.Text;
 using Warehouse.Common;
 using Warehouse.Model.BeginningWareHouse;
 using Warehouse.Model.Unit;
+using Warehouse.Model.WareHouseItem;
+using Warehouse.Model.WareHouseItemUnit;
 
 namespace Warehouse.WebApp.ApiClient
 {
@@ -90,6 +92,30 @@ namespace Warehouse.WebApp.ApiClient
                 return JsonConvert.DeserializeObject<ApiSuccessResult<BeginningWareHouseModel>>(body);
 
             return JsonConvert.DeserializeObject<ApiErrorResult<BeginningWareHouseModel>>(body);
+        }
+
+        public async Task<List<WareHouseItemUnitModel>> GetByWareHouseItemUnitId(string getUnitItem)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var response = await client.GetAsync($"/warehouse-item-unit/get?ItemId={getUnitItem}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<WareHouseItemUnitModel>>(body);
+
+            return JsonConvert.DeserializeObject<List<WareHouseItemUnitModel>>(body);
+        }
+
+        public async Task<WareHouseItemModel> GetByWareHouseItemId(string id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var response = await client.GetAsync($"/wareHouse-item/get-by-id-unit?id={id}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<WareHouseItemModel>(body);
+
+            return JsonConvert.DeserializeObject<WareHouseItemModel>(body);
         }
 
         #endregion List
