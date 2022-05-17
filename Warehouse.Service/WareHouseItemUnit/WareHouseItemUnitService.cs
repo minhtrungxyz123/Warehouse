@@ -21,6 +21,25 @@ namespace Warehouse.Service
 
         #region List
 
+        public async Task<ApiResult<Data.Entities.WareHouseItemUnit>> GetByIdAsyn(string id)
+        {
+            var item = await _context.WareHouseItemUnits
+                            .OrderByDescending(p => p.UnitId)
+                            .DefaultIfEmpty()
+                            .FirstOrDefaultAsync(p => p.Id == id);
+
+            var userViewModel = new Data.Entities.WareHouseItemUnit()
+            {
+                ConvertRate = item.ConvertRate,
+                Id = item.Id,
+                UnitId = item.UnitId,
+                UnitName = item.UnitName,
+                ItemId = item.ItemId,
+                IsPrimary = item.IsPrimary,
+            };
+            return new ApiSuccessResult<Data.Entities.WareHouseItemUnit>(userViewModel);
+        }
+
         public async Task<Data.Entities.WareHouseItemUnit?> GetById(string? id)
         {
             var item = await _context.WareHouseItemUnits

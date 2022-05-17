@@ -25,6 +25,14 @@ namespace Warehouse.WebApi.Controllers
 
         #region List
 
+        [Route("get-by-id")]
+        [HttpGet]
+        public async Task<IActionResult> GetByIdAsyn(string id)
+        {
+            var user = await _wareHouseItemUnitService.GetByIdAsyn(id);
+            return Ok(user);
+        }
+
         [Route("get")]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string? ItemId)

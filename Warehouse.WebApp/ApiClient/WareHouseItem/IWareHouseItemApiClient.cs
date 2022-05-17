@@ -27,5 +27,7 @@ namespace Warehouse.WebApp.ApiClient
         Task<WareHouseItemModel> GetByIdAync(string id);
 
         Task<IList<WareHouseItemModel>> GetAvailableItem(bool showHidden = true);
+
+        Task<ApiResult<WareHouseItemModel>> GetByWHItemUnitIdAync(string id);
     }
 }

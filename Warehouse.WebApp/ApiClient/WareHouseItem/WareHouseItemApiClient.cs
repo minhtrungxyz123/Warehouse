@@ -153,6 +153,18 @@ namespace Warehouse.WebApp.ApiClient
             return JsonConvert.DeserializeObject<IList<WareHouseItemModel>>(body);
         }
 
+        public async Task<ApiResult<WareHouseItemModel>> GetByWHItemUnitIdAync(string id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var response = await client.GetAsync($"/wareHouse-item/get-by-whItem-unit-id?id={id}");
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<WareHouseItemModel>>(body);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<WareHouseItemModel>>(body);
+        }
+
         #endregion List
     }
 }

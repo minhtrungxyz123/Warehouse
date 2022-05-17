@@ -22,5 +22,7 @@ namespace Warehouse.Service
         IList<Data.Entities.WareHouseItem> GetMvcListItems(bool showHidden = true);
 
         Task<Data.Entities.WareHouseItem> GetByIdUnitAsync(string id);
+
+        Task<ApiResult<WareHouseItemModel>> GetByWHItemUnitId(string id);
     }
 }

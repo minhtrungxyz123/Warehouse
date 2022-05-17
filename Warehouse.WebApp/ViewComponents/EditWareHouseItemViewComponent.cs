@@ -21,6 +21,8 @@ namespace Warehouse.WebApp.ViewComponents
             model.AvailableVendor = unitModel.AvailableVendor;
             model.AvailableUnit = unitModel.AvailableUnit;
             model.Country = unitModel.Country;
+            model.ConvertRate = unitModel.ConvertRate;
+            model.IsPrimary = unitModel.IsPrimary;
             return View(model);
         }
     }

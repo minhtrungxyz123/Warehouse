@@ -11,5 +11,7 @@ namespace Warehouse.Service
         Task<RepositoryResponse> Create(WareHouseItemUnitModel model);
 
         Task<Data.Entities.WareHouseItemUnit> GetById(string? id);
+
+        Task<ApiResult<Data.Entities.WareHouseItemUnit>> GetByIdAsyn(string id);
     }
 }

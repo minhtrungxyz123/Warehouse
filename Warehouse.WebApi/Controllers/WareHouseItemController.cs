@@ -75,6 +75,16 @@ namespace Warehouse.WebApi.Controllers
             return Ok(item);
         }
 
+        [Route("get-by-whItem-unit-id")]
+        [HttpGet]
+        public async Task<IActionResult> GetByWHItemUnitId(string id)
+        {
+            var product = await _wareHouseItemService.GetByWHItemUnitId(id);
+            if (product == null)
+                return BadRequest("Cannot find warehouseitemunit");
+            return Ok(product);
+        }
+
         #endregion List
 
         #region Method
@@ -110,7 +120,7 @@ namespace Warehouse.WebApi.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Put([FromBody] WareHouseItemModel model, string id)
         {
-            var item = await _wareHouseItemService.GetById(id);
+            var item = await _wareHouseItemService.GetByWHItemUnitId(id);
             if (item == null)
                 return NotFound(new ApiNotFoundResponse($"WareHouseItem with id: {id} is not found"));
 

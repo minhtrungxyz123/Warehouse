@@ -5,6 +5,7 @@ using Warehouse.Model.WareHouseItem;
 using Warehouse.WebApp.ApiClient;
 using System.Linq;
 using Warehouse.Common;
+using Warehouse.Model.WareHouseItemUnit;
 
 namespace Warehouse.WebApp.Controllers
 {
@@ -13,10 +14,13 @@ namespace Warehouse.WebApp.Controllers
         #region Fields
 
         private readonly IWareHouseItemApiClient _wareHouseItemApiClient;
+        private readonly IWareHouseItemUnitApiClient _wareHouseItemUnitApiClient;
 
-        public WareHouseItemController(IWareHouseItemApiClient wareHouseItemApiClient)
+        public WareHouseItemController(IWareHouseItemApiClient wareHouseItemApiClient,
+            IWareHouseItemUnitApiClient wareHouseItemUnitApiClient)
         {
             _wareHouseItemApiClient = wareHouseItemApiClient;
+            _wareHouseItemUnitApiClient = wareHouseItemUnitApiClient;
         }
 
         #endregion Fields
@@ -58,10 +62,7 @@ namespace Warehouse.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(WareHouseItemModel request)
         {
-            request.UnitName = "test";
-            request.VendorName ="test";
             request.IsPrimary = true;
-            request.ConvertRate = 1;
 
             if (!ModelState.IsValid)
                 return View(request);
@@ -83,7 +84,7 @@ namespace Warehouse.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string itemId)
         {
-            var result = await _wareHouseItemApiClient.GetById(itemId);
+            var result = await _wareHouseItemApiClient.GetByWHItemUnitIdAync(itemId);
             var model = result.ResultObj;
 
             await GetDropDownList(model);
@@ -130,6 +131,7 @@ namespace Warehouse.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(WareHouseItemModel request)
         {
+            request.IsPrimary = true;
             if (!ModelState.IsValid)
                 return View();
 
@@ -163,7 +165,7 @@ namespace Warehouse.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Detail(string itemId)
         {
-            var result = await _wareHouseItemApiClient.GetById(itemId);
+            var result = await _wareHouseItemApiClient.GetByWHItemUnitIdAync(itemId);
             var model = result.ResultObj;
 
             await GetDropDownList(model);
@@ -288,6 +290,35 @@ namespace Warehouse.WebApp.Controllers
             }
 
             model.AvailableCategory = new List<SelectListItem>(categories2);
+        }
+
+        private async Task GetDropDownListWHItemUnit(WareHouseItemUnitModel model)
+        {
+            var availableUnits = await _wareHouseItemApiClient.GetAvailableList();
+
+            var categories = new List<SelectListItem>();
+            var data = availableUnits;
+
+            if (data?.Count > 0)
+            {
+                foreach (var m in data)
+                {
+                    var item = new SelectListItem
+                    {
+                        Text = m.UnitName,
+                        Value = m.Id,
+                    };
+                    categories.Add(item);
+                }
+            }
+            categories.OrderBy(e => e.Text);
+            if (categories == null || categories.Count == 0)
+            {
+                categories = new List<SelectListItem>();
+            }
+
+            model.AvailableUnit = new List<SelectListItem>(categories);
+           
         }
 
         #endregion

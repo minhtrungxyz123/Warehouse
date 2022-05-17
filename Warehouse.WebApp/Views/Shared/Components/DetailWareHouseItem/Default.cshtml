@@ -6,6 +6,8 @@
     <form asp-controller="WareHouseItem" asp-action="Detail">
         <div class="form-body">
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ItemId" />
+            <input type="hidden" asp-for="IsPrimary" />
             <div class="modal-body">
                  <div class="form-group">
                     <label asp-for="Code" class="control-label"></label>
@@ -48,6 +50,37 @@
                         @Html.DisplayFor(m => m.Inactive)
                     </div>
                 </div>
+                <span>Các Đơn Vị Có Thể Sử Dụng</span>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Đơn vị
+                            </th>
+                            <th>
+                                Tỉ lệ chuyển đổi
+                            </th>
+                            <th>
+                                Ghi chú
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td>
+                                    @Html.DropDownListFor(m => m.UnitId, Model.AvailableUnit, "Đơn vị", new { @class = "form-control", style = "width: 100%", disabled = "disabled"  })
+                                </td>
+                                <td>
+                                    <input asp-for="ConvertRate" class="form-control" min="0" readonly="@(true)" />
+                                </td>
+                                <td>
+                                    <input asp-for="Note" class="form-control" min="0" readonly="@(true)" />
+                                </td>
+                            </tr>
+                        
+                    </tbody>
+
+                </table>
             </div>
         </div>
     </form>

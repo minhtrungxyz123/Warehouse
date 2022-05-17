@@ -38,7 +38,7 @@ namespace Warehouse.Service
                 UnitId = item.UnitId,
                 VendorId = item.VendorId,
                 VendorName = item.VendorName,
-                Id = item.Id
+                Id = item.Id,
             };
             return new ApiSuccessResult<Data.Entities.WareHouseItem>(userViewModel);
         }
@@ -145,14 +145,13 @@ namespace Warehouse.Service
             {
                 ConvertRate = model.ConvertRate,
                 IsPrimary = model.IsPrimary,
-                UnitId=model.UnitId,
+                UnitId = model.UnitId,
                 UnitName = model.UnitName,
-
             };
             item.Id = Guid.NewGuid().ToString();
-            itemUnit.Id= Guid.NewGuid().ToString();
+            itemUnit.Id = Guid.NewGuid().ToString();
 
-            itemUnit.ItemId=item.Id;
+            itemUnit.ItemId = item.Id;
 
             _context.WareHouseItems.Add(item);
             _context.WareHouseItemUnits.Add(itemUnit);
@@ -162,13 +161,15 @@ namespace Warehouse.Service
             return new RepositoryResponse()
             {
                 Result = result,
-                Id = item.Id,
+                Id = item.Id
             };
         }
 
         public async Task<RepositoryResponse> Update(string id, WareHouseItemModel model)
         {
             var item = await _context.WareHouseItems.FindAsync(id);
+            var productTranslations = await _context.WareHouseItemUnits.FirstOrDefaultAsync(x => x.ItemId == model.Id);
+
             item.Name = model.Name;
             item.Code = model.Code;
             item.Description = model.Description;
@@ -178,8 +179,14 @@ namespace Warehouse.Service
             item.UnitId = model.UnitId;
             item.VendorId = model.VendorId;
             item.VendorName = model.VendorName;
+            productTranslations.IsPrimary = model.IsPrimary;
+            productTranslations.UnitId = model.UnitId;
+            productTranslations.UnitName = model.UnitName;
+            productTranslations.ConvertRate = model.ConvertRate;
+            productTranslations.ItemId = model.ItemId;
 
             _context.WareHouseItems.Update(item);
+            _context.WareHouseItemUnits.Update(productTranslations);
             var result = await _context.SaveChangesAsync();
 
             return new RepositoryResponse()
@@ -191,12 +198,19 @@ namespace Warehouse.Service
 
         public async Task<int> Delete(string id)
         {
-            var item = await _context.WareHouseItems.FindAsync(id);
+            var product = await _context.WareHouseItems.FindAsync(id);
+            if (product == null) throw new WarehouseException($"Cannot find a warehouseitem: {id}");
 
-            _context.WareHouseItems.Remove(item);
-            var result = await _context.SaveChangesAsync();
+            var images = _context.WareHouseItemUnits.Where(i => i.ItemId == id);
 
-            return result;
+            foreach (var image in images)
+            {
+                 _context.WareHouseItemUnits.Remove(image);
+            }
+
+            _context.WareHouseItems.Remove(product);
+
+            return await _context.SaveChangesAsync();
         }
 
         public IList<Data.Entities.WareHouseItem> GetMvcListItems(bool showHidden = true)
@@ -236,6 +250,32 @@ namespace Warehouse.Service
                 Id = item.Id
             };
             return item;
+        }
+
+        public async Task<ApiResult<WareHouseItemModel>> GetByWHItemUnitId(string id)
+        {
+            var product = await _context.WareHouseItems.FindAsync(id);
+            var productTranslation = await _context.WareHouseItemUnits.FirstOrDefaultAsync(x => x.ItemId == id);
+
+            var productViewModel = new WareHouseItemModel()
+            {
+                Id = product.Id,
+                Note = productTranslation.Id,
+                Inactive = product.Inactive,
+                ItemId = productTranslation.ItemId,
+                CategoryId = product.CategoryId,
+                Code = product.Code,
+                ConvertRate = productTranslation.ConvertRate,
+                Country = product.Country,
+                Description = product.Description,
+                IsPrimary = productTranslation.IsPrimary,
+                UnitId = productTranslation.UnitId,
+                Name = product.Name,
+                UnitName = productTranslation.UnitName,
+                VendorId = product.VendorId,
+                VendorName = product.VendorName,
+            };
+            return new ApiSuccessResult<WareHouseItemModel>(productViewModel);
         }
 
         #endregion Method

@@ -24,5 +24,7 @@ namespace Warehouse.Model.WareHouseItem
         public string? UnitName { get; set; }
         public int? ConvertRate { get; set; }
         public bool? IsPrimary { get; set; }
+
+        public  string? Note { get; set; }
     }
 }
