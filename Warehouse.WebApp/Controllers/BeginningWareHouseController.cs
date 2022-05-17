@@ -66,7 +66,9 @@ namespace Warehouse.WebApp.Controllers
         {
             request.CreatedDate= DateTime.Now;
             request.ModifiedDate= DateTime.Now;
-
+            var claims = HttpContext.User.Claims;
+            var userId = claims.FirstOrDefault(c => c.Type == "Id").Value;
+            request.CreatedBy = userId;
             if (!ModelState.IsValid)
                 return View(request);
 
