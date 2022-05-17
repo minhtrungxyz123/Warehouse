@@ -1,4 +1,11 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Warehouse.Data.EF;
+using Warehouse.Data.Repositories;
 using Warehouse.WebApp.ApiClient;
+using Warehouse.WebApp.CustomHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +24,42 @@ builder.Services.AddTransient<IBeginningWareHouseApiClient, BeginningWareHouseAp
 builder.Services.AddTransient<IWareHouseItemUnitApiClient, WareHouseItemUnitApiClient>();
 #endregion
 
+//DbContext
+builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseSqlServer(
+                            builder.Configuration.GetConnectionString("WarehouseDatabase")));
+
+//Repository
+builder.Services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
+
+//Authorization
+builder.Services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+builder.Services.AddAuthorization(options =>
+{
+});
+
+//AddCookie
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+ .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, config =>
+ {
+     config.LoginPath = "/Login/Index";
+     config.AccessDeniedPath = "/Login/FalseLogin";
+     config.ExpireTimeSpan = TimeSpan.FromHours(1);
+     config.Cookie.HttpOnly = true;
+     config.Cookie.IsEssential = true;
+ });
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".AdventureWorks.Session";
+    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+builder.Services.Configure<PasswordHasherOptions>(option =>
+{
+    option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
+    option.IterationCount = 12000;
+});
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -32,11 +75,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapRazorPages();
 
