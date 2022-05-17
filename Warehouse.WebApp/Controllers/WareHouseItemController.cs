@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Warehouse.Model.Unit;
-using Warehouse.Model.WareHouseItem;
-using Warehouse.WebApp.ApiClient;
-using System.Linq;
 using Warehouse.Common;
+using Warehouse.Model.WareHouseItem;
 using Warehouse.Model.WareHouseItemUnit;
+using Warehouse.WebApp.ApiClient;
 
 namespace Warehouse.WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class WareHouseItemController : Controller
     {
         #region Fields
@@ -209,12 +209,13 @@ namespace Warehouse.WebApp.Controllers
             return ViewComponent("DetailWareHouseItem", model);
         }
 
-        #endregion
+        #endregion Method
 
         #region Utilities
+
         private async Task GetDropDownList(WareHouseItemModel model)
         {
-            var availableUnits = await  _wareHouseItemApiClient.GetAvailableList();
+            var availableUnits = await _wareHouseItemApiClient.GetAvailableList();
 
             var availableVendor = await _wareHouseItemApiClient.GetVendor();
 
@@ -318,9 +319,8 @@ namespace Warehouse.WebApp.Controllers
             }
 
             model.AvailableUnit = new List<SelectListItem>(categories);
-           
         }
 
-        #endregion
+        #endregion Utilities
     }
 }

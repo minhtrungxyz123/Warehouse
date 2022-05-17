@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Warehouse.Model.Unit;
 using Warehouse.WebApp.ApiClient;
 
 namespace Warehouse.WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UnitController : Controller
     {
         #region Fields

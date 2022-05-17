@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Warehouse.Model.BeginningWareHouse;
-using Warehouse.Model.WareHouseItem;
 using Warehouse.Model.WareHouseItemUnit;
 using Warehouse.WebApp.ApiClient;
 using Warehouse.WebApp.Models;
-using System.Linq;
 
 namespace Warehouse.WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class BeginningWareHouseController : Controller
     {
         #region Fields
@@ -64,8 +64,8 @@ namespace Warehouse.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(BeginningWareHouseModel request)
         {
-            request.CreatedDate= DateTime.Now;
-            request.ModifiedDate= DateTime.Now;
+            request.CreatedDate = DateTime.Now;
+            request.ModifiedDate = DateTime.Now;
             var claims = HttpContext.User.Claims;
             var userId = claims.FirstOrDefault(c => c.Type == "Id").Value;
             request.CreatedBy = userId;
@@ -211,9 +211,10 @@ namespace Warehouse.WebApp.Controllers
             return ViewComponent("DetailBeginningWareHouse", model);
         }
 
-        #endregion
+        #endregion Method
 
         #region Utilities
+
         private async Task GetDropDownList(BeginningWareHouseModel model)
         {
             var availableUnit = await _wareHouseItemApiClient.GetAvailableList();
@@ -300,20 +301,21 @@ namespace Warehouse.WebApp.Controllers
             var listItem = await _beginningWareHouseApiClient.GetByWareHouseItemUnitId(id);
             var getItem = await _beginningWareHouseApiClient.GetByWareHouseItemId(id);
             var model = new List<SelectItem>();
-                foreach (var item in listItem)
+            foreach (var item in listItem)
+            {
+                var tem = new SelectItem
                 {
-                    var tem = new SelectItem
-                    {
-                        text = item.UnitName,
-                        id = item.UnitId
-                    };
-                    if (getItem != null && getItem.UnitId.Equals(item.UnitId))
-                        tem.selected = true;
-                    model.Add(tem);
-                }
+                    text = item.UnitName,
+                    id = item.UnitId
+                };
+                if (getItem != null && getItem.UnitId.Equals(item.UnitId))
+                    tem.selected = true;
+                model.Add(tem);
+            }
 
             return Ok(model);
         }
-        #endregion
+
+        #endregion Utilities
     }
 }

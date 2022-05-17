@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Warehouse.Common;
 using Warehouse.Model.WareHouseItemCategory;
@@ -6,6 +7,7 @@ using Warehouse.WebApp.ApiClient;
 
 namespace Warehouse.WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class WareHouseItemCategoryController : Controller
     {
         #region Fields
