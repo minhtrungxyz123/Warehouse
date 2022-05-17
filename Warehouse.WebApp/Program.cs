@@ -15,6 +15,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 
 #region Add DI
+
+builder.Services.AddTransient<IInwardApiClient, InwardApiClient>();
 builder.Services.AddTransient<IUnitApiClient, UnitApiClient>();
 builder.Services.AddTransient<IWareHouseApiClient, WareHouseApiClient>();
 builder.Services.AddTransient<IVendorApiClient, VendorApiClient>();
@@ -22,6 +24,7 @@ builder.Services.AddTransient<IWareHouseItemCategoryApiClient, WareHouseItemCate
 builder.Services.AddTransient<IWareHouseItemApiClient, WareHouseItemApiClient>();
 builder.Services.AddTransient<IBeginningWareHouseApiClient, BeginningWareHouseApiClient>();
 builder.Services.AddTransient<IWareHouseItemUnitApiClient, WareHouseItemUnitApiClient>();
+
 #endregion
 
 //DbContext

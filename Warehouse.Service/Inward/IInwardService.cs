@@ -5,12 +5,14 @@ namespace Warehouse.Service
 {
     public interface IInwardService
     {
-        Task<Data.Entities.Inward> GetById(string? id);
+        Task<RepositoryResponse> Create(InwardGridModel model);
 
-        Task<RepositoryResponse> Create(InwardModel model);
-
-        Task<RepositoryResponse> Update(string id, InwardModel model);
+        Task<RepositoryResponse> Update(string id, InwardGridModel model);
 
         Task<int> Delete(string id);
+
+        Task<Data.Entities.Inward> GetById(string? id);
+
+        Task<ApiResult<InwardGridModel>> GetByInwardId(string id);
     }
 }

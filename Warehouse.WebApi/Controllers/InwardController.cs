@@ -31,18 +31,10 @@ namespace Warehouse.WebApi.Controllers
 
             if (item == null)
             {
-                return NotFound(new ApiNotFoundResponse($"Inward with id: {id} is not found"));
+                return NotFound(new ApiNotFoundResponse($"inward with id: {id} is not found"));
             }
 
             return Ok(item);
-        }
-
-        [Route("get")]
-        [HttpGet]
-        public async Task<ActionResult> GetAllPaging([FromQuery] GetInwardPagingRequest request)
-        {
-            var audit = await _inwardDetailService.GetAllPaging(request);
-            return Ok(audit);
         }
 
         #endregion List
@@ -50,7 +42,7 @@ namespace Warehouse.WebApi.Controllers
         #region Method
 
         [HttpPost("create")]
-        public async Task<IActionResult> Post(InwardModel model)
+        public async Task<IActionResult> Post([FromBody] InwardGridModel model)
         {
             var result = await _inwardService.Create(model);
 
@@ -64,12 +56,25 @@ namespace Warehouse.WebApi.Controllers
             }
         }
 
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> Put(InwardModel model, string id)
+        [Route("edit")]
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
         {
-            var item = await _inwardService.GetById(id);
+            var entity = await _inwardService.GetById(id);
+            if (entity == null)
+            {
+                return NotFound(new ApiNotFoundResponse($"inward with id: {id} is not found"));
+            }
+
+            return Ok(entity);
+        }
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Put([FromBody] InwardGridModel model, string id)
+        {
+            var item = await _inwardService.GetByInwardId(id);
             if (item == null)
-                return NotFound(new ApiNotFoundResponse($"Inward with id: {id} is not found"));
+                return NotFound(new ApiNotFoundResponse($"inward with id: {id} is not found"));
 
             var result = await _inwardService.Update(id, model);
 
@@ -83,24 +88,12 @@ namespace Warehouse.WebApi.Controllers
             }
         }
 
-        [HttpDelete("delete/{id}")]
+        [Route("delete")]
+        [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
-            var item = _inwardService.GetById(id);
-
-            if (item == null)
-                return NotFound(new ApiNotFoundResponse($"Inward with id: {id} is not found"));
-
             var result = await _inwardService.Delete(id);
-
-            if (result > 0)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest(new ApiBadRequestResponse("Delete inward failed"));
-            }
+            return Ok(result);
         }
 
         #endregion Method
