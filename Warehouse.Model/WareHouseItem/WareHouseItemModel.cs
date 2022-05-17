@@ -19,5 +19,10 @@ namespace Warehouse.Model.WareHouseItem
         public IList<SelectListItem>? AvailableVendor { get; set; }
 
         public IList<SelectListItem>? AvailableCategory { get; set; }
+
+        public string? ItemId { get; set; }
+        public string? UnitName { get; set; }
+        public int? ConvertRate { get; set; }
+        public bool? IsPrimary { get; set; }
     }
 }

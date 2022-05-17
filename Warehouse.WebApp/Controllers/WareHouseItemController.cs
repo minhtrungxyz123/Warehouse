@@ -58,6 +58,11 @@ namespace Warehouse.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(WareHouseItemModel request)
         {
+            request.UnitName = "test";
+            request.VendorName ="test";
+            request.IsPrimary = true;
+            request.ConvertRate = 1;
+
             if (!ModelState.IsValid)
                 return View(request);
 

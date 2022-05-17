@@ -140,15 +140,29 @@ namespace Warehouse.Service
                 VendorId = model.VendorId,
                 VendorName = model.VendorName,
             };
+
+            Data.Entities.WareHouseItemUnit itemUnit = new Data.Entities.WareHouseItemUnit()
+            {
+                ConvertRate = model.ConvertRate,
+                IsPrimary = model.IsPrimary,
+                UnitId=model.UnitId,
+                UnitName = model.UnitName,
+
+            };
             item.Id = Guid.NewGuid().ToString();
+            itemUnit.Id= Guid.NewGuid().ToString();
+
+            itemUnit.ItemId=item.Id;
 
             _context.WareHouseItems.Add(item);
+            _context.WareHouseItemUnits.Add(itemUnit);
+
             var result = await _context.SaveChangesAsync();
 
             return new RepositoryResponse()
             {
                 Result = result,
-                Id = item.Id
+                Id = item.Id,
             };
         }
 

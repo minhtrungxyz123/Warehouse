@@ -1,4 +1,5 @@
-﻿using Warehouse.Data.Entities;
+﻿using Warehouse.Common;
+using Warehouse.Data.Entities;
 using Warehouse.Model.WareHouseItemUnit;
 
 namespace Warehouse.Service
@@ -6,5 +7,9 @@ namespace Warehouse.Service
     public interface IWareHouseItemUnitService
     {
         IList<WareHouseItemUnit> GetByWareHouseItemUnitId(GetWareHouseItemUnitPagingRequest ctx);
+
+        Task<RepositoryResponse> Create(WareHouseItemUnitModel model);
+
+        Task<Data.Entities.WareHouseItemUnit> GetById(string? id);
     }
 }

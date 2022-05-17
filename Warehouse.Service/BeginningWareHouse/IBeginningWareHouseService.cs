@@ -19,5 +19,7 @@ namespace Warehouse.Service
 
         Task<ApiResult<Data.Entities.BeginningWareHouse>> GetByIdAsyn(string id);
 
+        Task<bool> ExistAsync(string idWareHouse, string idItem);
+
     }
 }

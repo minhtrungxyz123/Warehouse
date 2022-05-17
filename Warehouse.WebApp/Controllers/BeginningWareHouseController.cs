@@ -78,8 +78,8 @@ namespace Warehouse.WebApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", "Thêm mới thất bại");
-            return View(request);
+            TempData["result"] = "Thêm mới thất bại";
+            return RedirectToAction("Index");
         }
 
         [HttpGet]

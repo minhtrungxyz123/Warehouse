@@ -61,18 +61,19 @@ namespace Warehouse.WebApi.Controllers
         #region Method
 
         [HttpPost("create")]
-        public async Task<IActionResult> Post([FromBody] BeginningWareHouseModel model)
+        public async Task<IActionResult> Post([FromBody] BeginningWareHouseModel models)
         {
-            var result = await _beginningWareHouseService.Create(model);
+            if (await _beginningWareHouseService.ExistAsync(models.WareHouseId, models.ItemId) == false)
+            {
+                var result = await _beginningWareHouseService.Create(models);
 
-            if (result.Result > 0)
-            {
-                return RedirectToAction(nameof(Get), new { id = result.Id });
+                if (result.Result > 0)
+                {
+                    return RedirectToAction(nameof(Get), new { id = result.Id });
+                }
             }
-            else
-            {
-                return BadRequest(new ApiBadRequestResponse("Create BeginningWareHouse failed"));
-            }
+            return BadRequest(new ApiBadRequestResponse("Create BeginningWareHouse failed"));
+
         }
 
         [HttpPut("update/{id}")]
@@ -82,16 +83,16 @@ namespace Warehouse.WebApi.Controllers
             if (item == null)
                 return NotFound(new ApiNotFoundResponse($"BeginningWareHouse with id: {id} is not found"));
 
-            var result = await _beginningWareHouseService.Update(id, model);
-
-            if (result.Result > 0)
+            if (await _beginningWareHouseService.ExistAsync(model.WareHouseId, model.ItemId) == false)
             {
-                return Ok();
+                var result = await _beginningWareHouseService.Update(id, model);
+                if (result.Result > 0)
+                {
+                    return Ok();
+                }
             }
-            else
-            {
                 return BadRequest(new ApiBadRequestResponse("Update BeginningWareHouse failed"));
-            }
+
         }
 
         [Route("delete")]

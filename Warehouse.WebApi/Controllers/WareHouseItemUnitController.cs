@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Warehouse.Common;
 using Warehouse.Model.WareHouseItemUnit;
 using Warehouse.Service;
 
@@ -22,6 +23,8 @@ namespace Warehouse.WebApi.Controllers
 
         #endregion Fields
 
+        #region List
+
         [Route("get")]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string? ItemId)
@@ -43,5 +46,39 @@ namespace Warehouse.WebApi.Controllers
 
             return Ok(entities);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetById(string id)
+        {
+            var item = await _wareHouseItemUnitService.GetById(id);
+
+            if (item == null)
+            {
+                return NotFound(new ApiNotFoundResponse($"WareHouseItemUnit with id: {id} is not found"));
+            }
+
+            return Ok(item);
+        }
+
+        #endregion
+
+        #region Method
+
+        [HttpPost("create")]
+        public async Task<IActionResult> Post([FromBody] WareHouseItemUnitModel model)
+        {
+            var result = await _wareHouseItemUnitService.Create(model);
+
+            if (result.Result > 0)
+            {
+                return RedirectToAction(nameof(Get), new { id = result.Id });
+            }
+            else
+            {
+                return BadRequest(new ApiBadRequestResponse("Create WareHouseItemUnit failed"));
+            }
+        }
+
+        #endregion
     }
 }

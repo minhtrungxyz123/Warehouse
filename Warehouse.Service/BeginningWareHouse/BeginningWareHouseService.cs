@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Warehouse.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.BeginningWareHouse;
@@ -111,6 +112,14 @@ namespace Warehouse.Service
         #endregion List
 
         #region Method
+
+        public async Task<bool> ExistAsync(string idWareHouse, string idItem)
+        {
+            var check = await _context.BeginningWareHouses.AsQueryable().AnyAsync(
+                a => a.WareHouseId.Equals(idWareHouse)
+                     && a.ItemId.Equals(idItem));
+            return check;
+        }
 
         public async Task<RepositoryResponse> Create(BeginningWareHouseModel model)
         {
