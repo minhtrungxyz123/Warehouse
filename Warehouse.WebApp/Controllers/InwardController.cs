@@ -31,7 +31,7 @@ namespace Warehouse.WebApp.Controllers
         {
             var model = new InwardGridModel();
             await GetDropDownList(model);
-            return ViewComponent("CreateInward", model);
+            return View(model);
         }
 
         [HttpPost]
@@ -39,22 +39,23 @@ namespace Warehouse.WebApp.Controllers
         {
             request.CreatedDate = DateTime.Now;
             request.ModifiedDate = DateTime.Now;
+
             var claims = HttpContext.User.Claims;
             var userId = claims.FirstOrDefault(c => c.Type == "Id").Value;
             request.CreatedBy = userId;
+
             if (!ModelState.IsValid)
                 return View(request);
 
             var result = await _inwardApiClient.Create(request);
-
             if (result)
             {
                 TempData["result"] = "Thêm mới thành công";
                 return RedirectToAction("Index");
             }
 
-            TempData["result"] = "Thêm mới thất bại";
-            return RedirectToAction("Index");
+            ModelState.AddModelError("", "Thêm mới thất bại");
+            return View(request);
         }
 
         #endregion
@@ -66,6 +67,7 @@ namespace Warehouse.WebApp.Controllers
             var availableUnit = await _wareHouseItemApiClient.GetAvailableList();
             var availableWH = await _wareHouseApiClient.GetAvailableList();
             var availableItem = await _wareHouseItemApiClient.GetAvailableItem();
+            var availableVendor = await _wareHouseItemApiClient.GetVendor();
 
             //unit
             var categories = new List<SelectListItem>();
@@ -138,6 +140,30 @@ namespace Warehouse.WebApp.Controllers
             }
 
             model.AvailableWarehouse = new List<SelectListItem>(categories2);
+
+            //vendor
+            var categories3 = new List<SelectListItem>();
+            var data3 = availableVendor;
+
+            if (data3?.Count > 0)
+            {
+                foreach (var m3 in data3)
+                {
+                    var item3 = new SelectListItem
+                    {
+                        Text = m3.Name,
+                        Value = m3.Id,
+                    };
+                    categories3.Add(item3);
+                }
+            }
+            categories3.OrderBy(e => e.Text);
+            if (categories3 == null || categories3.Count == 0)
+            {
+                categories3 = new List<SelectListItem>();
+            }
+
+            model.AvailableVendor = new List<SelectListItem>(categories3);
         }
 
         #endregion Utilities

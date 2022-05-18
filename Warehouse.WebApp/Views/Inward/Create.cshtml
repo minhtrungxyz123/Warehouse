@@ -1,5 +1,267 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Warehouse.Model.Inward.InwardGridModel
+
 @{
+    ViewData["Title"] = "Tạo mới sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
+<h1 class="mt-4">Tạo mới sản phẩm</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+    <li class="breadcrumb-item active">Tạo mới sản phẩm</li>
+</ol>
+<div class="card-header">
+    <a class="btn btn-success" asp-action="Index" asp-controller="Product">Về danh sách</a>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8" style="padding: 10px">
+            <fieldset class="fieldset-no-border" >
+                <legend style="color: #23527c; border-bottom: none; text-transform: uppercase; font-size:16px;">Phiếu Nhập Kho</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="WareHouseId" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.DropDownListFor(m => m.WareHouseId, Model.AvailableWarehouse, new { @class = "form-control", style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="AccObjectId" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.AccObjectId, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="Deliver" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.Deliver, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="Receiver" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.Receiver, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="DeliverPhone" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.DeliverPhone, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="ReceiverPhone" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.ReceiverPhone, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="DeliverAddress" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.DeliverAddress, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="ReceiverAddress" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.ReceiverAddress, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="DeliverDepartment" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.DeliverDepartment, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="ReceiverDepartment" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.ReceiverDepartment, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="VendorId" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.DropDownListFor(m => m.VendorId, Model.AvailableVendor, new { @class = "form-control", style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm row">
+                            <label asp-for="Reason" class="control-label col-md-4"></label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.Reason, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group form-group-sm row">
+                    <label asp-for="Description" class="control-label col-md-4"></label>
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control" , style = "width: 121%" })
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-md-4" style="padding: 10px">
+            <fieldset class="fieldset-no-border" style="width:98%;">
+                <legend style="color: #23527c; border-bottom: none; text-transform: uppercase; width: 73%; font-size:16px;">Thông Tin Chung</legend>
+                <div class="form-group form-group-sm row">
+                    <label asp-for="VoucherCode" class="control-label col-md-4"></label>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.VoucherCode, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="form-group form-group-sm row">
+                    <label asp-for="Voucher" class="control-label col-md-4"></label>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.Voucher, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group form-group-sm row">
+                    <label asp-for="VoucherDate" class="control-label col-md-4"></label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.VoucherDate, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group form-group-sm row">
+                    <label asp-for="CreatedBy" class="control-label col-md-4"></label>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.CreatedBy, new { @class = "form-control", style = "width: 100%" })
+                    </div>
+                </div>
+                <div class="form-group form-group-sm row">
+                    <label asp-for="CreatedDate" class="control-label col-md-4"></label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.CreatedDate, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="row full-height"style="padding-top:3%;"> 
+<div class="toolbar" style="line-height: 28px; font-size: 12px; font-weight: 600; font-family: TahomaCustom, Arial, sans-serif !important;">
+                            <span>DANH SÁCH VẬT TƯ</span>
+                        </div>
+                        <div class="toolbar" style="display: inline-block; margin-right: 0; margin-left: auto">
+                            <a id="btnAdd" class="btn btn-default btn-sm" href="javascript:void(0)" style="min-width: 80px; background: green;color: aliceblue;"><i class="fa-solid fa-plus"></i> Thêm vật tư</a>
+                            <a id="btnRemove" class="btn btn-default btn-sm" href="javascript:void(0)" style="min-width: 80px; background: red;color: aliceblue;"><i class="fa-solid fa-trash-can"></i> Xóa (Đã chọn)</a>
+                        </div>
+<table class="table table-bordered">
+    <thead>         
+        <tr>
+            <th>            
+                Vật tư       
+            </th>           
+            <th>            
+                Đơn vị      
+            </th>           
+            <th>                 
+                Số lượng          
+            </th>
+            <th>                 
+                Đơn giá        
+            </th>
+            <th>                 
+                Thành tiền         
+            </th>
+            <th>                 
+                Trạng thái          
+            </th>
+            <th>                 
+                Phòng ban         
+            </th>
+            <th>                 
+               Nhân viên         
+            </th>
+            <th>                 
+                Trạm          
+            </th>
+            <th>                 
+                Dự án         
+            </th>
+            <th>                 
+                Khách hàng        
+            </th>
+        </tr>       
+    </thead>          
+    <tbody>                 
+        <tr>                  
+            <td>                
+                @Html.DropDownListFor(m => m.ItemId, Model.AvailableItem, "vật tư", new { @class = "form-control", style = "width: 100%" })                 
+            </td>                  
+            <td>                      
+                <input asp-for="UnitId" class="form-control" min="0" min="0" />                 
+            </td>                  
+            <td>                 
+                <input asp-for="Uiquantity" class="form-control" min="0" min="0" />                 
+            </td>
+            <td>                 
+                <input asp-for="Uiprice" class="form-control" min="0" min="0" />                 
+            </td>    
+            <td>                 
+                <input asp-for="Amount" class="form-control" min="0" min="0" />                 
+            </td>    
+            <td>                 
+                <input asp-for="Quantity" class="form-control" min="0" min="0" />                 
+            </td>
+            <td>                 
+                <input asp-for="Price" class="form-control" min="0" min="0" />                 
+            </td> 
+            <td>                 
+                <input asp-for="Status" class="form-control" min="0" min="0" />                 
+            </td> 
+            <td>                 
+                <input asp-for="DepartmentId" class="form-control" min="0" min="0" />                 
+            </td> 
+            <td>                 
+                <input asp-for="EmployeeId" class="form-control" min="0" min="0" />                 
+            </td> 
+            <td>                 
+                <input asp-for="StationId" class="form-control" min="0" min="0" />                 
+            </td>  
+        </tr>           
+    </tbody>           
+</table>
+</div>
+</div>

@@ -50,5 +50,10 @@ namespace Warehouse.Model.Inward
         public IList<SelectListItem>? AvailableUnit { get; set; }
         public IList<SelectListItem>? AvailableItem { get; set; }
         public IList<SelectListItem>? AvailableWarehouse { get; set; }
+        public IList<SelectListItem>? AvailableVendor { get; set; }
+        public IList<SelectListItem>? AvailableReason { get; set; }
+        public IList<SelectListItem>? AvailableCreatedBy { get; set; }
+
+        public  string AccObjectId { get; set; }
     }
 }
