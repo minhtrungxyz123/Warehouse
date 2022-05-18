@@ -1,0 +1,105 @@
+﻿@model Warehouse.Model.Inward.InwardGridModel
+
+<div>
+    <h4>Thêm vật tư</h4>
+    <hr />
+    <form asp-controller="Inward" asp-action="AddItem">
+        <div class="form-body">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label asp-for="ItemId" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.ItemId, Model.AvailableItem, "Vật tư", new { @class = "form-control", style = "width: 100%" })
+                    <span asp-validation-for="ItemId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UnitId" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.UnitId, Model.AvailableUnit, "Đơn vị", new { @class = "form-control", style = "width: 100%" })
+                    <span asp-validation-for="UnitId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Uiquantity" class="control-label"></label>
+                    <input asp-for="Uiquantity" class="form-control" min="0" />
+                    <span asp-validation-for="Uiquantity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Uiprice" class="control-label"></label>
+                    <input asp-for="Uiprice" class="form-control" min="0" />
+                    <span asp-validation-for="Uiprice" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Amount" class="control-label"></label>
+                    <input asp-for="Amount" class="form-control" min="0" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Status" class="control-label"></label>
+                    <input asp-for="Status" class="form-control" min="0" />
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DepartmentId" class="control-label"></label>
+                    <input asp-for="DepartmentId" class="form-control" min="0" />
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AccObjectId" class="control-label"></label>
+                    <input asp-for="AccObjectId" class="form-control" min="0" />
+                    <span asp-validation-for="AccObjectId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EmployeeId" class="control-label"></label>
+                    <input asp-for="EmployeeId" class="form-control" min="0" />
+                    <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StationId" class="control-label"></label>
+                    <input asp-for="StationId" class="form-control" min="0" />
+                    <span asp-validation-for="StationId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProjectId" class="control-label"></label>
+                    <input asp-for="ProjectId" class="form-control" min="0" />
+                    <span asp-validation-for="ProjectId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer form-actions">
+                <button type="submit" class="btn btn-success btn-sm">
+                    Lưu
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script>
+
+    $("#ItemId").on("change", function (e) {
+        console.log()
+        $('#UnitId').empty();
+        
+                    $.ajax({
+                        type: 'GET',
+                        data: { id: $("#ItemId").val() },
+                    dataType: 'json',
+                    url: '@Url.Action("GetWareHouseItemUnitByItemId", "Inward")',
+                            success: function (msg) {
+                              if(msg && msg.length>0)
+                              {
+                                  for(var i=0;i<msg.length;i++)
+                                  {
+                                      var tem=msg[i];
+                                       var o = new Option(tem.text, tem.id);
+                                    /// jquerify the DOM object 'o' so we can use the html method
+                                    $(o).html(tem.text);
+                                    $("#UnitId").append(o);
+                                  }
+
+                              }
+                            }
+                });
+
+        return false;
+    });
+
+</script>

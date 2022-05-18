@@ -167,5 +167,17 @@ namespace Warehouse.WebApp.Controllers
         }
 
         #endregion Utilities
+
+        #region AddItem
+
+        [HttpGet]
+        public async Task<IActionResult> AddItem()
+        {
+            var model = new InwardGridModel();
+            await GetDropDownList(model);
+            return ViewComponent("AddItemCP", model);
+        }
+
+        #endregion
     }
 }
