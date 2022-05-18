@@ -184,7 +184,7 @@
     <span>DANH SÁCH VẬT TƯ</span>               
 </div>         
 <div class="toolbar" style="display: inline-block; margin-right: 0; margin-left: auto">              
-    <a id="btnAdd" class="btn btn-default btn-sm" style="min-width: 80px; background: green;color: aliceblue;"><i class="fa-solid fa-plus"></i> Thêm vật tư</a>             
+    <a onclick="Create()" href="javascript:void(0)" class="btn btn-default btn-sm" style="min-width: 80px; background: green;color: aliceblue;"><i class="fa-solid fa-plus"></i> Thêm vật tư</a>             
     <a id="btnRemove" class="btn btn-default btn-sm" href="javascript:void(0)" style="min-width: 80px; background: red;color: aliceblue;"><i class="fa-solid fa-trash-can"></i> Xóa (Đã chọn)</a>                    
 </div>
 <table class="table table-bordered">
@@ -228,37 +228,37 @@
     <tbody>                 
         <tr>                  
             <td>                
-                @Html.DropDownListFor(m => m.ItemId, Model.AvailableItem, "vật tư", new { @class = "form-control", style = "width: 100%" })                 
+                @Html.DropDownListFor(m => m.ItemId, Model.AvailableItem, "vật tư", new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                 
             </td>                  
-            <td>                      
-                <input asp-for="UnitId" class="form-control" min="0" min="0" />                 
+            <td>
+                @Html.DropDownListFor(m => m.UnitId,Model.AvailableUnit, "Đơn vị", new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                 
             </td>                  
-            <td>                 
-                <input asp-for="Uiquantity" class="form-control" min="0" min="0" />                 
+            <td> 
+                @Html.DisplayFor(m => m.Uiquantity, new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                
             </td>
-            <td>                 
-                <input asp-for="Uiprice" class="form-control" min="0" min="0" />                 
+            <td>
+                @Html.DisplayFor(m => m.Uiprice, new { @class = "form-control", style = "width: 100%", disabled = "disabled" })  
             </td>    
-            <td>                 
-                <input asp-for="Amount" class="form-control" min="0" min="0" />                 
+            <td> 
+                @Html.DisplayFor(m => m.Amount, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
             </td>    
-            <td>                 
-                <input asp-for="Quantity" class="form-control" min="0" min="0" />                 
+            <td>      
+                @Html.DisplayFor(m => m.Quantity, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
             </td>
-            <td>                 
-                <input asp-for="Price" class="form-control" min="0" min="0" />                 
+            <td>     
+                @Html.DisplayFor(m => m.Price, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
             </td> 
-            <td>                 
-                <input asp-for="Status" class="form-control" min="0" min="0" />                 
+            <td>      
+                @Html.DisplayFor(m => m.Status, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
             </td> 
-            <td>                 
-                <input asp-for="DepartmentId" class="form-control" min="0" min="0" />                 
+            <td>  
+                @Html.DisplayFor(m => m.DepartmentId, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
             </td> 
-            <td>                 
-                <input asp-for="EmployeeId" class="form-control" min="0" min="0" />                 
+            <td>  
+                @Html.DisplayFor(m => m.EmployeeId, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
             </td> 
-            <td>                 
-                <input asp-for="StationId" class="form-control" min="0" min="0" />                 
+            <td>     
+                @Html.DisplayFor(m => m.StationId, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
             </td>  
         </tr>           
     </tbody>           
@@ -266,13 +266,33 @@
 </div>
 </div>
 
+<div id="contactDetails"></div>
+
+@section Scripts{
 <script>
 
 function Create() {
             $.get("/Inward/AddItem", function (data) {
-                $("#btnAdd").html(data);
-                $("#btnAdd").dialog("open");
+                $("#contactDetails").html(data);
+                $("#contactDetails").dialog("open");
                 $(".k-overlay").removeClass("d-none");
             });
         }
+
+        $(function() {
+            $("#contactDetails").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 500,
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+            });
+        });
 </script>
+}

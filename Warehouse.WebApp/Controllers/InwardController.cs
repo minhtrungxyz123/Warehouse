@@ -1,25 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Warehouse.Model.Inward;
+using Warehouse.Model.WareHouseItemUnit;
 using Warehouse.WebApp.ApiClient;
+using Warehouse.WebApp.Models;
 
 namespace Warehouse.WebApp.Controllers
 {
     public class InwardController : Controller
     {
         #region Fields
-
+        private readonly IBeginningWareHouseApiClient _beginningWareHouseApiClient;
         private readonly IWareHouseApiClient _wareHouseApiClient;
         private readonly IWareHouseItemApiClient _wareHouseItemApiClient;
         private readonly IInwardApiClient _inwardApiClient;
 
         public InwardController(IInwardApiClient inwardApiClient,
             IWareHouseItemApiClient wareHouseItemApiClient,
-            IWareHouseApiClient wareHouseApiClient)
+            IWareHouseApiClient wareHouseApiClient,
+            IBeginningWareHouseApiClient beginningWareHouseApiClient)
         {
             _inwardApiClient = inwardApiClient;
             _wareHouseItemApiClient = wareHouseItemApiClient;
             _wareHouseApiClient = wareHouseApiClient;
+            _beginningWareHouseApiClient = beginningWareHouseApiClient;
         }
 
         #endregion Fields
@@ -164,6 +168,29 @@ namespace Warehouse.WebApp.Controllers
             }
 
             model.AvailableVendor = new List<SelectListItem>(categories3);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetWareHouseItemUnitByItemId(string id)
+        {
+            var getUnitItem = new GetWareHouseItemUnitPagingRequest();
+            getUnitItem.ItemId = id;
+            var listItem = await _beginningWareHouseApiClient.GetByWareHouseItemUnitId(id);
+            var getItem = await _beginningWareHouseApiClient.GetByWareHouseItemId(id);
+            var model = new List<SelectItem>();
+            foreach (var item in listItem)
+            {
+                var tem = new SelectItem
+                {
+                    text = item.UnitName,
+                    id = item.UnitId
+                };
+                if (getItem != null && getItem.UnitId.Equals(item.UnitId))
+                    tem.selected = true;
+                model.Add(tem);
+            }
+
+            return Ok(model);
         }
 
         #endregion Utilities
