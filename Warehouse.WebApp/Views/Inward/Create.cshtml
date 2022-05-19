@@ -1,4 +1,4 @@
-﻿@model Warehouse.Model.Inward.InwardGridModel
+﻿@model Warehouse.Model.Inward.InwardModel
 
 @{
     ViewData["Title"] = "Tạo mới sản phẩm";
@@ -12,8 +12,10 @@
     <li class="breadcrumb-item active">Tạo mới sản phẩm</li>
 </ol>
 <div class="card-header">
-    <a class="btn btn-success" asp-action="Index" asp-controller="Product">Về danh sách</a>
+    <a class="btn btn-success" asp-action="Index" asp-controller="Inward">Về danh sách</a>
 </div>
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8" style="padding: 10px">
@@ -226,46 +228,11 @@
         </tr>       
     </thead>          
     <tbody>                 
-        <tr>                  
-            <td>                
-                @Html.DisplayFor(m => m.ItemId, new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                 
-            </td>                  
-            <td>
-                @Html.DisplayFor(m => m.UnitId, new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                 
-            </td>                  
-            <td> 
-                @Html.DisplayFor(m => m.Uiquantity, new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                
-            </td>
-            <td>
-                @Html.DisplayFor(m => m.Uiprice, new { @class = "form-control", style = "width: 100%", disabled = "disabled" })  
-            </td>    
-            <td> 
-                @Html.DisplayFor(m => m.Amount, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
-            </td>    
-            <td>      
-                @Html.DisplayFor(m => m.Quantity, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
-            </td>
-            <td>     
-                @Html.DisplayFor(m => m.Price, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
-            </td> 
-            <td>      
-                @Html.DisplayFor(m => m.Status, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
-            </td> 
-            <td>  
-                @Html.DisplayFor(m => m.DepartmentId, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
-            </td> 
-            <td>  
-                @Html.DisplayFor(m => m.EmployeeId, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
-            </td> 
-            <td>     
-                @Html.DisplayFor(m => m.StationId, new { @class = "form-control", style = "width: 100%", disabled = "disabled" }) 
-            </td>  
-        </tr>           
     </tbody>           
 </table>
 </div>
 </div>
-
+</form>
 <div id="contactDetails"></div>
 
 @section Scripts{

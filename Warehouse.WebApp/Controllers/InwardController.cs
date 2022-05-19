@@ -35,7 +35,7 @@ namespace Warehouse.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var model = new InwardGridModel();
+            var model = new InwardModel();
             await GetDropDownList(model);
             return View(model);
         }
@@ -68,12 +68,10 @@ namespace Warehouse.WebApp.Controllers
 
         #region Utilities
 
-        private async Task GetDropDownList(InwardGridModel model)
+        private async Task GetDropDownListDetail(InwardDetailModel model)
         {
             var availableUnit = await _wareHouseItemApiClient.GetAvailableList();
-            var availableWH = await _wareHouseApiClient.GetAvailableList();
             var availableItem = await _wareHouseItemApiClient.GetAvailableItem();
-            var availableVendor = await _wareHouseItemApiClient.GetVendor();
 
             //unit
             var categories = new List<SelectListItem>();
@@ -121,7 +119,13 @@ namespace Warehouse.WebApp.Controllers
                 categories1 = new List<SelectListItem>();
             }
 
-            model.AvailableItem = new List<SelectListItem>(categories1);
+            model.AvailableItem = new List<SelectListItem>(categories1);  
+        }
+
+        private async Task GetDropDownList(InwardModel model)
+        {
+            var availableWH = await _wareHouseApiClient.GetAvailableList();
+            var availableVendor = await _wareHouseItemApiClient.GetVendor();
 
             //wh
             var categories2 = new List<SelectListItem>();
@@ -202,8 +206,8 @@ namespace Warehouse.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> AddItem()
         {
-            var model = new InwardGridModel();
-            await GetDropDownList(model);
+            var model = new InwardDetailModel();
+            await GetDropDownListDetail(model);
             return ViewComponent("AddItemCP", model);
         }
 

@@ -1,4 +1,4 @@
-﻿@model Warehouse.Model.Inward.InwardGridModel
+﻿@model Warehouse.Model.InwardDetail.InwardDetailModel
 
 <div>
     <h4>Thêm vật tư</h4>
@@ -27,6 +27,11 @@
                     <span asp-validation-for="Uiprice" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="Quantity" class="control-label"></label>
+                    <input asp-for="Quantity" class="form-control" min="0" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label asp-for="Amount" class="control-label"></label>
                     <input asp-for="Amount" class="form-control" min="0" />
                     <span asp-validation-for="Amount" class="text-danger"></span>
@@ -42,9 +47,19 @@
                     <span asp-validation-for="DepartmentId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="AccountMore" class="control-label"></label>
+                    <input asp-for="AccountMore" class="form-control" min="0" />
+                    <span asp-validation-for="AccountMore" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label asp-for="AccObjectId" class="control-label"></label>
                     <input asp-for="AccObjectId" class="form-control" min="0" />
                     <span asp-validation-for="AccObjectId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AccountYes" class="control-label"></label>
+                    <input asp-for="AccountYes" class="form-control" min="0" />
+                    <span asp-validation-for="AccountYes" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="EmployeeId" class="control-label"></label>
@@ -60,6 +75,16 @@
                     <label asp-for="ProjectId" class="control-label"></label>
                     <input asp-for="ProjectId" class="form-control" min="0" />
                     <span asp-validation-for="ProjectId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CustomerId" class="control-label"></label>
+                    <input asp-for="CustomerId" class="form-control" min="0" />
+                    <span asp-validation-for="CustomerId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Serial" class="control-label"></label>
+                    <input asp-for="Serial" class="form-control" min="0" />
+                    <span asp-validation-for="Serial" class="text-danger"></span>
                 </div>
             </div>
             <div class="modal-footer form-actions">
@@ -79,13 +104,19 @@
                 $("#Item").val();
                 $("#Unit").val();
                 $("#Uiquantity").val();
+                $("#Quantity").val();
                 $("#Uiprice").val();
                 $("#Amount").val();
                 $("#Status").val();
                 $("#DepartmentId").val();
+                $("#AccObjectId").val();
+                $("#AccountMore").val();
+                $("#AccountYes").val();
                 $("#EmployeeId").val();
                 $("#StationId").val();
                 $("#ProjectId").val();
+                $("#CustomerId").val();
+                $("#Serial").val();
 
                 //list text
                 var textItem="";
@@ -112,9 +143,15 @@
                     amount:$("#Amount").val(),
                     status:$("#Status").val(),
                     departmentId:$("#DepartmentId").val(),
+                    accObjectId:$("#AccObjectId").val(),
+                    accountMore:$("#AccountMore").val(),
+                    accountYes:$("#AccountYes").val(),
                     employeeId:$("#EmployeeId").val(),
                     stationId:$("#StationId").val(),
                     projectId:$("#ProjectId").val(),
+                    customerId:$("#CustomerId").val(),
+                    quantity:$("#Quantity").val(),
+                    serial:$("#Serial").val(),
                 }
 
                 listDetalis.push(tem);
@@ -133,9 +170,6 @@
 
                 <td>
                   `+listDetalis[i].uiquantity+`
-                </td>
-                <td>
-                    `+listDetalis[i].uiquantity+`
                 </td>
                 <td>
                     `+listDetalis[i].uiprice+`
@@ -157,6 +191,9 @@
                 </td>
                 <td>
                     `+listDetalis[i].projectId+`
+                </td>
+                <td>
+                    `+listDetalis[i].customerId+`
                 </td>
             </tr>`;
                     $("#table-list tbody").append(rawjs);

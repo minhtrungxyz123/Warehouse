@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Warehouse.Model.Inward;
+using Warehouse.Model.InwardDetail;
 
 namespace Warehouse.WebApp.ViewComponents
 {
@@ -9,7 +10,7 @@ namespace Warehouse.WebApp.ViewComponents
         {
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(InwardGridModel beginning)
+        public async Task<IViewComponentResult> InvokeAsync(InwardDetailModel beginning)
         {
             return View(beginning);
         }

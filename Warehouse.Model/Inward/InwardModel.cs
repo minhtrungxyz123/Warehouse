@@ -1,4 +1,5 @@
-﻿using Warehouse.Model.InwardDetail;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Warehouse.Model.InwardDetail;
 
 namespace Warehouse.Model.Inward
 {
@@ -8,6 +9,8 @@ namespace Warehouse.Model.Inward
         public string? VoucherCode { get; set; }
         public DateTime VoucherDate { get; set; }
         public string WareHouseId { get; set; }
+
+        public  string AccObjectId { get; set; }
         public string Deliver { get; set; }
         public string Receiver { get; set; }
         public string VendorId { get; set; }
@@ -27,6 +30,8 @@ namespace Warehouse.Model.Inward
         public string ReceiverDepartment { get; set; }
         public string Voucher { get; set; }
 
+        public IList<SelectListItem>? AvailableVendor { get; set; }
+        public IList<SelectListItem>? AvailableWarehouse { get; set; }
         public IList<InwardDetailModel>? InwardDetails { get; set; }
     }
 }

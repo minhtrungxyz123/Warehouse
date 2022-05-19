@@ -1,4 +1,5 @@
-﻿using Warehouse.Model.SerialWareHouse;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Warehouse.Model.SerialWareHouse;
 
 namespace Warehouse.Model.InwardDetail
 {
@@ -27,8 +28,11 @@ namespace Warehouse.Model.InwardDetail
         public string AccountYes { get; set; }
         public string Status { get; set; }
 
+        public  string AccObjectId { get; set; }
         public string? Serial { get; set; }
 
+        public IList<SelectListItem>? AvailableItem { get; set; }
+        public IList<SelectListItem>? AvailableUnit { get; set; }
         public IEnumerable<SerialWareHouselModel> SerialWareHouses { get; set; }
     }
 }
