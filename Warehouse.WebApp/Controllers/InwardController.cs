@@ -41,7 +41,7 @@ namespace Warehouse.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(InwardModel model, IEnumerable<InwardDetailModel> modelDetails)
+        public async Task<IActionResult> CreateSave(InwardModel model, IEnumerable<InwardDetailModel> modelDetails)
         {
 
             var claims = HttpContext.User.Claims;

@@ -136,8 +136,10 @@
                 });
 
                 var tem={
+                    itemName:$("#Item").val(),
                     item:textItem,
                     unit:textUnit,
+                    unitId:$("#Unit").val(),
                     uiquantity:$("#Uiquantity").val(),
                     uiprice:$("#Uiprice").val(),
                     amount:$("#Amount").val(),
@@ -160,12 +162,16 @@
                 {
                     var tem=listDetalis[i];
                     var rawjs=`<tr>
-                <td>
-                `+listDetalis[i].item+`
+                <td>    
+                <select class="form-control" data-val="true" data-val-required="The ItemId field is required." disabled="disabled" name="ItemId" style="width: 100%">
+                <option value="`+listDetalis[i].itemName+`">`+listDetalis[i].item+`</option>
+                </select>
                 </td>
 
                 <td>
-                `+listDetalis[i].unit+`
+                <select class="form-control" data-val="true" data-val-required="The UnitId field is required." disabled="disabled" name="UnitId" style="width: 100%">
+                <option value="`+listDetalis[i].unitId+`">`+listDetalis[i].unit+`</option>
+                </select>
                 </td>
 
                 <td>

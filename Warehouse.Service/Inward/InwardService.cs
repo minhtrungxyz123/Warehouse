@@ -115,7 +115,7 @@ namespace Warehouse.Service
                 WareHouseId = inwardModel.WareHouseId,
             };
 
-            if (detailModel != null)
+            if (detailModel == null)
             {
                 Data.Entities.InwardDetail inwardDetail = new Data.Entities.InwardDetail()
                 {

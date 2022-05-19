@@ -5,16 +5,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<h1 class="mt-4">Tạo mới sản phẩm</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
     <li class="breadcrumb-item active">Tạo mới sản phẩm</li>
 </ol>
 <div class="card-header">
-    <a class="btn btn-success" asp-action="Index" asp-controller="Inward">Về danh sách</a>
+    <a style="margin-left:1060px;" class="btn btn-success"><i class="fa-solid fa-plus"></i> Tạo phiếu</a>
+    <a class="btn btn-danger" asp-action="Index" asp-controller="WarehouseBook"><i class="fa-solid fa-arrow-left"></i> Về danh sách</a>
 </div>
-<form asp-action="Create" enctype="multipart/form-data" method="post">
+
+<div class="card-body" style="padding-top: 5px">
+
+<form id="form1" method="post" enctype="multipart/form-data" asp-controller="Inward" asp-action="CreateSave">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <div class="container-fluid">
     <div class="row">
@@ -26,7 +28,7 @@
                         <div class="form-group form-group-sm row">
                             <label asp-for="WareHouseId" class="control-label col-md-4"></label>
                             <div class="col-md-8">
-                                @Html.DropDownListFor(m => m.WareHouseId, Model.AvailableWarehouse, new { @class = "form-control", style = "width: 100%" })
+                                @Html.DropDownListFor(m => m.WareHouseId, Model.AvailableWarehouse, "Chọn kho", new { @class = "form-control", style = "width: 100%" })
                             </div>
                         </div>
                     </div>
@@ -121,7 +123,7 @@
                         <div class="form-group form-group-sm row">
                             <label asp-for="VendorId" class="control-label col-md-4"></label>
                             <div class="col-md-8">
-                                @Html.DropDownListFor(m => m.VendorId, Model.AvailableVendor, new { @class = "form-control", style = "width: 100%" })
+                                @Html.DropDownListFor(m => m.VendorId, Model.AvailableVendor, "Chọn nhà cung cấp", new { @class = "form-control", style = "width: 100%" })
                             </div>
                         </div>
                     </div>
@@ -232,13 +234,18 @@
 </table>
 </div>
 </div>
+    <div>
+        <input type="submit" value="Submit" />
+    </div>
 </form>
+</div>
 <div id="contactDetails"></div>
 
 @section Scripts{
 <script>
-    var listDetalis=[];
-function Create() {
+        var listDetalis=[];
+
+        function Create() {
             $.get("/Inward/AddItem", function (data) {
                 $("#contactDetails").html(data);
                 $("#contactDetails").dialog("open");
@@ -262,5 +269,18 @@ function Create() {
                 }
             });
         });
+
+        $("#form1").submit(function () {
+        var jqxhr = $.post('Inward/CreateSave', $('#form1').serialize())
+            .success(function () {
+                var loc = jqxhr.getResponseHeader('Location');
+                var a = $('<a/>', { href: loc, text: loc });
+                $('#message').html(a);
+            })
+            .error(function () {
+                $('#message').html("Error posting the update.");
+            });
+        return false;
+    });
 </script>
 }
