@@ -1,7 +1,10 @@
-﻿namespace Warehouse.Model.InwardDetail
+﻿using Warehouse.Model.SerialWareHouse;
+
+namespace Warehouse.Model.InwardDetail
 {
     public class InwardDetailModel
     {
+        public  string? Id { get; set; }
         public string InwardId { get; set; }
         public string ItemId { get; set; }
         public string UnitId { get; set; }
@@ -23,5 +26,9 @@
         public string AccountMore { get; set; }
         public string AccountYes { get; set; }
         public string Status { get; set; }
+
+        public string? Serial { get; set; }
+
+        public IEnumerable<SerialWareHouselModel> SerialWareHouses { get; set; }
     }
 }

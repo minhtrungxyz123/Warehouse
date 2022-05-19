@@ -187,7 +187,7 @@
     <a onclick="Create()" href="javascript:void(0)" class="btn btn-default btn-sm" style="min-width: 80px; background: green;color: aliceblue;"><i class="fa-solid fa-plus"></i> Thêm vật tư</a>             
     <a id="btnRemove" class="btn btn-default btn-sm" href="javascript:void(0)" style="min-width: 80px; background: red;color: aliceblue;"><i class="fa-solid fa-trash-can"></i> Xóa (Đã chọn)</a>                    
 </div>
-<table class="table table-bordered">
+<table class="table table-bordered" id="table-list">
     <thead>         
         <tr>
             <th>            
@@ -228,10 +228,10 @@
     <tbody>                 
         <tr>                  
             <td>                
-                @Html.DropDownListFor(m => m.ItemId, Model.AvailableItem, "vật tư", new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                 
+                @Html.DisplayFor(m => m.ItemId, new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                 
             </td>                  
             <td>
-                @Html.DropDownListFor(m => m.UnitId,Model.AvailableUnit, "Đơn vị", new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                 
+                @Html.DisplayFor(m => m.UnitId, new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                 
             </td>                  
             <td> 
                 @Html.DisplayFor(m => m.Uiquantity, new { @class = "form-control", style = "width: 100%", disabled = "disabled" })                
@@ -270,7 +270,7 @@
 
 @section Scripts{
 <script>
-
+    var listDetalis=[];
 function Create() {
             $.get("/Inward/AddItem", function (data) {
                 $("#contactDetails").html(data);
@@ -284,6 +284,7 @@ function Create() {
                 autoOpen: false,
                 modal: true,
                 width: 500,
+                height:800,
                 show: {
                     effect: "blind",
                     duration: 1000

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Warehouse.Model.Inward;
+using Warehouse.Model.InwardDetail;
+using Warehouse.Model.SerialWareHouse;
 using Warehouse.Model.WareHouseItemUnit;
 using Warehouse.WebApp.ApiClient;
 using Warehouse.WebApp.Models;
@@ -39,19 +41,19 @@ namespace Warehouse.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(InwardGridModel request)
+        public async Task<IActionResult> Create(InwardModel model, IEnumerable<InwardDetailModel> modelDetails)
         {
-            request.CreatedDate = DateTime.Now;
-            request.ModifiedDate = DateTime.Now;
 
             var claims = HttpContext.User.Claims;
             var userId = claims.FirstOrDefault(c => c.Type == "Id").Value;
-            request.CreatedBy = userId;
+            model.CreatedBy = userId;
 
             if (!ModelState.IsValid)
-                return View(request);
+                return View(model);
 
-            var result = await _inwardApiClient.Create(request);
+            model.InwardDetails = modelDetails.ToList();
+
+            var result = await _inwardApiClient.Create(model);
             if (result)
             {
                 TempData["result"] = "Thêm mới thành công";
@@ -59,7 +61,7 @@ namespace Warehouse.WebApp.Controllers
             }
 
             ModelState.AddModelError("", "Thêm mới thất bại");
-            return View(request);
+            return View(model);
         }
 
         #endregion

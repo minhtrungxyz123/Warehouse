@@ -2,6 +2,7 @@
 using Warehouse.Common;
 using Warehouse.Data.EF;
 using Warehouse.Model.Inward;
+using Warehouse.Model.InwardDetail;
 
 namespace Warehouse.Service
 {
@@ -30,45 +31,45 @@ namespace Warehouse.Service
                 Voucher = inward.Voucher,
                 CustomerId = inwardDetail.CustomerId,
                 AccountMore = inwardDetail.AccountMore,
-                Description=inward.Description,
+                Description = inward.Description,
                 AccountYes = inwardDetail.AccountYes,
-                Amount=inwardDetail.Amount,
-                CreatedBy=inward.CreatedBy,
-                CreatedDate=inward.CreatedDate,
-                CustomerName=inwardDetail.CustomerName,
-                Deliver=inward.Deliver,
-                DeliverAddress=inward.DeliverAddress,
-                DeliverPhone=inward.DeliverPhone,
+                Amount = inwardDetail.Amount,
+                CreatedBy = inward.CreatedBy,
+                CreatedDate = inward.CreatedDate,
+                CustomerName = inwardDetail.CustomerName,
+                Deliver = inward.Deliver,
+                DeliverAddress = inward.DeliverAddress,
+                DeliverPhone = inward.DeliverPhone,
                 DeliverDepartment = inward.DeliverDepartment,
-                DepartmentId=inwardDetail.DepartmentId,
-                DepartmentName=inwardDetail.DepartmentName,
-                EmployeeId=inwardDetail.EmployeeId,
-                EmployeeName=inwardDetail.EmployeeName,
-                InwardId=inwardDetail.InwardId,
-                ItemId=inwardDetail.ItemId,
-                ModifiedBy=inward.ModifiedBy,
-                ModifiedDate=inward.ModifiedDate,
-                Price=inwardDetail.Price,
-                ProjectId=inwardDetail.ProjectId,
-                ProjectName=inwardDetail.ProjectName,
-                Quantity=inwardDetail.Quantity,
-                Reason=inward.Reason,
-                ReasonDescription=inward.ReasonDescription,
-                Receiver=inward.Receiver,
-                ReceiverAddress=inward.ReceiverAddress,
-                ReceiverDepartment=inward.ReceiverDepartment,
-                ReceiverPhone=inward.ReceiverPhone,
-                Reference=inward.Reference,
-                StationId=inwardDetail.StationId,
-                StationName=inwardDetail.StationName,
-                Status=inwardDetail.Status,
-                Uiprice=inwardDetail.Uiprice,
-                Uiquantity=inwardDetail.Uiquantity,
-                UnitId=inwardDetail.UnitId,
-                VendorId=inward.VendorId,
-                VoucherCode=inward.VoucherCode,
-                VoucherDate=inward.VoucherDate,
-                WareHouseId=inward.WareHouseId
+                DepartmentId = inwardDetail.DepartmentId,
+                DepartmentName = inwardDetail.DepartmentName,
+                EmployeeId = inwardDetail.EmployeeId,
+                EmployeeName = inwardDetail.EmployeeName,
+                InwardId = inwardDetail.InwardId,
+                ItemId = inwardDetail.ItemId,
+                ModifiedBy = inward.ModifiedBy,
+                ModifiedDate = inward.ModifiedDate,
+                Price = inwardDetail.Price,
+                ProjectId = inwardDetail.ProjectId,
+                ProjectName = inwardDetail.ProjectName,
+                Quantity = inwardDetail.Quantity,
+                Reason = inward.Reason,
+                ReasonDescription = inward.ReasonDescription,
+                Receiver = inward.Receiver,
+                ReceiverAddress = inward.ReceiverAddress,
+                ReceiverDepartment = inward.ReceiverDepartment,
+                ReceiverPhone = inward.ReceiverPhone,
+                Reference = inward.Reference,
+                StationId = inwardDetail.StationId,
+                StationName = inwardDetail.StationName,
+                Status = inwardDetail.Status,
+                Uiprice = inwardDetail.Uiprice,
+                Uiquantity = inwardDetail.Uiquantity,
+                UnitId = inwardDetail.UnitId,
+                VendorId = inward.VendorId,
+                VoucherCode = inward.VoucherCode,
+                VoucherDate = inward.VoucherDate,
+                WareHouseId = inward.WareHouseId
             };
             return new ApiSuccessResult<InwardGridModel>(inwardViewModel);
         }
@@ -83,68 +84,70 @@ namespace Warehouse.Service
             return item;
         }
 
-        #endregion
+        #endregion List
 
         #region Method
 
-        public async Task<RepositoryResponse> Create(InwardGridModel model)
+        public async Task<RepositoryResponse> Create(InwardModel inwardModel, IList<InwardDetailModel> detailModel = null)
         {
             Data.Entities.Inward inward = new Data.Entities.Inward()
             {
-                VoucherCode = model.VoucherCode,
-                CreatedBy = model.CreatedBy,
-                CreatedDate = model.CreatedDate,
-                Deliver = model.Deliver,
-                DeliverAddress = model.DeliverAddress,
-                DeliverDepartment = model.DeliverDepartment,
-                DeliverPhone = model.DeliverPhone,
-                Description = model.Description,
-                ModifiedBy = model.ModifiedBy,
-                ModifiedDate = model.ModifiedDate,
-                Reason = model.Reason,
-                ReasonDescription = model.ReasonDescription,
-                ReceiverAddress = model.ReceiverAddress,
-                ReceiverDepartment = model.ReceiverDepartment,
-                ReceiverPhone = model.ReceiverPhone,
-                Receiver = model.Receiver,
-                Reference = model.Reference,
-                VendorId = model.VendorId,
-                Voucher = model.Voucher,
-                VoucherDate = model.VoucherDate,
-                WareHouseId = model.WareHouseId
+                VoucherCode = inwardModel.VoucherCode,
+                CreatedBy = inwardModel.CreatedBy,
+                CreatedDate = inwardModel.CreatedDate,
+                Deliver = inwardModel.Deliver,
+                DeliverAddress = inwardModel.DeliverAddress,
+                DeliverDepartment = inwardModel.DeliverDepartment,
+                DeliverPhone = inwardModel.DeliverPhone,
+                Description = inwardModel.Description,
+                ModifiedBy = inwardModel.ModifiedBy,
+                ModifiedDate = inwardModel.ModifiedDate,
+                Reason = inwardModel.Reason,
+                ReasonDescription = inwardModel.ReasonDescription,
+                ReceiverAddress = inwardModel.ReceiverAddress,
+                ReceiverDepartment = inwardModel.ReceiverDepartment,
+                ReceiverPhone = inwardModel.ReceiverPhone,
+                Receiver = inwardModel.Receiver,
+                Reference = inwardModel.Reference,
+                VendorId = inwardModel.VendorId,
+                Voucher = inwardModel.Voucher,
+                VoucherDate = inwardModel.VoucherDate,
+                WareHouseId = inwardModel.WareHouseId,
             };
 
-            Data.Entities.InwardDetail inwardDetail = new Data.Entities.InwardDetail()
+            if (detailModel != null)
             {
-                EmployeeName = model.EmployeeName,
-                DepartmentId = model.DepartmentId,
-                CustomerName = model.CustomerName,
-                CustomerId = model.CustomerId,
-                Amount = model.Amount,
-                EmployeeId = model.EmployeeId,
-                AccountMore = model.AccountMore,
-                AccountYes = model.AccountYes,
-                DepartmentName = model.DepartmentName,
-                InwardId = model.InwardId,
-                ItemId = model.ItemId,
-                Price = model.Price,
-                ProjectId = model.ProjectId,
-                ProjectName = model.ProjectName,
-                Quantity = model.Quantity,
-                StationId = model.StationId,
-                StationName = model.StationName,
-                Status = model.Status,
-                Uiprice = model.Uiprice,
-                Uiquantity = model.Uiquantity,
-                UnitId = model.UnitId
-            };
+                Data.Entities.InwardDetail inwardDetail = new Data.Entities.InwardDetail()
+                {
+                    EmployeeName = detailModel.Count > 0 ? detailModel[0].EmployeeName : null,
+                    DepartmentId = detailModel.Count > 0 ? detailModel[0].DepartmentId : null,
+                    CustomerName = detailModel.Count > 0 ? detailModel[0].CustomerName : null,
+                    CustomerId = detailModel.Count > 0 ? detailModel[0].CustomerId : null,
+                    Amount = detailModel.Count > 0 ? detailModel[0].Amount : 0,
+                    EmployeeId = detailModel.Count > 0 ? detailModel[0].EmployeeId : null,
+                    AccountMore = detailModel.Count > 0 ? detailModel[0].AccountMore : null,
+                    AccountYes = detailModel.Count > 0 ? detailModel[0].AccountYes : null,
+                    DepartmentName = detailModel.Count > 0 ? detailModel[0].DepartmentName : null,
+                    InwardId = detailModel.Count > 0 ? detailModel[0].InwardId : null,
+                    ItemId = detailModel.Count > 0 ? detailModel[0].ItemId : null,
+                    Price = detailModel.Count > 0 ? detailModel[0].Price : 0,
+                    ProjectId = detailModel.Count > 0 ? detailModel[0].ProjectId : null,
+                    ProjectName = detailModel.Count > 0 ? detailModel[0].ProjectName : null,
+                    Quantity = detailModel.Count > 0 ? detailModel[0].Quantity : 0,
+                    StationId = detailModel.Count > 0 ? detailModel[0].StationId : null,
+                    StationName = detailModel.Count > 0 ? detailModel[0].StationName : null,
+                    Status = detailModel.Count > 0 ? detailModel[0].Status : null,
+                    Uiprice = detailModel.Count > 0 ? detailModel[0].Uiprice : 0,
+                    Uiquantity = detailModel.Count > 0 ? detailModel[0].Uiquantity : 0,
+                    UnitId = detailModel.Count > 0 ? detailModel[0].UnitId : null,
+                };
+
+                inwardDetail.Id = Guid.NewGuid().ToString();
+                await _context.InwardDetails.AddRangeAsync(inwardDetail);
+            }
+
             inward.Id = Guid.NewGuid().ToString();
-            inwardDetail.Id = Guid.NewGuid().ToString();
-
-            inwardDetail.InwardId = inward.Id;
-
             _context.Inwards.Add(inward);
-            _context.InwardDetails.Add(inwardDetail);
 
             var result = await _context.SaveChangesAsync();
 

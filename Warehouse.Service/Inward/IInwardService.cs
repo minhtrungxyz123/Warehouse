@@ -1,11 +1,12 @@
 ﻿using Warehouse.Common;
 using Warehouse.Model.Inward;
+using Warehouse.Model.InwardDetail;
 
 namespace Warehouse.Service
 {
     public interface IInwardService
     {
-        Task<RepositoryResponse> Create(InwardGridModel model);
+        Task<RepositoryResponse> Create(InwardModel inwardModel, IList<InwardDetailModel> detailModel = null);
 
         Task<RepositoryResponse> Update(string id, InwardGridModel model);
 

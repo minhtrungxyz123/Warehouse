@@ -43,7 +43,7 @@ namespace Warehouse.WebApp.ApiClient
 
         #region Method
 
-        public async Task<bool> Create(InwardGridModel request)
+        public async Task<bool> Create(InwardModel request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");

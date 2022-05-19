@@ -3,17 +3,17 @@
 <div>
     <h4>Thêm vật tư</h4>
     <hr />
-    <form asp-controller="Inward" asp-action="AddItem">
+    <form id="data" asp-controller="Inward" asp-action="AddItem">
         <div class="form-body">
             <div class="modal-body">
                 <div class="form-group">
                     <label asp-for="ItemId" class="control-label"></label>
-                    @Html.DropDownListFor(m => m.ItemId, Model.AvailableItem, "Vật tư", new { @class = "form-control", style = "width: 100%" })
+                    @Html.DropDownListFor(m => m.ItemId, Model.AvailableItem, "Vật tư", new { @class = "form-control",id="Item", style = "width: 100%" })
                     <span asp-validation-for="ItemId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="UnitId" class="control-label"></label>
-                    @Html.DropDownListFor(m => m.UnitId, Model.AvailableUnit, "Đơn vị", new { @class = "form-control", style = "width: 100%" })
+                    @Html.DropDownListFor(m => m.UnitId, Model.AvailableUnit, "Đơn vị", new { @class = "form-control",id="Unit", style = "width: 100%" })
                     <span asp-validation-for="UnitId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="modal-footer form-actions">
-                <button type="submit" class="btn btn-success btn-sm">
+                <button id="saveItem" type="submit" class="btn btn-success btn-sm">
                     Lưu
                 </button>
             </div>
@@ -74,31 +74,121 @@
 
 <script>
 
-    $("#ItemId").on("change", function (e) {
-        console.log()
-        $('#UnitId').empty();
-        
-                    $.ajax({
-                        type: 'GET',
-                        data: { id: $("#ItemId").val() },
-                    dataType: 'json',
-                    url: '@Url.Action("GetWareHouseItemUnitByItemId", "Inward")',
-                            success: function (msg) {
-                              if(msg && msg.length>0)
-                              {
-                                  for(var i=0;i<msg.length;i++)
-                                  {
-                                      var tem=msg[i];
-                                       var o = new Option(tem.text, tem.id);
-                                        $(o).html(tem.text);
-                                        $("#UnitId").append(o);
-                                  }
+        $( "#data" ).submit(function( event ) {
+                event.preventDefault();
+                $("#Item").val();
+                $("#Unit").val();
+                $("#Uiquantity").val();
+                $("#Uiprice").val();
+                $("#Amount").val();
+                $("#Status").val();
+                $("#DepartmentId").val();
+                $("#EmployeeId").val();
+                $("#StationId").val();
+                $("#ProjectId").val();
 
-                              }
-                            }
+                //list text
+                var textItem="";
+                 $("#Item option").each(function()
+                {
+                    var idSelect=$("#Item").val();
+                    if($(this).val()===idSelect)
+                    textItem=$(this).text();                                       
                 });
 
-        return false;
-    });
+                var textUnit="";
+                 $("#Unit option").each(function()
+                {
+                    var idSelect=$("#Unit").val();
+                    if($(this).val()===idSelect)
+                    textUnit=$(this).text();                                       
+                });
+
+                var tem={
+                    item:textItem,
+                    unit:textUnit,
+                    uiquantity:$("#Uiquantity").val(),
+                    uiprice:$("#Uiprice").val(),
+                    amount:$("#Amount").val(),
+                    status:$("#Status").val(),
+                    departmentId:$("#DepartmentId").val(),
+                    employeeId:$("#EmployeeId").val(),
+                    stationId:$("#StationId").val(),
+                    projectId:$("#ProjectId").val(),
+                }
+
+                listDetalis.push(tem);
+                $("#table-list tbody tr").remove();
+                for(var i=0;i<listDetalis.length;i++)
+                {
+                    var tem=listDetalis[i];
+                    var rawjs=`<tr>
+                <td>
+                `+listDetalis[i].item+`
+                </td>
+
+                <td>
+                `+listDetalis[i].unit+`
+                </td>
+
+                <td>
+                  `+listDetalis[i].uiquantity+`
+                </td>
+                <td>
+                    `+listDetalis[i].uiquantity+`
+                </td>
+                <td>
+                    `+listDetalis[i].uiprice+`
+                </td>
+                <td>
+                    `+listDetalis[i].amount+`
+                </td>
+                <td>
+                    `+listDetalis[i].status+`
+                </td>
+                <td>
+                    `+listDetalis[i].departmentId+`
+                </td>
+                <td>
+                    `+listDetalis[i].employeeId+`
+                </td>
+                <td>
+                    `+listDetalis[i].stationId+`
+                </td>
+                <td>
+                    `+listDetalis[i].projectId+`
+                </td>
+            </tr>`;
+                    $("#table-list tbody").append(rawjs);
+                }
+        $("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable > div.ui-dialog-titlebar.ui-corner-all.ui-widget-header.ui-helper-clearfix.ui-draggable-handle > button").click();
+
+        });
+
+        $("#Item").on("change", function (e) {
+            $('#Unit').empty();
+
+                        $.ajax({
+                            type: 'GET',
+                            data: { id: $("#Item").val() },
+                        dataType: 'json',
+                        url: '@Url.Action("GetWareHouseItemUnitByItemId", "Inward")',
+                                success: function (msg) {
+                                  if(msg && msg.length>0)
+                                  {
+                                      for(var i=0;i<msg.length;i++)
+                                      {
+                                          var tem=msg[i];
+                                           var o = new Option(tem.text, tem.id);
+                                            $(o).html(tem.text);
+                                            $("#Unit").append(o);
+                                      }
+
+                                  }
+                                }
+                    });
+
+            return false;
+        });
 
 </script>

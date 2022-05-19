@@ -1,7 +1,10 @@
-﻿namespace Warehouse.Model.Inward
+﻿using Warehouse.Model.InwardDetail;
+
+namespace Warehouse.Model.Inward
 {
     public class InwardModel
     {
+        public  string? Id  { get; set; }
         public string? VoucherCode { get; set; }
         public DateTime VoucherDate { get; set; }
         public string WareHouseId { get; set; }
@@ -23,5 +26,7 @@
         public string ReceiverAddress { get; set; }
         public string ReceiverDepartment { get; set; }
         public string Voucher { get; set; }
+
+        public IList<InwardDetailModel>? InwardDetails { get; set; }
     }
 }
