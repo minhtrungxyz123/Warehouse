@@ -6,7 +6,7 @@ namespace Warehouse.Service
 {
     public interface IInwardService
     {
-        Task<RepositoryResponse> Create(InwardModel inwardModel, IList<InwardDetailModel> detailModel = null);
+        Task<RepositoryResponse> Create(InwardModel inwardModel, IList<InwardDetailModel> detailModel);
 
         Task<RepositoryResponse> Update(string id, InwardGridModel model);
 

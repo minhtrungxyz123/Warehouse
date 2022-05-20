@@ -99,7 +99,7 @@
 
 <script>
 
-        $( "#data" ).submit(function( event ) {
+        $("#data" ).submit(function( event ) {
                 event.preventDefault();
                 $("#Item").val();
                 $("#Unit").val();
@@ -136,7 +136,7 @@
                 });
 
                 var tem={
-                    itemName:$("#Item").val(),
+                    itemId:$("#Item").val(),
                     item:textItem,
                     unit:textUnit,
                     unitId:$("#Unit").val(),
@@ -162,9 +162,9 @@
                 {
                     var tem=listDetalis[i];
                     var rawjs=`<tr>
-                <td>    
-                <select class="form-control" data-val="true" data-val-required="The ItemId field is required." disabled="disabled" name="ItemId" style="width: 100%">
-                <option value="`+listDetalis[i].itemName+`">`+listDetalis[i].item+`</option>
+                <td>
+                <select class="form-control" data-val="true" data-val-required="The ItemId field is required." id="Item" name="ItemId" style="width: 100%">
+                <option value="`+listDetalis[i].itemId+`">`+listDetalis[i].item+`</option>
                 </select>
                 </td>
 
@@ -201,11 +201,19 @@
                 <td>
                     `+listDetalis[i].customerId+`
                 </td>
+                <td>
+                     <button id='btnremove' class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Xóa</button>
+                </td>
             </tr>`;
                     $("#table-list tbody").append(rawjs);
                 }
         $("body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable > div.ui-dialog-titlebar.ui-corner-all.ui-widget-header.ui-helper-clearfix.ui-draggable-handle > button").click();
 
+        });
+
+        //remove
+        $("#table-list").on('click', '#btnremove', function () {
+            $(this).closest('tr').remove();
         });
 
         $("#Item").on("change", function (e) {

@@ -41,7 +41,8 @@ namespace Warehouse.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSave(InwardModel model, IEnumerable<InwardDetailModel> modelDetails)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateSave(InwardModel model, IEnumerable<InwardDetailModel> listDetalis)
         {
 
             var claims = HttpContext.User.Claims;
@@ -51,13 +52,13 @@ namespace Warehouse.WebApp.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            model.InwardDetails = modelDetails.ToList();
+            model.InwardDetails = listDetalis.ToList();
 
             var result = await _inwardApiClient.Create(model);
             if (result)
             {
                 TempData["result"] = "Thêm mới thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("Create");
             }
 
             ModelState.AddModelError("", "Thêm mới thất bại");

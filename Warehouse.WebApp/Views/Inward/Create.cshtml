@@ -10,13 +10,13 @@
     <li class="breadcrumb-item active">Tạo mới sản phẩm</li>
 </ol>
 <div class="card-header">
-    <a style="margin-left:1060px;" class="btn btn-success"><i class="fa-solid fa-plus"></i> Tạo phiếu</a>
+    <a id="btnCreate" class="btn btn-success"><i class="fa-solid fa-plus"></i> Tạo phiếu</a>
     <a class="btn btn-danger" asp-action="Index" asp-controller="WarehouseBook"><i class="fa-solid fa-arrow-left"></i> Về danh sách</a>
 </div>
 
-<div class="card-body" style="padding-top: 5px">
+<div class="page-data" style="padding-top: 5px">
 
-<form id="form1" method="post" enctype="multipart/form-data" asp-controller="Inward" asp-action="CreateSave">
+<form id="form-data" method="post" enctype="multipart/form-data" asp-controller="Inward" asp-action="CreateSave">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <div class="container-fluid">
     <div class="row">
@@ -188,8 +188,7 @@
     <span>DANH SÁCH VẬT TƯ</span>               
 </div>         
 <div class="toolbar" style="display: inline-block; margin-right: 0; margin-left: auto">              
-    <a onclick="Create()" href="javascript:void(0)" class="btn btn-default btn-sm" style="min-width: 80px; background: green;color: aliceblue;"><i class="fa-solid fa-plus"></i> Thêm vật tư</a>             
-    <a id="btnRemove" class="btn btn-default btn-sm" href="javascript:void(0)" style="min-width: 80px; background: red;color: aliceblue;"><i class="fa-solid fa-trash-can"></i> Xóa (Đã chọn)</a>                    
+    <a onclick="Create()" href="javascript:void(0)" class="btn btn-default btn-sm" style="min-width: 80px; background: green;color: aliceblue;"><i class="fa-solid fa-plus"></i> Thêm vật tư</a>                    
 </div>
 <table class="table table-bordered" id="table-list">
     <thead>         
@@ -227,6 +226,7 @@
             <th>                 
                 Khách hàng        
             </th>
+            <th>Chức năng</th>
         </tr>       
     </thead>          
     <tbody>                 
@@ -234,9 +234,6 @@
 </table>
 </div>
 </div>
-    <div>
-        <input type="submit" value="Submit" />
-    </div>
 </form>
 </div>
 <div id="contactDetails"></div>
@@ -270,17 +267,89 @@
             });
         });
 
-        $("#form1").submit(function () {
-        var jqxhr = $.post('Inward/CreateSave', $('#form1').serialize())
-            .success(function () {
-                var loc = jqxhr.getResponseHeader('Location');
-                var a = $('<a/>', { href: loc, text: loc });
-                $('#message').html(a);
-            })
-            .error(function () {
-                $('#message').html("Error posting the update.");
-            });
-        return false;
+    var master = {
+        urlCreate: '@Url.Action("CreateSave")',
+        urlBackList: '@Url.Action("Index")',
+        el: '.page-data',
+        $el: {},
+        form: {
+            el: '#form-data',
+            $el: {},
+            init: function () { }
+        },
+        btnCreate: {
+            el: '#btnCreate',
+            $el: {},
+            init: function () { }
+        },
+        init: function () { }
+    };
+    var form = master.form;
+    var btnCreate = master.btnCreate;
+
+     master.init = function (){
+        master.$el = $(master.el);
+        form.init();
+        btnCreate.init();
+     };
+
+     form.init = function () {
+        form.$el = $(form.el);
+    };
+
+    btnCreate.init = function () {
+        btnCreate.$el = $(btnCreate.el);
+
+        btnCreate.$el.click(function (e) {
+
+                var model = {};
+
+                model.WareHouseId = $('#WareHouseId').val();
+                model.VendorId = $('#VendorId').val();
+                model.AccObjectId = $('#AccObjectId').val();
+                model.VoucherCode = $('#VoucherCode').val();
+                model.VoucherDate = $('#VoucherDate').val();
+                model.Deliver = $('#Deliver').val();
+                model.Receiver = $('#Receiver').val();
+                model.VendorId = $('#VendorId').val();
+                model.Reason = $('#Reason').val();
+                model.ReasonDescription = $('#ReasonDescription').val();
+                model.Description = $('#Description').val();
+                model.Reference = $('#Reference').val();
+                model.CreatedDate = $('#CreatedDate').val();
+                model.CreatedBy = $('#CreatedBy').val();
+                model.ModifiedDate = $('#ModifiedDate').val();
+                model.ModifiedBy = $('#ModifiedBy').val();
+                model.DeliverPhone = $('#DeliverPhone').val();
+                model.DeliverAddress = $('#DeliverAddress').val();
+                model.DeliverDepartment = $('#DeliverDepartment').val();
+                model.ReceiverPhone = $('#ReceiverPhone').val();
+                model.ReceiverDepartment = $('#ReceiverDepartment').val();
+                model.Voucher = $('#Voucher').val();
+                model.ReceiverAddress = $('#ReceiverAddress').val();
+
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        model: model,
+                        listDetalis: listDetalis,
+                        __RequestVerificationToken: getToken()
+                    },
+                    dataType: "json",
+                    url: master.urlCreate,
+                });
+            
+        });
+    };
+
+    function getToken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+    }
+
+    $(function () {
+        master.init();
     });
 </script>
 }

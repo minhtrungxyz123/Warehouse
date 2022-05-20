@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Warehouse.Common;
 using Warehouse.Data.EF;
+using Warehouse.Data.Entities;
 using Warehouse.Model.Inward;
 using Warehouse.Model.InwardDetail;
 
@@ -88,7 +89,7 @@ namespace Warehouse.Service
 
         #region Method
 
-        public async Task<RepositoryResponse> Create(InwardModel inwardModel, IList<InwardDetailModel> detailModel = null)
+        public async Task<RepositoryResponse> Create(InwardModel inwardModel, IList<InwardDetailModel> detailModel)
         {
             Data.Entities.Inward inward = new Data.Entities.Inward()
             {
@@ -114,39 +115,47 @@ namespace Warehouse.Service
                 VoucherDate = inwardModel.VoucherDate,
                 WareHouseId = inwardModel.WareHouseId,
             };
+            inward.Id = Guid.NewGuid().ToString();
 
-            if (detailModel == null)
+            if (detailModel != null)
             {
-                Data.Entities.InwardDetail inwardDetail = new Data.Entities.InwardDetail()
+                var list = new List<InwardDetail>();
+                foreach (var item in detailModel)
                 {
-                    EmployeeName = detailModel.Count > 0 ? detailModel[0].EmployeeName : null,
-                    DepartmentId = detailModel.Count > 0 ? detailModel[0].DepartmentId : null,
-                    CustomerName = detailModel.Count > 0 ? detailModel[0].CustomerName : null,
-                    CustomerId = detailModel.Count > 0 ? detailModel[0].CustomerId : null,
-                    Amount = detailModel.Count > 0 ? detailModel[0].Amount : 0,
-                    EmployeeId = detailModel.Count > 0 ? detailModel[0].EmployeeId : null,
-                    AccountMore = detailModel.Count > 0 ? detailModel[0].AccountMore : null,
-                    AccountYes = detailModel.Count > 0 ? detailModel[0].AccountYes : null,
-                    DepartmentName = detailModel.Count > 0 ? detailModel[0].DepartmentName : null,
-                    InwardId = detailModel.Count > 0 ? detailModel[0].InwardId : null,
-                    ItemId = detailModel.Count > 0 ? detailModel[0].ItemId : null,
-                    Price = detailModel.Count > 0 ? detailModel[0].Price : 0,
-                    ProjectId = detailModel.Count > 0 ? detailModel[0].ProjectId : null,
-                    ProjectName = detailModel.Count > 0 ? detailModel[0].ProjectName : null,
-                    Quantity = detailModel.Count > 0 ? detailModel[0].Quantity : 0,
-                    StationId = detailModel.Count > 0 ? detailModel[0].StationId : null,
-                    StationName = detailModel.Count > 0 ? detailModel[0].StationName : null,
-                    Status = detailModel.Count > 0 ? detailModel[0].Status : null,
-                    Uiprice = detailModel.Count > 0 ? detailModel[0].Uiprice : 0,
-                    Uiquantity = detailModel.Count > 0 ? detailModel[0].Uiquantity : 0,
-                    UnitId = detailModel.Count > 0 ? detailModel[0].UnitId : null,
-                };
+                  var inwardDetail = new Data.Entities.InwardDetail()
+                    {
+                        EmployeeName = item.EmployeeName,
+                        DepartmentId = item.DepartmentId,
+                        CustomerName = item.CustomerName,
+                        CustomerId = item.CustomerId,
+                        Amount = item.Amount,
+                        EmployeeId = item.EmployeeId,
+                        AccountMore = item.AccountMore,
+                        AccountYes = item.AccountYes,
+                        DepartmentName = item.DepartmentName,
+                        InwardId = item.InwardId,
+                        ItemId = item.ItemId,
+                        Price = item.Price,
+                        ProjectId = item.ProjectId,
+                        ProjectName = item.ProjectName,
+                        Quantity = item.Quantity,
+                        StationId = item.StationId,
+                        StationName = item.StationName,
+                        Status = item.Status,
+                        Uiprice = item.Uiprice,
+                        Uiquantity = item.Uiquantity,
+                        UnitId = item.UnitId,
+                    };
 
-                inwardDetail.Id = Guid.NewGuid().ToString();
-                await _context.InwardDetails.AddRangeAsync(inwardDetail);
+                    inwardDetail.Id = Guid.NewGuid().ToString();
+                    inwardDetail.InwardId = inward.Id;
+                    list.Add(inwardDetail);
+                }
+
+                await _context.InwardDetails.AddRangeAsync(list);
             }
 
-            inward.Id = Guid.NewGuid().ToString();
+            
             _context.Inwards.Add(inward);
 
             var result = await _context.SaveChangesAsync();

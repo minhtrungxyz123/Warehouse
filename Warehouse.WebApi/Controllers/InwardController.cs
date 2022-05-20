@@ -44,16 +44,6 @@ namespace Warehouse.WebApi.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Post([FromBody] InwardModel model)
         {
-            if (model.InwardDetails != null && model.InwardDetails.Any())
-            {
-                var i = 0;
-                foreach (var detail in model.InwardDetails)
-                {
-                    ModelState.Remove($"InwardDetails[{i}].InwardId");
-                    i++;
-                }
-            }
-
             var entity = model;
             entity.VoucherCode = model.VoucherCode;
             entity.VoucherDate = model.VoucherDate.ToUniversalTime();
@@ -65,30 +55,13 @@ namespace Warehouse.WebApi.Controllers
                 {
                     var eDetail = mDetail;
                     eDetail.InwardId = entity.Id;
-
-                    eDetail.SerialWareHouses = mDetail.SerialWareHouses.Select(mSerial =>
-                    {
-                        var eSerial = mSerial;
-                        eSerial.ItemId = eDetail.ItemId;
-                        eSerial.InwardDetailId = eDetail.Id;
-
-                        return eSerial;
-                    });
-
                     return eDetail;
                 }).ToList();
             }
 
             var result = await _inwardService.Create(entity, detailEntities);
 
-            if (result.Result > 0)
-            {
-                return RedirectToAction(nameof(Get), new { id = result.Id });
-            }
-            else
-            {
-                return BadRequest(new ApiBadRequestResponse("Create inward failed"));
-            }
+                return Ok();
         }
 
         [Route("edit")]
